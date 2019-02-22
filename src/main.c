@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <getopt.h>
-#include <manipulation_partition.h>
+#include <meminit.h>
 
 /**
 * @author ABDELMOUMENE Djahid 
@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 	 	while((opt = getopt(argc, argv, "p:")) != -1){
 	 		switch(opt){
 	 			case 'p':
-	 				create_partition(optarg);
+	 				creatfile(optarg);
 	 				break;
 	 			default:
 	 				usage(argv[0]);
@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
 	 	}
 	else{
 		getcwd(cwd, sizeof(cwd));
-		create_partition(cwd);
+		creatfile(cwd);
 	}
 	return 0;
 }
