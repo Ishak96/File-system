@@ -2,7 +2,7 @@
 file manager that uses a simulated partition (UNIX file), OS Project
 
 ## getting started
-### installing
+###installing
 To install this project:
 To download the project
 ```
