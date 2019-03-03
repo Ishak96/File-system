@@ -18,5 +18,5 @@ make
 ```
 To run the project
 ```
-	./bin/fmanag
+	./bin/fmanag [-d] [dir]
 ```
