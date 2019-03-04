@@ -6,7 +6,6 @@
  * @details initializing the partition files and utility functions to interact with the os
  */
 #include <devutils.h>
-
 #include <sys/types.h>
 #include <fcntl.h>
 #include <unistd.h>
