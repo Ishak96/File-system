@@ -20,7 +20,7 @@ struct fs_super_block  {
 	uint32_t data_bitmap_loc; /* data bitmap location in block num */
 	uint32_t data_bitmap_size; /* data bitmap size in blocks */
 	uint32_t inode_bitmap_loc; /* inode bitmap location in block num */
-	uint32_t data_bitmap_size; /* inode bitmap size in blocks */
+	uint32_t inode_bitmap_size; /* inode bitmap size in blocks */
 	
 	uint32_t inode_loc; /* location of inodes in block num */
 	uint32_t inode_count; /* no of inodes in blocks */
