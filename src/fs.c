@@ -1,5 +1,5 @@
 /**
- * @file meminit.c
+ * @file fs.c
  * @author ABDELMOUMENE Djahid 
  * @author AYAD Ishak
  * @brief initializing the partition
