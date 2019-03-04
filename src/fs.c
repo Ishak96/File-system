@@ -9,20 +9,4 @@
 #include <sys/types.h>
 #include <fcntl.h>
 #include <unistd.h>
-
-int creatfile(const char* filename, size_t size) {
-	if(size <= 0) {
-		die("creatfile: null size");
-	}
-	
-	int fd = open(filename, O_RDWR | O_CREAT, 0777);
-	if(fd < 0) {
-		die("creatfile: open");
-	}
-	
-	lseek(fd, size, SEEK_SET);
-	write(fd, "\0", 1);
-	return fd;
-}
-
-
+#include <stdio.h>
