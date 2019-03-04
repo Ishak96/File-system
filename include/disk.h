@@ -3,13 +3,18 @@
 #include <stdint.h>
 
 #define BLOCK_SIZE 4096
-
+/**
+ * @brief virtual filesystem structure
+ * @details contains information about the file used to simulate a disk
+ * partition
+ */
 typedef struct{
-	uint32_t fd;
-	uint32_t tot_size;
-	uint32_t nblocks;
-	uint32_t nreads;
-	uint32_t nwrites;
+	uint32_t fd;      /**< file descriptor */
+	uint32_t tot_size;/**< total size of our file (partition) */
+	uint32_t nblocks; /**< number of blocks in disk image*/
+	uint32_t nreads;  /**< number of reads performed */
+	uint32_t nwrites; /**< number of writes performed*/
+	uint32_t mounts;  /**< number of mounts*/
 }fs_filesyst;
 
 int creatfile(const char* filename, size_t n, fs_filesyst* fs);

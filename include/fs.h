@@ -3,33 +3,63 @@
 #include <stdint.h>
 #include <disk.h>
 
-#define MAGIC_NUMBER 0xf0f03410
-#define INODES_PER_BLOCK 128
-#define POINTERS_PER_INODE 5
-#define POINTERS_PER_BLOCK 1024
 
+#define FS_MAGIC 0xF0F03410 		   /* magic number for our filesystem */
+#define FS_BLOCK_SIZE 4096 			   /* block size in bytes */
+#define FS_POINTERS_PER_BLOCK 1024     /* no of pointers (used by inodes) per block in bytes*/
+#define FS_INODES_PER_BLOCK 64 		   /* no of inodes per block */
+#define FS_DIRECT_POINTERS_PER_INODE 8 /* no of direct data pointers in each inode */
+/**
+ * @brief super block structure
+ * @details the structure of the super block the first block stored
+ * stored in memory contains general information about the filesystem
+ * and other useful information, with a total size of 28 bytes.
+ */
 struct fs_super_block  {
-	uint32_t inode_count;
-	uint32_t block_count;
-	uint32_t free_inode_count;
-	uint32_t free_block_count;
+	uint32_t magic; 		   /**< the filesystem magic number */
+	uint32_t data_bitmap_loc;  /**< data bitmap location in block num */
+	uint32_t data_bitmap_size; /**< data bitmap size in blocks */
+	uint32_t inode_bitmap_loc; /**< inode bitmap location in block num */
+	uint32_t inode_bitmap_size;/**< inode bitmap size in blocks */
 	
-	uint32_t mtime;	
-	uint32_t wtime;
+	uint32_t inode_loc; 	   /**< location of inodes in block num */
+	uint32_t inode_count; 	   /**< no of inodes in blocks */
+	uint32_t data_loc; 		   /**< location of the data in blocks */
+	uint32_t block_count; 	   /**< no of blocks */
+	
+	uint32_t free_inode_count; /**< no of free inodes */
+	uint32_t free_block_count; /**< no of free blocks */
+	
+	uint32_t mtime;			   /**< time of mount of the filesystem */
+	uint32_t wtime; 		   /**< last write time */
 };
 
+/**
+ * @brief inode structure
+ * @details the structure of inodes contains information about one file
+ * with a total size of 54 bytes.
+ */
 struct fs_inode {
-    uint32_t valid;		// Whether or not inode is valid
-    uint32_t size;		// Size of file
-	uint32_t direct[POINTERS_PER_INODE]; // Direct pointers
-	uint32_t indirect;	// Indirect pointer
+	uint16_t mode; 								  /**< file type and permissions */
+	uint16_t uid; 								  /**< id of owner */
+	uint16_t gid; 								  /**< group id of owners */
+	uint32_t atime; 							  /**< last access time in seconds since the epoch */
+	uint32_t mtime; 							  /**< last modification time in seconds since the epoch*/
+	uint32_t size; 								  /**< size of the file in bytes */
+	uint32_t direct[FS_DIRECT_POINTERS_PER_INODE];/* direct data blocks */
+	uint32_t indirect; 							  /**< indirect data blocks */
 };
 
+
+/**
+ * @brief union of a block structure
+ * @details a block can either be a super block, or and array of inodes
+ * or an array of pointers to other blocks, or an array of data  bytes.
+ */
 union fs_block {
-	struct fs_super_block  super;			    // Superblock
-    struct fs_inode	       inodes[INODES_PER_BLOCK];	    // Inode block
-    uint32_t    		   pointers[POINTERS_PER_BLOCK];   // Pointer block
-	char	    		   data[BLOCK_SIZE];	    // Data block
+	struct fs_super_block super; 				/**< super block */
+	struct fs_inode inodes[FS_INODES_PER_BLOCK];/**< array of inodes */
+	uint32_t pointers[FS_POINTERS_PER_BLOCK];   /**< array of pointers */
+	uint8_t data[FS_BLOCK_SIZE]; 				/**< array of data bytes */
 };
-
 #endif
