@@ -28,53 +28,32 @@ static void	usage(char* prog){
  * @brief main function
  */
 int main(int argc, char** argv) {
- //~ int opt;
- //~ char cwd[4012];
- //~ size_t size = 4000;
+	int opt;
+	char cwd[4012];
+	int size = 10;
+	struct fs_filesyst fs;
 
- 	//~ if(argc >= 2){
-	 	//~ while((opt = getopt(argc, argv, "s:p:")) != -1){
-	 		//~ switch(opt){
-	 			//~ case 's':
-	 				//~ size = atoi(optarg);
-	 				//~ break;
-	 			//~ case 'p':
-	 				//~ creatfile(optarg, size);
-	 				//~ break;
-	 			//~ default:
-	 				//~ usage(argv[0]);
-	 				//~ break;
-	 		//~ }
-	 	//~ }
-	//~ }
-	//~ else{
-		//~ getcwd(cwd, sizeof(cwd));
-		//~ strcat(cwd, "/partition");
+ 	if(argc >= 2){
+	 	while((opt = getopt(argc, argv, "s:p:")) != -1){
+	 		switch(opt){
+	 			case 's':
+	 				size = atoi(optarg);
+	 				break;
+	 			case 'p':
+	 				creatfile(optarg, size, &fs);
+	 				break;
+	 			default:
+	 				usage(argv[0]);
+	 				break;
+	 		}
+	 	}
+	}
+	else{
+		getcwd(cwd, sizeof(cwd));
+		strcat(cwd, "/partition");
 
-		//~ creatfile(cwd, size);
-	//~ }
-	char cwd[512] = "partition";
-	struct fs_filesyst fs = creatfile(cwd, 10000);
-	
-	struct fs_super_block sb;
-	sb.magic = 12;
-	sb.data_bitmap_loc = 12;
-	sb.data_bitmap_size = 12;
-	sb.inode_bitmap_loc = 12;
-	sb.inode_bitmap_size = 12;
-	sb.inode_loc = 12;
-	sb.inode_count = 12;
-	sb.data_loc = 12;
-	sb.block_count = 12;
-	sb.free_inode_count = 12;
-	sb.free_block_count = 12;
-	sb.mtime = 12;
-	sb.wtime = 12;
-
-	fs_read_block(fs, 0, sb, sizeof(sb));
-	
-	memset(fs, 0, sizeof(fs));
-	
-	fs_read_block(fs, 0, sb);
+		creatfile(cwd, size, &fs);
+	}
+	disk_close(&fs);
 	return 0;
 }
