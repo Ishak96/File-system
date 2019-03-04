@@ -1,3 +1,10 @@
+/**
+ * @file fs.h
+ * @author ABDELMOUMENE Djahid 
+ * @author AYAD Ishak
+ * @brief filesystem function header
+ * @details main filesystem structs and prototypes
+ */
 #ifndef FS_H
 #define FS_H
 #include <stdint.h>
@@ -5,7 +12,6 @@
 
 
 #define FS_MAGIC 0xF0F03410 		   /* magic number for our filesystem */
-#define FS_BLOCK_SIZE 4096 			   /* block size in bytes */
 #define FS_POINTERS_PER_BLOCK 1024     /* no of pointers (used by inodes) per block in bytes*/
 #define FS_INODES_PER_BLOCK 64 		   /* no of inodes per block */
 #define FS_DIRECT_POINTERS_PER_INODE 8 /* no of direct data pointers in each inode */
@@ -13,7 +19,7 @@
  * @brief super block structure
  * @details the structure of the super block the first block stored
  * stored in memory contains general information about the filesystem
- * and other useful information, with a total size of 28 bytes.
+ * and other useful information, with a total size of 40 bytes.
  */
 struct fs_super_block  {
 	uint32_t magic; 		   /**< the filesystem magic number */
@@ -29,6 +35,10 @@ struct fs_super_block  {
 	
 	uint32_t free_inode_count; /**< no of free inodes */
 	uint32_t free_block_count; /**< no of free blocks */
+	
+	uint32_t nreads;  /**< number of reads performed */
+	uint32_t nwrites; /**< number of writes performed*/
+	uint32_t mounts;  /**< number of mounts*/
 	
 	uint32_t mtime;			   /**< time of mount of the filesystem */
 	uint32_t wtime; 		   /**< last write time */
@@ -46,7 +56,7 @@ struct fs_inode {
 	uint32_t atime; 							  /**< last access time in seconds since the epoch */
 	uint32_t mtime; 							  /**< last modification time in seconds since the epoch*/
 	uint32_t size; 								  /**< size of the file in bytes */
-	uint32_t direct[FS_DIRECT_POINTERS_PER_INODE];/* direct data blocks */
+	uint32_t direct[FS_DIRECT_POINTERS_PER_INODE];/**< direct data blocks */
 	uint32_t indirect; 							  /**< indirect data blocks */
 };
 
