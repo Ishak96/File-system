@@ -53,6 +53,11 @@ int main(int argc, char** argv) {
 		fs_dump_inode(fs, super, no);
 	}
 	
+	uint32_t data[5];
+	fs_alloc_data(fs, super, data, 5);
+	for(int i=0; i<5; i++) {
+		printf("allocated %u\n", data[i]);
+	}
 	
 	disk_close(&fs);
 	return 0;

@@ -283,3 +283,64 @@ int fs_dump_inode(struct fs_filesyst fs, struct fs_super_block super, uint32_t i
 	printf("size: %d\n", ind.size);
 	return 0;
 }
+
+int fs_alloc_data(struct fs_filesyst fs, struct fs_super_block super, uint32_t data[], size_t size) {
+	/* param check */
+	if(data == NULL || size <= 0) {
+		fprintf(stderr, "fs_alloc_data: invalid arguments!\n");
+		return FUNC_ERROR;
+	}
+
+	uint32_t start = super.data_bitmap_loc;
+	uint32_t end = super.data_bitmap_loc + super.data_bitmap_size;
+	if(end <= start) {
+		fprintf(stderr, "fs_alloc_inode: invalid bitmap blocks!\n");
+		return FUNC_ERROR;
+	}
+	
+	int left = size;
+	uint32_t off; /* offset of the first null bit in the first block containing one */
+	uint32_t blknum;
+	union fs_block blk;
+	/* parse the data bitmap and look for the first bit in the first block that is free */
+	for(blknum=start; blknum<end && left>0; blknum++) {
+		/* read the block */
+		if(fs_read_block(fs, blknum, &blk) < 0) {
+			fprintf(stderr, "fs_alloc_inode: fs_read_block!\n");
+			return FUNC_ERROR;
+		}
+		/* parse the block for a null bit */
+		for(int i=0; i<FS_BLOCK_SIZE && left>0; i++) {
+			uint8_t byte = blk.data[i];
+			if(byte != 255) {
+				off = 0;
+				uint8_t temp = byte;
+				while(temp) { /* to get the first one */
+					temp >>= 1;
+					off ++;
+				}
+				/* calculate the marked byte */
+				uint8_t marked_byte = 1;
+				marked_byte <<= off;
+				marked_byte |= byte;
+				off += i * 8; /* add the offset of the byte location in the block */
+				/* mark as read */
+				blk.data[i] = marked_byte;
+
+				left --;
+				data[left] = ((blknum - start) * FS_BLOCK_SIZE * BITS_PER_BYTE) + off;
+				
+				/* write to disk */
+				if(fs_write_block(fs, blknum, &blk, FS_BLOCK_SIZE) < 0) {
+					fprintf(stderr, "fs_alloc_inode: fs_write_block!\n");
+					return FUNC_ERROR;
+				}
+				if(byte != 255 && left != 0) {
+					i--;
+				}
+			}
+		}
+	}
+	return 0;
+}
+

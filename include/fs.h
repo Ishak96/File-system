@@ -85,5 +85,6 @@ int fs_dump_super(struct fs_filesyst fs);
 int fs_format(struct fs_filesyst fs);
 int fs_alloc_inode(struct fs_filesyst fs, struct fs_super_block super, struct fs_inode *inode, uint32_t *inodenum);
 int fs_dump_inode(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum);
+int fs_alloc_data(struct fs_filesyst fs, struct fs_super_block super, uint32_t data[], size_t size);
 
 #endif
