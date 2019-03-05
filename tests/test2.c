@@ -47,9 +47,10 @@ int main(int argc, char** argv) {
 	ind.atime = 123;
 	ind.mtime = 123;	
 	
-	for(int i=0; i<5; i++) {
+	for(int i=0; i<65; i++) {
 		printf("\n[%d]ALLOCATING\n", i);
-		fs_alloc_inode(fs, super, &ind, &no);
+		fs_alloc_inode(fs, super, &no);
+		fs_write_inode(fs, super,no, &ind);
 		fs_dump_inode(fs, super, no);
 	}
 	
