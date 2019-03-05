@@ -87,5 +87,6 @@ int fs_alloc_inode(struct fs_filesyst fs, struct fs_super_block* super, uint32_t
 int fs_dump_inode(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum);
 int fs_alloc_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t data[], size_t size);
 int fs_write_inode(struct fs_filesyst fs, struct fs_super_block super, uint32_t indno, struct fs_inode *inode);
-
+int fs_write_data(struct fs_filesyst fs, struct fs_super_block super,
+				  union fs_block *data, uint32_t *blknums, size_t size);
 #endif

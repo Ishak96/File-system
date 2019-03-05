@@ -378,7 +378,21 @@ int fs_alloc_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t 
 	return 0;
 }
 
-int fs_free_inod(struct fs_filesyst fs, struct fs_super_block super, uint32_t no){
-
+int fs_write_data(struct fs_filesyst fs, struct fs_super_block super,
+				  union fs_block *data, uint32_t *blknums, size_t size)
+{
+	if(data == NULL || blknums == NULL) {
+		fprintf(stderr, "fs_write_data: invalid arguments!\n");
+		return FUNC_ERROR;
+	}
+	
+	for(int i=0; i<size; i++) {
+		uint32_t blknum = blknums[i];
+		union fs_block* d = data + i + super.data_loc;
+		if(fs_write_block(fs, blknum, d, FS_BLOCK_SIZE)) {
+			fprintf(stderr, "fs_write_data: fs_write_block");
+			return FUNC_ERROR;
+		}
+	}
 	return 0;
 }

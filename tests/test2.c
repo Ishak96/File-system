@@ -55,9 +55,14 @@ int main(int argc, char** argv) {
 	}
 	
 	uint32_t data[20];
+	union fs_block b[20];
+	memset(&b, 0, sizeof(b));
+	
 	fs_alloc_data(fs, &super, data, 20);
+	fs_write_data(fs, super, b, data, 20);
 	for(int i=0; i<20; i++) {
 		printf("allocated %u\n", data[i]);
+		
 	}
 	fs_dump_super(fs);
 	
