@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 
 /**
  * @brief format the superblock into the virtual filesystem
@@ -23,7 +24,6 @@
  */
 int fs_format_super(struct fs_filesyst fs) {
 	struct fs_super_block super;
-	
 	/* initializing the log values */
 	super.magic = FS_MAGIC;
 	super.nreads = 0;
@@ -45,7 +45,9 @@ int fs_format_super(struct fs_filesyst fs) {
 	
 	/* the rest is for data and data bitmap */
 	uint32_t blocks_left = nblocks - (super.inode_count + super.inode_bitmap_size);
-	super.data_bitmap_size = NOT_NULL((int) log2(blocks_left)); /* approximation */
+	super.data_bitmap_size = 
+	NOT_NULL((int) log2(blocks_left / (FS_BLOCK_SIZE*BITS_PER_BYTE))); /* approximation */
+
 	super.data_count = NOT_NULL(blocks_left - super.data_bitmap_size);
 	
 	/* sanity check */
@@ -104,10 +106,10 @@ int fs_dump_super(struct fs_filesyst fs) {
 	printf("Magic: %x\n", super.magic);
 
 	printf("Bitmaps: \finode: \f");
-	print_range(super.inode_bitmap_loc, super.inode_count);
+	print_range(super.inode_bitmap_loc, super.inode_bitmap_size);
 	
 	printf("         data: \f");
-	print_range(super.data_bitmap_loc, super.data_count);
+	print_range(super.data_bitmap_loc, super.data_bitmap_size);
 	
 	printf("Inode table:\f");
 	print_range(super.inode_loc, super.inode_count);
@@ -118,10 +120,166 @@ int fs_dump_super(struct fs_filesyst fs) {
 	printf("Log:\n");
 	printf("    number of reads: %d\n", super.nreads);
 	printf("    number of writes: %d\n", super.nwrites);
-	printf("    number of mounts: %d\n", super.nwrites);
+	printf("    number of mounts: %d\n", super.mounts);
 	
 	printf("    last mount time: %s", timetostr(super.mtime));
 	printf("    last write time: %s", timetostr(super.wtime));
 	
+	return 0;
+}
+
+/**
+ * @brief format the filesystem
+ * @details formats the superblock and sets the bitmaps to 0
+ */
+int fs_format(struct fs_filesyst fs) {
+	/* format the superblock */
+	if(fs_format_super(fs) < 0) {
+		fprintf(stderr, "fs_format: fs_format_super\n");
+		return FUNC_ERROR;
+	}
+	
+	/* set the bitmaps to 0 */
+	union fs_block blk;
+	
+	/* read the super block*/
+	struct fs_super_block super;
+	if(fs_read_block(fs, 0, &blk) < 0) {
+		fprintf(stderr, "fs_format: fs_read_block\n");
+		return FUNC_ERROR;
+	}
+	super = blk.super;
+	
+	/* reset the blk buffer to 0 */
+	memset(&blk, 0, FS_BLOCK_SIZE);
+	
+	/* set the data bitmap to 0 */
+	for(int i=super.data_bitmap_loc; i<super.data_bitmap_loc+super.data_bitmap_size; i++) {
+		if(fs_write_block(fs, i, &blk, FS_BLOCK_SIZE) < 0) {
+			fprintf(stderr, "fs_format: fs_write_block\n");
+			return FUNC_ERROR;
+		}
+	}
+
+	/* set the inode bitmap to 0 */
+	for(int i=super.inode_bitmap_loc; i<super.inode_bitmap_loc+super.inode_bitmap_size; i++) {
+		if(fs_write_block(fs, i, &blk, FS_BLOCK_SIZE) < 0) {
+			fprintf(stderr, "fs_format: fs_write_block\n");
+			return FUNC_ERROR;
+		}
+	}
+	
+	return 0;
+}
+
+/**
+ * @brief allocate an inode
+ * @details allocates the first free inode in the inode table
+ * @arg fs: the virtual filesystem
+ * @arg super: the superblock
+ * @arg inode: the inode to write
+ * @arg inodenum: the inode number allocated
+ */
+int fs_alloc_inode(struct fs_filesyst fs, struct fs_super_block super, struct fs_inode *inode, uint32_t *inodenum) {
+	uint32_t start = super.inode_bitmap_loc;
+	uint32_t end = super.inode_bitmap_loc + super.inode_bitmap_size;
+	if(end <= start) {
+		fprintf(stderr, "fs_alloc_inode: invalid bitmap blocks!\n");
+		return FUNC_ERROR;
+	}
+	
+	int found = 0;
+	uint32_t off; /* offset of the first null bit in the first block containing one */
+	uint32_t blknum;
+	union fs_block blk;
+	/* parse the inode bitmap and look for the first bit in the first block that is free */
+	for(blknum=start; blknum<end && found==0; blknum++) {
+		/* read the block */
+		if(fs_read_block(fs, blknum, &blk) < 0) {
+			fprintf(stderr, "fs_alloc_inode: fs_read_block!\n");
+			return FUNC_ERROR;
+		}
+		/* parse the block for a null bit */
+		for(int i=0; i<FS_BLOCK_SIZE && found==0; i++) {
+			uint8_t byte = blk.data[i];
+			if(byte != 255) {
+				off = 0;
+				uint8_t temp = byte;
+				while(temp) { /* to get the first one */
+					temp >>= 1;
+					off ++;
+				}
+				/* calculate the marked byte */
+				uint8_t marked_byte = 1;
+				marked_byte <<= off;
+				marked_byte |= byte;
+				off += i * 8; /* add the offset of the byte location in the block */
+				found = 1;
+				/* mark as read */
+				blk.data[i] = marked_byte;
+				
+				/* write to disk */
+				if(fs_write_block(fs, blknum, &blk, FS_BLOCK_SIZE) < 0) {
+					fprintf(stderr, "fs_alloc_inode: fs_write_block!\n");
+					return FUNC_ERROR;
+				}
+			}
+		}
+	}
+	
+	/* real inode offset in blocks from super.inode_loc */
+	uint32_t indno = ((blknum - start - 1) * FS_BLOCK_SIZE * BITS_PER_BYTE) + off;
+	*inodenum = indno;
+	
+	uint32_t blkno = indno / FS_INODES_PER_BLOCK;
+
+	if(!found || blkno >= super.inode_count) {
+		fprintf(stderr, "fs_alloc_inode: no space left\n");
+		return FUNC_ERROR;
+	}
+	/* getting the real block offset from the start */
+	blkno += super.inode_loc;
+	
+	/* offset in the block containing the inode */
+	uint8_t indoff = indno % FS_INODES_PER_BLOCK;
+	
+	//~ /* reading the block containing the inode */
+	union fs_block iblk;
+	if(fs_read_block(fs, blkno, &iblk) < 0) {
+		fprintf(stderr, "fs_alloc_inode: fs_read_block!\n");
+		return FUNC_ERROR;
+	}
+	//~ /* setting the inode in the block */
+	iblk.inodes[indoff] = *inode;
+	
+	/* writing changes to disk */
+	if(fs_write_block(fs, blkno, &iblk, FS_BLOCK_SIZE) < 0) {
+		fprintf(stderr, "fs_alloc_inode: fs_write_block!\n");
+		return FUNC_ERROR;
+	}
+	
+	return 0;
+}
+
+int fs_dump_inode(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum) {
+	uint32_t blkno = inodenum / FS_INODES_PER_BLOCK + super.inode_loc;
+	uint8_t indoff = inodenum % FS_INODES_PER_BLOCK;
+	
+	union fs_block blk;
+	if(fs_read_block(fs, blkno, &blk) < 0) {
+		fprintf(stderr, "fd_dump_super: dump failed, cannot read!\n");
+		return FUNC_ERROR;
+	}
+	
+	struct fs_inode ind;
+	ind = blk.inodes[indoff];
+	
+	printf("Inode %d dump:\n", inodenum);
+	printf("mode: %d\n", ind.mode);
+	printf("uid: %d\n", ind.uid);
+	printf("gid: %d\n", ind.gid);
+	printf("atime: %s", timetostr(ind.atime));
+	printf("mtime: %s", timetostr(ind.mtime));
+	printf("size: %d\n", ind.size);
 	return 0;
 }

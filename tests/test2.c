@@ -10,7 +10,7 @@
 
 #include <fs.h>
 #include <disk.h>
-
+#include <devutils.h>
 
 /**
  * @author ABDELMOUMENE Djahid 
@@ -23,11 +23,37 @@ int main(int argc, char** argv) {
 	printf("Creating filesyst..\n");
 	creatfile(cwd, 100000, &fs);
 
-	printf("formatting superblock..\n");
-	fs_format_super(fs);
+	printf("formatting filesystem..\n");
+	fs_format(fs);
 	
 	printf("dumping superblock\n");
 	fs_dump_super(fs);
 	
+	/* read the super block*/
+	union fs_block blk;
+	struct fs_super_block super;
+	if(fs_read_block(fs, 0, &blk) < 0) {
+		fprintf(stderr, "fs_format: fs_read_block\n");
+		return FUNC_ERROR;
+	}
+	super = blk.super;
+	
+	uint32_t no;
+	struct fs_inode ind;
+	memset(&ind, 0, sizeof(ind));
+	ind.mode = 123;
+	ind.uid = 123;
+	ind.gid = 123;
+	ind.atime = 123;
+	ind.mtime = 123;	
+	
+	for(int i=0; i<5; i++) {
+		printf("\n[%d]ALLOCATING\n", i);
+		fs_alloc_inode(fs, super, &ind, &no);
+		fs_dump_inode(fs, super, no);
+	}
+	
+	
+	disk_close(&fs);
 	return 0;
 }

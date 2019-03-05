@@ -82,5 +82,8 @@ union fs_block {
 /* prototypes */
 int fs_format_super(struct fs_filesyst fs);
 int fs_dump_super(struct fs_filesyst fs);
+int fs_format(struct fs_filesyst fs);
+int fs_alloc_inode(struct fs_filesyst fs, struct fs_super_block super, struct fs_inode *inode, uint32_t *inodenum);
+int fs_dump_inode(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum);
 
 #endif
