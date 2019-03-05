@@ -1,0 +1,122 @@
+.TH "src/disk.c" 3 "Tue Mar 5 2019" "File Manager" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/disk.c \- initializing the partition  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <devutils\&.h>\fP
+.br
+\fC#include <disk\&.h>\fP
+.br
+\fC#include <fs\&.h>\fP
+.br
+\fC#include <sys/types\&.h>\fP
+.br
+\fC#include <fcntl\&.h>\fP
+.br
+\fC#include <unistd\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBcreatfile\fP (const char *filename, size_t size, struct \fBfs_filesyst\fP *fs)"
+.br
+.RI "creat a disk image for storing the disk data "
+.ti -1c
+.RI "int \fBdisk_size\fP (struct \fBfs_filesyst\fP fs)"
+.br
+.RI "discover the number of blocks on the disk "
+.ti -1c
+.RI "void \fBdisk_close\fP (struct \fBfs_filesyst\fP *fs)"
+.br
+.RI "release the file "
+.ti -1c
+.RI "int \fBfs_write_block\fP (struct \fBfs_filesyst\fP fs, int blocknum, const void *blk, size_t blksize)"
+.br
+.RI "write a chunk of data into a block "
+.ti -1c
+.RI "int \fBfs_read_block\fP (struct \fBfs_filesyst\fP fs, int blocknum, void *blk)"
+.br
+.RI "read a chunk of data from a filesystem "
+.in -1c
+.SH "Detailed Description"
+.PP 
+initializing the partition 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+ABDELMOUMENE Djahid 
+.PP
+AYAD Ishak
+.RE
+.PP
+initializing the partition files and utility functions to interact with the os 
+.SH "Function Documentation"
+.PP 
+.SS "int creatfile (const char * filename, size_t size, struct \fBfs_filesyst\fP * fs)"
+
+.PP
+creat a disk image for storing the disk data if this function is called on a disk image that already exists, the function will retun -1, otherwise it will initialize the \fBfs_filesyst\fP struct 
+.PP
+\fBSee also:\fP
+.RS 4
+\fBfs_filesyst\fP 
+.RE
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfilename\fP partition name 
+.br
+\fIn\fP the number of blocks 
+.br
+\fIfs\fP virtual filesystem structure 
+.RE
+.PP
+
+.SS "void disk_close (struct \fBfs_filesyst\fP * fs)"
+
+.PP
+release the file this function close the file descriptor using the virtual filesystem structure 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfs\fP virtual filesystem structure 
+.RE
+.PP
+
+.SS "int disk_size (struct \fBfs_filesyst\fP fs)"
+
+.PP
+discover the number of blocks on the disk 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfs\fP virtual filesystem structure 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+the virtual filesystem number of blocks 
+.RE
+.PP
+
+.SS "int fs_read_block (struct \fBfs_filesyst\fP fs, int blocknum, void * blk)"
+
+.PP
+read a chunk of data from a filesystem read a block of data blk from the filesystem fs from block number blocknum 
+.SS "int fs_write_block (struct \fBfs_filesyst\fP fs, int blocknum, const void * blk, size_t blksize)"
+
+.PP
+write a chunk of data into a block write a block of data blk of size blksize into the filesystem fs in block number blocknum 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for File Manager from the source code\&.

@@ -1,0 +1,59 @@
+\hypertarget{unionfs__block}{}\doxysection{fs\+\_\+block Union Reference}
+\label{unionfs__block}\index{fs\_block@{fs\_block}}
+
+
+union of a block structure  
+
+
+
+
+{\ttfamily \#include $<$fs.\+h$>$}
+
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} \mbox{\hyperlink{unionfs__block_a567fd97fc6dbdbede24dba13bbe9fef5}{super}}
+\item 
+struct \mbox{\hyperlink{structfs__inode}{fs\+\_\+inode}} \mbox{\hyperlink{unionfs__block_a43d96d75f7ec8b76e489d7772057b7af}{inodes}} \mbox{[}F\+S\+\_\+\+I\+N\+O\+D\+E\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+CK\mbox{]}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{unionfs__block_a9f65c017631624e8fd41f9b994ec33db}{pointers}} \mbox{[}F\+S\+\_\+\+P\+O\+I\+N\+T\+E\+R\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+CK\mbox{]}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{unionfs__block_af4bcdadb505a03f48130efd7cf646f7b}{data}} \mbox{[}F\+S\+\_\+\+B\+L\+O\+C\+K\+\_\+\+S\+I\+ZE\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+union of a block structure 
+
+a block can either be a super block, or and array of inodes or an array of pointers to other blocks, or an array of data bytes. 
+
+\doxysubsection{Field Documentation}
+\mbox{\Hypertarget{unionfs__block_af4bcdadb505a03f48130efd7cf646f7b}\label{unionfs__block_af4bcdadb505a03f48130efd7cf646f7b}} 
+\index{fs\_block@{fs\_block}!data@{data}}
+\index{data@{data}!fs\_block@{fs\_block}}
+\doxysubsubsection{\texorpdfstring{data}{data}}
+{\footnotesize\ttfamily uint8\+\_\+t fs\+\_\+block\+::data\mbox{[}F\+S\+\_\+\+B\+L\+O\+C\+K\+\_\+\+S\+I\+ZE\mbox{]}}
+
+array of data bytes \mbox{\Hypertarget{unionfs__block_a43d96d75f7ec8b76e489d7772057b7af}\label{unionfs__block_a43d96d75f7ec8b76e489d7772057b7af}} 
+\index{fs\_block@{fs\_block}!inodes@{inodes}}
+\index{inodes@{inodes}!fs\_block@{fs\_block}}
+\doxysubsubsection{\texorpdfstring{inodes}{inodes}}
+{\footnotesize\ttfamily struct \mbox{\hyperlink{structfs__inode}{fs\+\_\+inode}} fs\+\_\+block\+::inodes\mbox{[}F\+S\+\_\+\+I\+N\+O\+D\+E\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+CK\mbox{]}}
+
+array of inodes \mbox{\Hypertarget{unionfs__block_a9f65c017631624e8fd41f9b994ec33db}\label{unionfs__block_a9f65c017631624e8fd41f9b994ec33db}} 
+\index{fs\_block@{fs\_block}!pointers@{pointers}}
+\index{pointers@{pointers}!fs\_block@{fs\_block}}
+\doxysubsubsection{\texorpdfstring{pointers}{pointers}}
+{\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+block\+::pointers\mbox{[}F\+S\+\_\+\+P\+O\+I\+N\+T\+E\+R\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+CK\mbox{]}}
+
+array of pointers \mbox{\Hypertarget{unionfs__block_a567fd97fc6dbdbede24dba13bbe9fef5}\label{unionfs__block_a567fd97fc6dbdbede24dba13bbe9fef5}} 
+\index{fs\_block@{fs\_block}!super@{super}}
+\index{super@{super}!fs\_block@{fs\_block}}
+\doxysubsubsection{\texorpdfstring{super}{super}}
+{\footnotesize\ttfamily struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} fs\+\_\+block\+::super}
+
+super block 
+
+The documentation for this union was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{fs_8h}{fs.\+h}}\end{DoxyCompactItemize}

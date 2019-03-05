@@ -44,7 +44,6 @@ int creatfile(const char* filename, size_t size, struct fs_filesyst* fs) {
 	return 0;
 }
 
-
 /**
 * @brief discover the number of blocks on the disk
 * @param fs virtual filesystem structure

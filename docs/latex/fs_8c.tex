@@ -2,18 +2,25 @@
 \label{fs_8c}\index{src/fs.c@{src/fs.c}}
 
 
-initializing the partition  
+main filesystem functions  
 
 
 {\ttfamily \#include $<$devutils.\+h$>$}\newline
+{\ttfamily \#include $<$fs.\+h$>$}\newline
 {\ttfamily \#include $<$sys/types.\+h$>$}\newline
 {\ttfamily \#include $<$fcntl.\+h$>$}\newline
 {\ttfamily \#include $<$unistd.\+h$>$}\newline
 {\ttfamily \#include $<$stdio.\+h$>$}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{fs_8c_ae7dfcd17667d2544831d6ed9e285faf1}\label{fs_8c_ae7dfcd17667d2544831d6ed9e285faf1}} 
+int {\bfseries fs\+\_\+format\+\_\+super} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super)
+\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
-initializing the partition 
+main filesystem functions 
 
 \begin{DoxyAuthor}{Author}
 A\+B\+D\+E\+L\+M\+O\+U\+M\+E\+NE Djahid 

@@ -1,0 +1,44 @@
+\hypertarget{fs_8h}{}\doxysection{include/fs.h File Reference}
+\label{fs_8h}\index{include/fs.h@{include/fs.h}}
+
+
+filesystem function header  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$disk.\+h$>$}\newline
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}
+\begin{DoxyCompactList}\small\item\em super block structure \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structfs__inode}{fs\+\_\+inode}}
+\begin{DoxyCompactList}\small\item\em inode structure \end{DoxyCompactList}\item 
+union \mbox{\hyperlink{unionfs__block}{fs\+\_\+block}}
+\begin{DoxyCompactList}\small\item\em union of a block structure \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{fs_8h_a5c72ea0aa1bd4c3dff167cae7c49bc54}\label{fs_8h_a5c72ea0aa1bd4c3dff167cae7c49bc54}} 
+\#define {\bfseries F\+S\+\_\+\+M\+A\+G\+IC}~0x\+F0\+F03410 		   /$\ast$ magic number for our filesystem $\ast$/
+\item 
+\mbox{\Hypertarget{fs_8h_a02aafdafda8ed87a9a67f66abdf1245d}\label{fs_8h_a02aafdafda8ed87a9a67f66abdf1245d}} 
+\#define {\bfseries F\+S\+\_\+\+P\+O\+I\+N\+T\+E\+R\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+CK}~1024     /$\ast$ no of pointers (used by inodes) per block in bytes$\ast$/
+\item 
+\mbox{\Hypertarget{fs_8h_af7740da8857fe70770909649bd6cd73f}\label{fs_8h_af7740da8857fe70770909649bd6cd73f}} 
+\#define {\bfseries F\+S\+\_\+\+I\+N\+O\+D\+E\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+CK}~64 		   /$\ast$ no of inodes per block $\ast$/
+\item 
+\mbox{\Hypertarget{fs_8h_a8bbde55a40d4abbebc3ef3cb04ed75d2}\label{fs_8h_a8bbde55a40d4abbebc3ef3cb04ed75d2}} 
+\#define {\bfseries F\+S\+\_\+\+D\+I\+R\+E\+C\+T\+\_\+\+P\+O\+I\+N\+T\+E\+R\+S\+\_\+\+P\+E\+R\+\_\+\+I\+N\+O\+DE}~8 /$\ast$ no of direct data pointers in each inode $\ast$/
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+filesystem function header 
+
+\begin{DoxyAuthor}{Author}
+A\+B\+D\+E\+L\+M\+O\+U\+M\+E\+NE Djahid 
+
+A\+Y\+AD Ishak
+\end{DoxyAuthor}
+main filesystem structs and prototypes 

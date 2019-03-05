@@ -55,5 +55,4 @@ int main(int argc, char** argv) {
 		creatfile(cwd, size, &fs);
 	}
 	disk_close(&fs);
-	return 0;
 }

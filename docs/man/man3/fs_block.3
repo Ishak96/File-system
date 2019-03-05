@@ -1,0 +1,46 @@
+.TH "fs_block" 3 "Tue Mar 5 2019" "File Manager" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+fs_block \- union of a block structure  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <fs\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "struct \fBfs_super_block\fP \fBsuper\fP"
+.br
+.ti -1c
+.RI "struct \fBfs_inode\fP \fBinodes\fP [FS_INODES_PER_BLOCK]"
+.br
+.ti -1c
+.RI "uint32_t \fBpointers\fP [FS_POINTERS_PER_BLOCK]"
+.br
+.ti -1c
+.RI "uint8_t \fBdata\fP [FS_BLOCK_SIZE]"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+union of a block structure 
+
+a block can either be a super block, or and array of inodes or an array of pointers to other blocks, or an array of data bytes\&. 
+.SH "Field Documentation"
+.PP 
+.SS "uint8_t fs_block::data[FS_BLOCK_SIZE]"
+array of data bytes 
+.SS "struct \fBfs_inode\fP fs_block::inodes[FS_INODES_PER_BLOCK]"
+array of inodes 
+.SS "uint32_t fs_block::pointers[FS_POINTERS_PER_BLOCK]"
+array of pointers 
+.SS "struct \fBfs_super_block\fP fs_block::super"
+super block 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for File Manager from the source code\&.

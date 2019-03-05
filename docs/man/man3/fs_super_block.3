@@ -1,0 +1,106 @@
+.TH "fs_super_block" 3 "Tue Mar 5 2019" "File Manager" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+fs_super_block \- super block structure  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <fs\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "uint32_t \fBmagic\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBdata_bitmap_loc\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBdata_bitmap_size\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBinode_bitmap_loc\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBinode_bitmap_size\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBinode_loc\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBinode_count\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBdata_loc\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBblock_count\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBfree_inode_count\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBfree_block_count\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBnreads\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBnwrites\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBmounts\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBmtime\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBwtime\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+super block structure 
+
+the structure of the super block the first block stored stored in memory contains general information about the filesystem and other useful information, with a total size of 40 bytes\&. 
+.SH "Field Documentation"
+.PP 
+.SS "uint32_t fs_super_block::block_count"
+no of blocks 
+.SS "uint32_t fs_super_block::data_bitmap_loc"
+data bitmap location in block num 
+.SS "uint32_t fs_super_block::data_bitmap_size"
+data bitmap size in blocks 
+.SS "uint32_t fs_super_block::data_loc"
+location of the data in blocks 
+.SS "uint32_t fs_super_block::free_block_count"
+no of free blocks 
+.SS "uint32_t fs_super_block::free_inode_count"
+no of free inodes 
+.SS "uint32_t fs_super_block::inode_bitmap_loc"
+inode bitmap location in block num 
+.SS "uint32_t fs_super_block::inode_bitmap_size"
+inode bitmap size in blocks 
+.SS "uint32_t fs_super_block::inode_count"
+no of inodes in blocks 
+.SS "uint32_t fs_super_block::inode_loc"
+location of inodes in block num 
+.SS "uint32_t fs_super_block::magic"
+the filesystem magic number 
+.SS "uint32_t fs_super_block::mounts"
+number of mounts 
+.SS "uint32_t fs_super_block::mtime"
+time of mount of the filesystem 
+.SS "uint32_t fs_super_block::nreads"
+number of reads performed 
+.SS "uint32_t fs_super_block::nwrites"
+number of writes performed 
+.SS "uint32_t fs_super_block::wtime"
+last write time 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for File Manager from the source code\&.

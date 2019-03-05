@@ -1,0 +1,116 @@
+\hypertarget{disk_8c}{}\doxysection{src/disk.c File Reference}
+\label{disk_8c}\index{src/disk.c@{src/disk.c}}
+
+
+initializing the partition  
+
+
+{\ttfamily \#include $<$devutils.\+h$>$}\newline
+{\ttfamily \#include $<$disk.\+h$>$}\newline
+{\ttfamily \#include $<$fs.\+h$>$}\newline
+{\ttfamily \#include $<$sys/types.\+h$>$}\newline
+{\ttfamily \#include $<$fcntl.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{disk_8c_a9d3c8e891397d966d2fbb3c27cc41dcc}{creatfile}} (const char $\ast$filename, size\+\_\+t size, struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} $\ast$fs)
+\begin{DoxyCompactList}\small\item\em creat a disk image for storing the disk data \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{disk_8c_a0cd9235d1059da527f94b43efb2afbbd}{disk\+\_\+size}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs)
+\begin{DoxyCompactList}\small\item\em discover the number of blocks on the disk \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{disk_8c_acb759581a1d3715fe5e74fe13c23677f}{disk\+\_\+close}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} $\ast$fs)
+\begin{DoxyCompactList}\small\item\em release the file \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{disk_8c_ace2675173098deba29cd2bd9b3f74a7a}{fs\+\_\+write\+\_\+block}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, int blocknum, const void $\ast$blk, size\+\_\+t blksize)
+\begin{DoxyCompactList}\small\item\em write a chunk of data into a block \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{disk_8c_ae7c04a755273864393eb6bb6b6419be1}{fs\+\_\+read\+\_\+block}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, int blocknum, void $\ast$blk)
+\begin{DoxyCompactList}\small\item\em read a chunk of data from a filesystem \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+initializing the partition 
+
+\begin{DoxyAuthor}{Author}
+A\+B\+D\+E\+L\+M\+O\+U\+M\+E\+NE Djahid 
+
+A\+Y\+AD Ishak
+\end{DoxyAuthor}
+initializing the partition files and utility functions to interact with the os 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{disk_8c_a9d3c8e891397d966d2fbb3c27cc41dcc}\label{disk_8c_a9d3c8e891397d966d2fbb3c27cc41dcc}} 
+\index{disk.c@{disk.c}!creatfile@{creatfile}}
+\index{creatfile@{creatfile}!disk.c@{disk.c}}
+\doxysubsubsection{\texorpdfstring{creatfile()}{creatfile()}}
+{\footnotesize\ttfamily int creatfile (\begin{DoxyParamCaption}\item[{const char $\ast$}]{filename,  }\item[{size\+\_\+t}]{size,  }\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} $\ast$}]{fs }\end{DoxyParamCaption})}
+
+
+
+creat a disk image for storing the disk data 
+
+if this function is called on a disk image that already exists, the function will retun -\/1, otherwise it will initialize the \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} struct \begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} 
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & partition name \\
+\hline
+{\em n} & the number of blocks \\
+\hline
+{\em fs} & virtual filesystem structure \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{disk_8c_acb759581a1d3715fe5e74fe13c23677f}\label{disk_8c_acb759581a1d3715fe5e74fe13c23677f}} 
+\index{disk.c@{disk.c}!disk\_close@{disk\_close}}
+\index{disk\_close@{disk\_close}!disk.c@{disk.c}}
+\doxysubsubsection{\texorpdfstring{disk\_close()}{disk\_close()}}
+{\footnotesize\ttfamily void disk\+\_\+close (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} $\ast$}]{fs }\end{DoxyParamCaption})}
+
+
+
+release the file 
+
+this function close the file descriptor using the virtual filesystem structure 
+\begin{DoxyParams}{Parameters}
+{\em fs} & virtual filesystem structure \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{disk_8c_a0cd9235d1059da527f94b43efb2afbbd}\label{disk_8c_a0cd9235d1059da527f94b43efb2afbbd}} 
+\index{disk.c@{disk.c}!disk\_size@{disk\_size}}
+\index{disk\_size@{disk\_size}!disk.c@{disk.c}}
+\doxysubsubsection{\texorpdfstring{disk\_size()}{disk\_size()}}
+{\footnotesize\ttfamily int disk\+\_\+size (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs }\end{DoxyParamCaption})}
+
+
+
+discover the number of blocks on the disk 
+
+
+\begin{DoxyParams}{Parameters}
+{\em fs} & virtual filesystem structure \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the virtual filesystem number of blocks 
+\end{DoxyReturn}
+\mbox{\Hypertarget{disk_8c_ae7c04a755273864393eb6bb6b6419be1}\label{disk_8c_ae7c04a755273864393eb6bb6b6419be1}} 
+\index{disk.c@{disk.c}!fs\_read\_block@{fs\_read\_block}}
+\index{fs\_read\_block@{fs\_read\_block}!disk.c@{disk.c}}
+\doxysubsubsection{\texorpdfstring{fs\_read\_block()}{fs\_read\_block()}}
+{\footnotesize\ttfamily int fs\+\_\+read\+\_\+block (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{int}]{blocknum,  }\item[{void $\ast$}]{blk }\end{DoxyParamCaption})}
+
+
+
+read a chunk of data from a filesystem 
+
+read a block of data blk from the filesystem fs from block number blocknum \mbox{\Hypertarget{disk_8c_ace2675173098deba29cd2bd9b3f74a7a}\label{disk_8c_ace2675173098deba29cd2bd9b3f74a7a}} 
+\index{disk.c@{disk.c}!fs\_write\_block@{fs\_write\_block}}
+\index{fs\_write\_block@{fs\_write\_block}!disk.c@{disk.c}}
+\doxysubsubsection{\texorpdfstring{fs\_write\_block()}{fs\_write\_block()}}
+{\footnotesize\ttfamily int fs\+\_\+write\+\_\+block (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{int}]{blocknum,  }\item[{const void $\ast$}]{blk,  }\item[{size\+\_\+t}]{blksize }\end{DoxyParamCaption})}
+
+
+
+write a chunk of data into a block 
+
+write a block of data blk of size blksize into the filesystem fs in block number blocknum 

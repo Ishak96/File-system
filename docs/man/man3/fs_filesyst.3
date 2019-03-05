@@ -1,0 +1,41 @@
+.TH "fs_filesyst" 3 "Tue Mar 5 2019" "File Manager" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+fs_filesyst \- virtual filesystem structure  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <disk\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "uint32_t \fBfd\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBtot_size\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBnblocks\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+virtual filesystem structure 
+
+contains information about the file used to simulate a disk partition 
+.SH "Field Documentation"
+.PP 
+.SS "uint32_t fs_filesyst::fd"
+file descriptor 
+.SS "uint32_t fs_filesyst::nblocks"
+number of blocks in disk image 
+.SS "uint32_t fs_filesyst::tot_size"
+total size of our file (partition) 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for File Manager from the source code\&.

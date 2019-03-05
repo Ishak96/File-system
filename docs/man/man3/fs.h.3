@@ -1,0 +1,63 @@
+.TH "include/fs.h" 3 "Tue Mar 5 2019" "File Manager" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+include/fs.h \- filesystem function header  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <disk\&.h>\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBfs_super_block\fP"
+.br
+.RI "super block structure "
+.ti -1c
+.RI "struct \fBfs_inode\fP"
+.br
+.RI "inode structure "
+.ti -1c
+.RI "union \fBfs_block\fP"
+.br
+.RI "union of a block structure "
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBFS_MAGIC\fP   0xF0F03410 		   /* magic number for our filesystem */"
+.br
+.ti -1c
+.RI "#define \fBFS_POINTERS_PER_BLOCK\fP   1024     /* no of pointers (used by inodes) per block in bytes*/"
+.br
+.ti -1c
+.RI "#define \fBFS_INODES_PER_BLOCK\fP   64 		   /* no of inodes per block */"
+.br
+.ti -1c
+.RI "#define \fBFS_DIRECT_POINTERS_PER_INODE\fP   8 /* no of direct data pointers in each inode */"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+filesystem function header 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+ABDELMOUMENE Djahid 
+.PP
+AYAD Ishak
+.RE
+.PP
+main filesystem structs and prototypes 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for File Manager from the source code\&.

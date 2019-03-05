@@ -1,0 +1,66 @@
+.TH "fs_inode" 3 "Tue Mar 5 2019" "File Manager" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+fs_inode \- inode structure  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <fs\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "uint16_t \fBmode\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBuid\fP"
+.br
+.ti -1c
+.RI "uint16_t \fBgid\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBatime\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBmtime\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBsize\fP"
+.br
+.ti -1c
+.RI "uint32_t \fBdirect\fP [FS_DIRECT_POINTERS_PER_INODE]"
+.br
+.ti -1c
+.RI "uint32_t \fBindirect\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+inode structure 
+
+the structure of inodes contains information about one file with a total size of 54 bytes\&. 
+.SH "Field Documentation"
+.PP 
+.SS "uint32_t fs_inode::atime"
+last access time in seconds since the epoch 
+.SS "uint32_t fs_inode::direct[FS_DIRECT_POINTERS_PER_INODE]"
+direct data blocks 
+.SS "uint16_t fs_inode::gid"
+group id of owners 
+.SS "uint32_t fs_inode::indirect"
+indirect data blocks 
+.SS "uint16_t fs_inode::mode"
+file type and permissions 
+.SS "uint32_t fs_inode::mtime"
+last modification time in seconds since the epoch 
+.SS "uint32_t fs_inode::size"
+size of the file in bytes 
+.SS "uint16_t fs_inode::uid"
+id of owner 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for File Manager from the source code\&.

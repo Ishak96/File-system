@@ -1,13 +1,15 @@
-.TH "src/fs.c" 3 "Mon Mar 4 2019" "File Manager" \" -*- nroff -*-
+.TH "src/fs.c" 3 "Tue Mar 5 2019" "File Manager" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-src/fs.c \- initializing the partition  
+src/fs.c \- main filesystem functions  
 
 .SH SYNOPSIS
 .br
 .PP
 \fC#include <devutils\&.h>\fP
+.br
+\fC#include <fs\&.h>\fP
 .br
 \fC#include <sys/types\&.h>\fP
 .br
@@ -18,9 +20,16 @@ src/fs.c \- initializing the partition
 \fC#include <stdio\&.h>\fP
 .br
 
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBfs_format_super\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super)"
+.br
+.in -1c
 .SH "Detailed Description"
 .PP 
-initializing the partition 
+main filesystem functions 
 
 
 .PP

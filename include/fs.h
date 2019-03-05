@@ -8,6 +8,7 @@
 #ifndef FS_H
 #define FS_H
 #include <stdint.h>
+
 #include <disk.h>
 
 
@@ -15,6 +16,11 @@
 #define FS_POINTERS_PER_BLOCK 1024     /* no of pointers (used by inodes) per block in bytes*/
 #define FS_INODES_PER_BLOCK 64 		   /* no of inodes per block */
 #define FS_DIRECT_POINTERS_PER_INODE 8 /* no of direct data pointers in each inode */
+#define FS_INODE_RATIO 0.01 /* total ratio of inodes in the fs */
+#define FS_MAX_INODE_COUNT (NO_BYTES_32 / (FS_BLOCK_SIZE * FS_INODES_PER_BLOCK))
+					/* maximum no of inodes blocks that can be referenced
+					 *  with 32 bits in the directory entries */
+
 /**
  * @brief super block structure
  * @details the structure of the super block the first block stored
@@ -23,6 +29,7 @@
  */
 struct fs_super_block  {
 	uint32_t magic; 		   /**< the filesystem magic number */
+	
 	uint32_t data_bitmap_loc;  /**< data bitmap location in block num */
 	uint32_t data_bitmap_size; /**< data bitmap size in blocks */
 	uint32_t inode_bitmap_loc; /**< inode bitmap location in block num */
@@ -31,14 +38,14 @@ struct fs_super_block  {
 	uint32_t inode_loc; 	   /**< location of inodes in block num */
 	uint32_t inode_count; 	   /**< no of inodes in blocks */
 	uint32_t data_loc; 		   /**< location of the data in blocks */
-	uint32_t block_count; 	   /**< no of blocks */
+	uint32_t data_count; 	   /**< no of data blocks */
 	
 	uint32_t free_inode_count; /**< no of free inodes */
-	uint32_t free_block_count; /**< no of free blocks */
+	uint32_t free_data_count;  /**< no of free blocks */
 	
-	uint32_t nreads;  /**< number of reads performed */
-	uint32_t nwrites; /**< number of writes performed*/
-	uint32_t mounts;  /**< number of mounts*/
+	uint32_t nreads;  		   /**< number of reads performed */
+	uint32_t nwrites;		   /**< number of writes performed*/
+	uint32_t mounts;  		   /**< number of mounts*/
 	
 	uint32_t mtime;			   /**< time of mount of the filesystem */
 	uint32_t wtime; 		   /**< last write time */
@@ -60,7 +67,6 @@ struct fs_inode {
 	uint32_t indirect; 							  /**< indirect data blocks */
 };
 
-
 /**
  * @brief union of a block structure
  * @details a block can either be a super block, or and array of inodes
@@ -72,4 +78,9 @@ union fs_block {
 	uint32_t pointers[FS_POINTERS_PER_BLOCK];   /**< array of pointers */
 	uint8_t data[FS_BLOCK_SIZE]; 				/**< array of data bytes */
 };
+
+/* prototypes */
+int fs_format_super(struct fs_filesyst fs);
+int fs_dump_super(struct fs_filesyst fs);
+
 #endif
