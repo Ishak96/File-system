@@ -64,6 +64,8 @@ int main(int argc, char** argv) {
 		printf("allocated %u\n", data[i]);
 		
 	}
+	fs_read_data(fs, super, b, data, 20);
+
 	fs_dump_super(fs);
 	
 	disk_close(&fs);

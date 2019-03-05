@@ -258,7 +258,14 @@ int fs_alloc_inode(struct fs_filesyst fs, struct fs_super_block* super, uint32_t
 	return 0;
 }
 
-int fs_write_inode(struct fs_filesyst fs, struct fs_super_block super, uint32_t indno, struct fs_inode *inode){
+int fs_write_inode(struct fs_filesyst fs, struct fs_super_block super,
+				   uint32_t indno, struct fs_inode *inode)
+{
+	if(inode == NULL) {
+		fprintf(stderr, "fs_read_inode: invalid arguments!\n");
+		return FUNC_ERROR;
+	}
+
 	uint32_t blkno = indno / FS_INODES_PER_BLOCK;
 	/* getting the real block offset from the start */
 	blkno += super.inode_loc;
@@ -280,6 +287,33 @@ int fs_write_inode(struct fs_filesyst fs, struct fs_super_block super, uint32_t 
 		fprintf(stderr, "fs_alloc_inode: fs_write_block!\n");
 		return FUNC_ERROR;
 	}
+	
+	return 0;
+}
+
+int fs_read_inode(struct fs_filesyst fs, struct fs_super_block super,
+				   uint32_t indno, struct fs_inode *inode)
+{
+	if(inode == NULL) {
+		fprintf(stderr, "fs_read_inode: invalid arguments!\n");
+		return FUNC_ERROR;
+	}
+	
+	uint32_t blkno = indno / FS_INODES_PER_BLOCK;
+	/* getting the real block offset from the start */
+	blkno += super.inode_loc;
+	
+	/* offset in the block containing the inode */
+	uint8_t indoff = indno % FS_INODES_PER_BLOCK;
+	
+	/* reading the block containing the inode */
+	union fs_block iblk;
+	if(fs_read_block(fs, blkno, &iblk) < 0) {
+		fprintf(stderr, "fs_alloc_inode: fs_read_block!\n");
+		return FUNC_ERROR;
+	}
+	/* setting the inode in the block */
+	*inode = iblk.inodes[indoff];
 	
 	return 0;
 }
@@ -390,6 +424,25 @@ int fs_write_data(struct fs_filesyst fs, struct fs_super_block super,
 		uint32_t blknum = blknums[i];
 		union fs_block* d = data + i + super.data_loc;
 		if(fs_write_block(fs, blknum, d, FS_BLOCK_SIZE)) {
+			fprintf(stderr, "fs_write_data: fs_write_block");
+			return FUNC_ERROR;
+		}
+	}
+	return 0;
+}
+
+int fs_read_data(struct fs_filesyst fs, struct fs_super_block super,
+				 union fs_block *data, uint32_t *blknums, size_t size)
+{
+	if(data == NULL || blknums == NULL) {
+		fprintf(stderr, "fs_write_data: invalid arguments!\n");
+		return FUNC_ERROR;
+	}
+	
+	for(int i=0; i<size; i++) {
+		uint32_t blknum = blknums[i];
+		union fs_block* d = data + i + super.data_loc;
+		if(fs_read_block(fs, blknum, d)) {
 			fprintf(stderr, "fs_write_data: fs_write_block");
 			return FUNC_ERROR;
 		}
