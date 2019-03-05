@@ -15,6 +15,12 @@
 #include <stdio.h>
 #include <math.h>
 
+/**
+ * @brief format the superblock into the virtual filesystem
+ * @details format and calculate the positions and sizes of each section
+ * of the filesystem (eg. bitmaps and inode and data blocks)
+ * @return this functions returns -1 in case of error and 0 on success
+ */
 int fs_format_super(struct fs_filesyst fs) {
 	struct fs_super_block super;
 	
@@ -81,6 +87,10 @@ int fs_format_super(struct fs_filesyst fs) {
 	return 0;
 }
 
+/**
+ * @brief dump formatted content of the superblock
+ * @details prints a human readable superblock from teh filesystem fs
+ */
 int fs_dump_super(struct fs_filesyst fs) {
 	/* read the super block */
 	union fs_block blk;

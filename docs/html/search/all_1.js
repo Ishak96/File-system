@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['block_5fcount',['block_count',['../structfs__super__block.html#abae8e036fb7266c3e35ed3d25e0866f5',1,'fs_super_block']]]
+  ['creatfile',['creatfile',['../disk_8c.html#a9d3c8e891397d966d2fbb3c27cc41dcc',1,'creatfile(const char *filename, size_t size, struct fs_filesyst *fs):&#160;disk.c'],['../disk_8h.html#a9d3c8e891397d966d2fbb3c27cc41dcc',1,'creatfile(const char *filename, size_t size, struct fs_filesyst *fs):&#160;disk.c']]]
 ];

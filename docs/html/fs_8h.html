@@ -68,7 +68,8 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Data Structures</a> &#124;
-<a href="#define-members">Macros</a>  </div>
+<a href="#define-members">Macros</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">fs.h File Reference</div>  </div>
 </div><!--header-->
@@ -107,6 +108,21 @@ Macros</h2></td></tr>
 <tr class="memitem:a8bbde55a40d4abbebc3ef3cb04ed75d2"><td class="memItemLeft" align="right" valign="top"><a id="a8bbde55a40d4abbebc3ef3cb04ed75d2"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>FS_DIRECT_POINTERS_PER_INODE</b>&#160;&#160;&#160;8 /* no of direct data pointers in each inode */</td></tr>
 <tr class="separator:a8bbde55a40d4abbebc3ef3cb04ed75d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee3f386a716f4e5c4e2281cfea627cc3"><td class="memItemLeft" align="right" valign="top"><a id="aee3f386a716f4e5c4e2281cfea627cc3"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>FS_INODE_RATIO</b>&#160;&#160;&#160;0.01 /* total ratio of inodes in the fs */</td></tr>
+<tr class="separator:aee3f386a716f4e5c4e2281cfea627cc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4e38308db33143ca556fc4cd290d9d4"><td class="memItemLeft" align="right" valign="top"><a id="ab4e38308db33143ca556fc4cd290d9d4"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>FS_MAX_INODE_COUNT</b>&#160;&#160;&#160;(NO_BYTES_32 / (FS_BLOCK_SIZE * FS_INODES_PER_BLOCK))</td></tr>
+<tr class="separator:ab4e38308db33143ca556fc4cd290d9d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a8e0f528f56de2675994ff4d38ac28942"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fs_8h.html#a8e0f528f56de2675994ff4d38ac28942">fs_format_super</a> (struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a> fs)</td></tr>
+<tr class="memdesc:a8e0f528f56de2675994ff4d38ac28942"><td class="mdescLeft">&#160;</td><td class="mdescRight">format the superblock into the virtual filesystem  <a href="#a8e0f528f56de2675994ff4d38ac28942">More...</a><br /></td></tr>
+<tr class="separator:a8e0f528f56de2675994ff4d38ac28942"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e220f2d9e463faa6ed48b24a72e79a0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fs_8h.html#a7e220f2d9e463faa6ed48b24a72e79a0">fs_dump_super</a> (struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a> fs)</td></tr>
+<tr class="memdesc:a7e220f2d9e463faa6ed48b24a72e79a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">dump formatted content of the superblock  <a href="#a7e220f2d9e463faa6ed48b24a72e79a0">More...</a><br /></td></tr>
+<tr class="separator:a7e220f2d9e463faa6ed48b24a72e79a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>filesystem function header </p>
@@ -114,7 +130,50 @@ Macros</h2></td></tr>
 <dd>
 AYAD Ishak</dd></dl>
 <p>main filesystem structs and prototypes </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a7e220f2d9e463faa6ed48b24a72e79a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e220f2d9e463faa6ed48b24a72e79a0">&#9670;&nbsp;</a></span>fs_dump_super()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int fs_dump_super </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a>&#160;</td>
+          <td class="paramname"><em>fs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>dump formatted content of the superblock </p>
+<p>prints a human readable superblock from teh filesystem fs </p>
+
+</div>
+</div>
+<a id="a8e0f528f56de2675994ff4d38ac28942"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e0f528f56de2675994ff4d38ac28942">&#9670;&nbsp;</a></span>fs_format_super()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int fs_format_super </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a>&#160;</td>
+          <td class="paramname"><em>fs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>format the superblock into the virtual filesystem </p>
+<p>format and calculate the positions and sizes of each section of the filesystem (eg. bitmaps and inode and data blocks) </p><dl class="section return"><dt>Returns</dt><dd>this functions returns -1 in case of error and 0 on success </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

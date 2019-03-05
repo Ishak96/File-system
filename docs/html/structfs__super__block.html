@@ -92,12 +92,12 @@ Data Fields</h2></td></tr>
 <tr class="separator:a9e679848231dc7346ca94512086bdbda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6a84fc2c9eba4a9582fa6d353ebfe48"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfs__super__block.html#ac6a84fc2c9eba4a9582fa6d353ebfe48">data_loc</a></td></tr>
 <tr class="separator:ac6a84fc2c9eba4a9582fa6d353ebfe48"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abae8e036fb7266c3e35ed3d25e0866f5"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfs__super__block.html#abae8e036fb7266c3e35ed3d25e0866f5">block_count</a></td></tr>
-<tr class="separator:abae8e036fb7266c3e35ed3d25e0866f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a0178409891f1219ced9c2fd1e0068b"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfs__super__block.html#a8a0178409891f1219ced9c2fd1e0068b">data_count</a></td></tr>
+<tr class="separator:a8a0178409891f1219ced9c2fd1e0068b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75c0f4cee23a5c4fc26aebb044e04b0c"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfs__super__block.html#a75c0f4cee23a5c4fc26aebb044e04b0c">free_inode_count</a></td></tr>
 <tr class="separator:a75c0f4cee23a5c4fc26aebb044e04b0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7242e9499e5ea53bba0e309031a330c0"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfs__super__block.html#a7242e9499e5ea53bba0e309031a330c0">free_block_count</a></td></tr>
-<tr class="separator:a7242e9499e5ea53bba0e309031a330c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6459a0a9030ccf53627c0e9dae409ffb"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfs__super__block.html#a6459a0a9030ccf53627c0e9dae409ffb">free_data_count</a></td></tr>
+<tr class="separator:a6459a0a9030ccf53627c0e9dae409ffb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a342bcfecfe5c06a1f8026d4aa5d8c6a8"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfs__super__block.html#a342bcfecfe5c06a1f8026d4aa5d8c6a8">nreads</a></td></tr>
 <tr class="separator:a342bcfecfe5c06a1f8026d4aa5d8c6a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8b149fd2b7f95fb0c277440604aabc7"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfs__super__block.html#ae8b149fd2b7f95fb0c277440604aabc7">nwrites</a></td></tr>
@@ -113,21 +113,6 @@ Data Fields</h2></td></tr>
 <div class="textblock"><p>super block structure </p>
 <p>the structure of the super block the first block stored stored in memory contains general information about the filesystem and other useful information, with a total size of 40 bytes. </p>
 </div><h2 class="groupheader">Field Documentation</h2>
-<a id="abae8e036fb7266c3e35ed3d25e0866f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abae8e036fb7266c3e35ed3d25e0866f5">&#9670;&nbsp;</a></span>block_count</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint32_t fs_super_block::block_count</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>no of blocks </p>
-
-</div>
-</div>
 <a id="af8051b81bc195298cec178c726c84127"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af8051b81bc195298cec178c726c84127">&#9670;&nbsp;</a></span>data_bitmap_loc</h2>
 
@@ -158,6 +143,21 @@ Data Fields</h2></td></tr>
 
 </div>
 </div>
+<a id="a8a0178409891f1219ced9c2fd1e0068b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a0178409891f1219ced9c2fd1e0068b">&#9670;&nbsp;</a></span>data_count</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t fs_super_block::data_count</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>no of data blocks </p>
+
+</div>
+</div>
 <a id="ac6a84fc2c9eba4a9582fa6d353ebfe48"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac6a84fc2c9eba4a9582fa6d353ebfe48">&#9670;&nbsp;</a></span>data_loc</h2>
 
@@ -173,14 +173,14 @@ Data Fields</h2></td></tr>
 
 </div>
 </div>
-<a id="a7242e9499e5ea53bba0e309031a330c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7242e9499e5ea53bba0e309031a330c0">&#9670;&nbsp;</a></span>free_block_count</h2>
+<a id="a6459a0a9030ccf53627c0e9dae409ffb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6459a0a9030ccf53627c0e9dae409ffb">&#9670;&nbsp;</a></span>free_data_count</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint32_t fs_super_block::free_block_count</td>
+          <td class="memname">uint32_t fs_super_block::free_data_count</td>
         </tr>
       </table>
 </div><div class="memdoc">

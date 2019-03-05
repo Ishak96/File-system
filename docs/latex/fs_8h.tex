@@ -30,7 +30,20 @@ union \mbox{\hyperlink{unionfs__block}{fs\+\_\+block}}
 \item 
 \mbox{\Hypertarget{fs_8h_a8bbde55a40d4abbebc3ef3cb04ed75d2}\label{fs_8h_a8bbde55a40d4abbebc3ef3cb04ed75d2}} 
 \#define {\bfseries F\+S\+\_\+\+D\+I\+R\+E\+C\+T\+\_\+\+P\+O\+I\+N\+T\+E\+R\+S\+\_\+\+P\+E\+R\+\_\+\+I\+N\+O\+DE}~8 /$\ast$ no of direct data pointers in each inode $\ast$/
+\item 
+\mbox{\Hypertarget{fs_8h_aee3f386a716f4e5c4e2281cfea627cc3}\label{fs_8h_aee3f386a716f4e5c4e2281cfea627cc3}} 
+\#define {\bfseries F\+S\+\_\+\+I\+N\+O\+D\+E\+\_\+\+R\+A\+T\+IO}~0.\+01 /$\ast$ total ratio of inodes in the fs $\ast$/
+\item 
+\mbox{\Hypertarget{fs_8h_ab4e38308db33143ca556fc4cd290d9d4}\label{fs_8h_ab4e38308db33143ca556fc4cd290d9d4}} 
+\#define {\bfseries F\+S\+\_\+\+M\+A\+X\+\_\+\+I\+N\+O\+D\+E\+\_\+\+C\+O\+U\+NT}~(N\+O\+\_\+\+B\+Y\+T\+E\+S\+\_\+32 / (F\+S\+\_\+\+B\+L\+O\+C\+K\+\_\+\+S\+I\+ZE $\ast$ F\+S\+\_\+\+I\+N\+O\+D\+E\+S\+\_\+\+P\+E\+R\+\_\+\+B\+L\+O\+CK))
 \end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{fs_8h_a8e0f528f56de2675994ff4d38ac28942}{fs\+\_\+format\+\_\+super}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs)
+\begin{DoxyCompactList}\small\item\em format the superblock into the virtual filesystem \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{fs_8h_a7e220f2d9e463faa6ed48b24a72e79a0}{fs\+\_\+dump\+\_\+super}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs)
+\begin{DoxyCompactList}\small\item\em dump formatted content of the superblock \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -42,3 +55,28 @@ A\+B\+D\+E\+L\+M\+O\+U\+M\+E\+NE Djahid
 A\+Y\+AD Ishak
 \end{DoxyAuthor}
 main filesystem structs and prototypes 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{fs_8h_a7e220f2d9e463faa6ed48b24a72e79a0}\label{fs_8h_a7e220f2d9e463faa6ed48b24a72e79a0}} 
+\index{fs.h@{fs.h}!fs\_dump\_super@{fs\_dump\_super}}
+\index{fs\_dump\_super@{fs\_dump\_super}!fs.h@{fs.h}}
+\doxysubsubsection{\texorpdfstring{fs\_dump\_super()}{fs\_dump\_super()}}
+{\footnotesize\ttfamily int fs\+\_\+dump\+\_\+super (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs }\end{DoxyParamCaption})}
+
+
+
+dump formatted content of the superblock 
+
+prints a human readable superblock from teh filesystem fs \mbox{\Hypertarget{fs_8h_a8e0f528f56de2675994ff4d38ac28942}\label{fs_8h_a8e0f528f56de2675994ff4d38ac28942}} 
+\index{fs.h@{fs.h}!fs\_format\_super@{fs\_format\_super}}
+\index{fs\_format\_super@{fs\_format\_super}!fs.h@{fs.h}}
+\doxysubsubsection{\texorpdfstring{fs\_format\_super()}{fs\_format\_super()}}
+{\footnotesize\ttfamily int fs\+\_\+format\+\_\+super (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs }\end{DoxyParamCaption})}
+
+
+
+format the superblock into the virtual filesystem 
+
+format and calculate the positions and sizes of each section of the filesystem (eg. bitmaps and inode and data blocks) \begin{DoxyReturn}{Returns}
+this functions returns -\/1 in case of error and 0 on success 
+\end{DoxyReturn}

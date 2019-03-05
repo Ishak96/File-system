@@ -19,13 +19,20 @@ src/fs.c \- main filesystem functions
 .br
 \fC#include <stdio\&.h>\fP
 .br
+\fC#include <math\&.h>\fP
+.br
 
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "int \fBfs_format_super\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super)"
+.RI "int \fBfs_format_super\fP (struct \fBfs_filesyst\fP fs)"
 .br
+.RI "format the superblock into the virtual filesystem "
+.ti -1c
+.RI "int \fBfs_dump_super\fP (struct \fBfs_filesyst\fP fs)"
+.br
+.RI "dump formatted content of the superblock "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -41,6 +48,23 @@ AYAD Ishak
 .RE
 .PP
 initializing the partition files and utility functions to interact with the os 
+.SH "Function Documentation"
+.PP 
+.SS "int fs_dump_super (struct \fBfs_filesyst\fP fs)"
+
+.PP
+dump formatted content of the superblock prints a human readable superblock from teh filesystem fs 
+.SS "int fs_format_super (struct \fBfs_filesyst\fP fs)"
+
+.PP
+format the superblock into the virtual filesystem format and calculate the positions and sizes of each section of the filesystem (eg\&. bitmaps and inode and data blocks) 
+.PP
+\fBReturns:\fP
+.RS 4
+this functions returns -1 in case of error and 0 on success 
+.RE
+.PP
+
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for File Manager from the source code\&.

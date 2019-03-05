@@ -16,7 +16,7 @@
 /**
  * @author ABDELMOUMENE Djahid 
  * @author AYAD Ishak
- * @brief test program
+ * @brief program to test the disk functions
  */
 int main(int argc, char** argv) {
 	char filename[512] = "./bin/partition";

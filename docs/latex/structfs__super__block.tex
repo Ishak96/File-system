@@ -28,11 +28,11 @@ uint32\+\_\+t \mbox{\hyperlink{structfs__super__block_a9e679848231dc7346ca945120
 \item 
 uint32\+\_\+t \mbox{\hyperlink{structfs__super__block_ac6a84fc2c9eba4a9582fa6d353ebfe48}{data\+\_\+loc}}
 \item 
-uint32\+\_\+t \mbox{\hyperlink{structfs__super__block_abae8e036fb7266c3e35ed3d25e0866f5}{block\+\_\+count}}
+uint32\+\_\+t \mbox{\hyperlink{structfs__super__block_a8a0178409891f1219ced9c2fd1e0068b}{data\+\_\+count}}
 \item 
 uint32\+\_\+t \mbox{\hyperlink{structfs__super__block_a75c0f4cee23a5c4fc26aebb044e04b0c}{free\+\_\+inode\+\_\+count}}
 \item 
-uint32\+\_\+t \mbox{\hyperlink{structfs__super__block_a7242e9499e5ea53bba0e309031a330c0}{free\+\_\+block\+\_\+count}}
+uint32\+\_\+t \mbox{\hyperlink{structfs__super__block_a6459a0a9030ccf53627c0e9dae409ffb}{free\+\_\+data\+\_\+count}}
 \item 
 uint32\+\_\+t \mbox{\hyperlink{structfs__super__block_a342bcfecfe5c06a1f8026d4aa5d8c6a8}{nreads}}
 \item 
@@ -52,13 +52,7 @@ super block structure
 the structure of the super block the first block stored stored in memory contains general information about the filesystem and other useful information, with a total size of 40 bytes. 
 
 \doxysubsection{Field Documentation}
-\mbox{\Hypertarget{structfs__super__block_abae8e036fb7266c3e35ed3d25e0866f5}\label{structfs__super__block_abae8e036fb7266c3e35ed3d25e0866f5}} 
-\index{fs\_super\_block@{fs\_super\_block}!block\_count@{block\_count}}
-\index{block\_count@{block\_count}!fs\_super\_block@{fs\_super\_block}}
-\doxysubsubsection{\texorpdfstring{block\_count}{block\_count}}
-{\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::block\+\_\+count}
-
-no of blocks \mbox{\Hypertarget{structfs__super__block_af8051b81bc195298cec178c726c84127}\label{structfs__super__block_af8051b81bc195298cec178c726c84127}} 
+\mbox{\Hypertarget{structfs__super__block_af8051b81bc195298cec178c726c84127}\label{structfs__super__block_af8051b81bc195298cec178c726c84127}} 
 \index{fs\_super\_block@{fs\_super\_block}!data\_bitmap\_loc@{data\_bitmap\_loc}}
 \index{data\_bitmap\_loc@{data\_bitmap\_loc}!fs\_super\_block@{fs\_super\_block}}
 \doxysubsubsection{\texorpdfstring{data\_bitmap\_loc}{data\_bitmap\_loc}}
@@ -70,17 +64,23 @@ data bitmap location in block num \mbox{\Hypertarget{structfs__super__block_ab63
 \doxysubsubsection{\texorpdfstring{data\_bitmap\_size}{data\_bitmap\_size}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::data\+\_\+bitmap\+\_\+size}
 
-data bitmap size in blocks \mbox{\Hypertarget{structfs__super__block_ac6a84fc2c9eba4a9582fa6d353ebfe48}\label{structfs__super__block_ac6a84fc2c9eba4a9582fa6d353ebfe48}} 
+data bitmap size in blocks \mbox{\Hypertarget{structfs__super__block_a8a0178409891f1219ced9c2fd1e0068b}\label{structfs__super__block_a8a0178409891f1219ced9c2fd1e0068b}} 
+\index{fs\_super\_block@{fs\_super\_block}!data\_count@{data\_count}}
+\index{data\_count@{data\_count}!fs\_super\_block@{fs\_super\_block}}
+\doxysubsubsection{\texorpdfstring{data\_count}{data\_count}}
+{\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::data\+\_\+count}
+
+no of data blocks \mbox{\Hypertarget{structfs__super__block_ac6a84fc2c9eba4a9582fa6d353ebfe48}\label{structfs__super__block_ac6a84fc2c9eba4a9582fa6d353ebfe48}} 
 \index{fs\_super\_block@{fs\_super\_block}!data\_loc@{data\_loc}}
 \index{data\_loc@{data\_loc}!fs\_super\_block@{fs\_super\_block}}
 \doxysubsubsection{\texorpdfstring{data\_loc}{data\_loc}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::data\+\_\+loc}
 
-location of the data in blocks \mbox{\Hypertarget{structfs__super__block_a7242e9499e5ea53bba0e309031a330c0}\label{structfs__super__block_a7242e9499e5ea53bba0e309031a330c0}} 
-\index{fs\_super\_block@{fs\_super\_block}!free\_block\_count@{free\_block\_count}}
-\index{free\_block\_count@{free\_block\_count}!fs\_super\_block@{fs\_super\_block}}
-\doxysubsubsection{\texorpdfstring{free\_block\_count}{free\_block\_count}}
-{\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::free\+\_\+block\+\_\+count}
+location of the data in blocks \mbox{\Hypertarget{structfs__super__block_a6459a0a9030ccf53627c0e9dae409ffb}\label{structfs__super__block_a6459a0a9030ccf53627c0e9dae409ffb}} 
+\index{fs\_super\_block@{fs\_super\_block}!free\_data\_count@{free\_data\_count}}
+\index{free\_data\_count@{free\_data\_count}!fs\_super\_block@{fs\_super\_block}}
+\doxysubsubsection{\texorpdfstring{free\_data\_count}{free\_data\_count}}
+{\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::free\+\_\+data\+\_\+count}
 
 no of free blocks \mbox{\Hypertarget{structfs__super__block_a75c0f4cee23a5c4fc26aebb044e04b0c}\label{structfs__super__block_a75c0f4cee23a5c4fc26aebb044e04b0c}} 
 \index{fs\_super\_block@{fs\_super\_block}!free\_inode\_count@{free\_inode\_count}}

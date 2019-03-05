@@ -20,3 +20,13 @@ To run the project
 ```
 	./bin/fmanag [-d] [dir]
 ```
+
+To compile tests
+```
+	make test
+```
+
+To run these tests
+```
+	./bin/<testname>
+```

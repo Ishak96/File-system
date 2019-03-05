@@ -37,13 +37,13 @@ fs_super_block \- super block structure
 .RI "uint32_t \fBdata_loc\fP"
 .br
 .ti -1c
-.RI "uint32_t \fBblock_count\fP"
+.RI "uint32_t \fBdata_count\fP"
 .br
 .ti -1c
 .RI "uint32_t \fBfree_inode_count\fP"
 .br
 .ti -1c
-.RI "uint32_t \fBfree_block_count\fP"
+.RI "uint32_t \fBfree_data_count\fP"
 .br
 .ti -1c
 .RI "uint32_t \fBnreads\fP"
@@ -68,15 +68,15 @@ super block structure
 the structure of the super block the first block stored stored in memory contains general information about the filesystem and other useful information, with a total size of 40 bytes\&. 
 .SH "Field Documentation"
 .PP 
-.SS "uint32_t fs_super_block::block_count"
-no of blocks 
 .SS "uint32_t fs_super_block::data_bitmap_loc"
 data bitmap location in block num 
 .SS "uint32_t fs_super_block::data_bitmap_size"
 data bitmap size in blocks 
+.SS "uint32_t fs_super_block::data_count"
+no of data blocks 
 .SS "uint32_t fs_super_block::data_loc"
 location of the data in blocks 
-.SS "uint32_t fs_super_block::free_block_count"
+.SS "uint32_t fs_super_block::free_data_count"
 no of free blocks 
 .SS "uint32_t fs_super_block::free_inode_count"
 no of free inodes 

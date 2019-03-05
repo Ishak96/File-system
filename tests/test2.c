@@ -15,7 +15,7 @@
 /**
  * @author ABDELMOUMENE Djahid 
  * @author AYAD Ishak
- * @brief test function
+ * @brief program to test filesystem functions
  */
 int main(int argc, char** argv) {
 	char cwd[512] = "./bin/partition";
