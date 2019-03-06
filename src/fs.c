@@ -45,8 +45,7 @@ int fs_format_super(struct fs_filesyst fs) {
 	
 	/* the rest is for data and data bitmap */
 	uint32_t blocks_left = nblocks - (super.inode_count + super.inode_bitmap_size);
-	super.data_bitmap_size = 
-	NOT_NULL((int) log2(blocks_left / (FS_BLOCK_SIZE*BITS_PER_BYTE))); /* approximation */
+	super.data_bitmap_size = NOT_NULL((int) log2(blocks_left / (FS_BLOCK_SIZE*BITS_PER_BYTE))); /* approximation */
 
 	super.data_count = NOT_NULL(blocks_left - super.data_bitmap_size);
 	
@@ -180,9 +179,14 @@ int fs_format(struct fs_filesyst fs) {
  * @arg inode: the inode to write
  * @arg inodenum: the inode number allocated
  */
-int fs_alloc_inode(struct fs_filesyst fs, struct fs_super_block super, struct fs_inode *inode, uint32_t *inodenum) {
+int fs_alloc_inode(struct fs_filesyst fs, struct fs_super_block super, uint32_t *inodenum) {
 	uint32_t start = super.inode_bitmap_loc;
 	uint32_t end = super.inode_bitmap_loc + super.inode_bitmap_size;
+	if(inodenum == NULL){
+		fprintf(stderr, "fs_alloc_inode: invalid inodenum!\n");
+		return FUNC_ERROR;		
+	}
+
 	if(end <= start) {
 		fprintf(stderr, "fs_alloc_inode: invalid bitmap blocks!\n");
 		return FUNC_ERROR;
@@ -230,13 +234,19 @@ int fs_alloc_inode(struct fs_filesyst fs, struct fs_super_block super, struct fs
 	/* real inode offset in blocks from super.inode_loc */
 	uint32_t indno = ((blknum - start - 1) * FS_BLOCK_SIZE * BITS_PER_BYTE) + off;
 	*inodenum = indno;
-	
+
 	uint32_t blkno = indno / FS_INODES_PER_BLOCK;
 
 	if(!found || blkno >= super.inode_count) {
 		fprintf(stderr, "fs_alloc_inode: no space left\n");
 		return FUNC_ERROR;
 	}
+
+	return 0;
+}
+
+int fs_write_inode(struct fs_filesyst fs, struct fs_super_block super, uint32_t indno, struct fs_inode *inode){
+	uint32_t blkno = indno / FS_INODES_PER_BLOCK;
 	/* getting the real block offset from the start */
 	blkno += super.inode_loc;
 	
