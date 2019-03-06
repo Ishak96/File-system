@@ -57,10 +57,17 @@ int main(int argc, char** argv) {
 	fs_free_inode(fs, &super, 0);
 	
 	uint32_t data[20];
+	
+	union fs_block b[20];
+	memset(&b, 0, sizeof(b));
+
 	fs_alloc_data(fs, &super, data, 20);
+	fs_write_data(fs, super, b, data, 20);
 	for(int i=0; i<20; i++) {
 		printf("allocated %u\n", data[i]);
+		
 	}
+	fs_read_data(fs, super, b, data, 20);
 
 	for(int i=0; i<20; i+=2) {
 		fs_free_data(fs, &super, i);
@@ -77,6 +84,7 @@ int main(int argc, char** argv) {
 	for(int i=0; i<60; i++) {
 		printf("[%d]%d\n", i, fs_is_inode_allocated(fs, super, i));
 	}
+
 
 	fs_dump_super(fs);
 	
