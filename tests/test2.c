@@ -47,18 +47,37 @@ int main(int argc, char** argv) {
 	ind.atime = 123;
 	ind.mtime = 123;	
 	
-	for(int i=0; i<65; i++) {
+	for(int i=0; i<60; i++) {
 		printf("\n[%d]ALLOCATING\n", i);
 		fs_alloc_inode(fs, &super, &no);
 		fs_write_inode(fs, super,no, &ind);
 		fs_dump_inode(fs, super, no);
 	}
+
+	fs_free_inode(fs, &super, 0);
 	
 	uint32_t data[20];
 	fs_alloc_data(fs, &super, data, 20);
 	for(int i=0; i<20; i++) {
 		printf("allocated %u\n", data[i]);
 	}
+
+	for(int i=0; i<20; i+=2) {
+		fs_free_data(fs, &super, i);
+	}
+
+	for(int i=0; i<60; i+=2) {
+		fs_free_inode(fs, &super, i);
+	}
+
+	for(int i=0; i<20; i++) {
+		printf("[%d]%d\n", i, fs_is_block_allocated(fs, super, i));
+	}
+
+	for(int i=0; i<60; i++) {
+		printf("[%d]%d\n", i, fs_is_inode_allocated(fs, super, i));
+	}
+
 	fs_dump_super(fs);
 	
 	disk_close(&fs);

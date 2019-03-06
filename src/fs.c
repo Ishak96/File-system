@@ -173,6 +173,40 @@ int fs_format(struct fs_filesyst fs) {
 	return 0;
 }
 
+int fs_is_block_allocated(struct fs_filesyst fs, struct fs_super_block super, uint32_t datanum) {
+	uint32_t blkno = datanum / (BITS_PER_BYTE * FS_BLOCK_SIZE) + super.data_bitmap_loc;
+	union fs_block blk;
+	if(fs_read_block(fs, blkno, &blk)) {
+		fprintf(stderr, "fs_free_inode: fs_read_block!\n");
+		return FUNC_ERROR;
+	}
+	uint32_t blkoff = datanum % (BITS_PER_BYTE * FS_BLOCK_SIZE);
+	uint32_t byteoff = blkoff % 8;
+	uint8_t byte = blk.data[blkoff / 8];
+	
+	uint8_t mask = 1;
+	mask <<= byteoff;
+
+	return (byte & mask) > 0;
+}
+
+int fs_is_inode_allocated(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum) {
+	uint32_t blkno = inodenum / (BITS_PER_BYTE * FS_BLOCK_SIZE) + super.inode_bitmap_loc;
+	union fs_block blk;
+	if(fs_read_block(fs, blkno, &blk)) {
+		fprintf(stderr, "fs_free_inode: fs_read_block!\n");
+		return FUNC_ERROR;
+	}
+	uint32_t blkoff = inodenum % (BITS_PER_BYTE * FS_BLOCK_SIZE);
+	uint32_t byteoff = blkoff % 8;
+	uint8_t byte = blk.data[blkoff / 8];
+
+	uint8_t mask = 1;
+	mask <<= byteoff;
+
+	return (byte & mask) > 0;
+}
+
 /**
  * @brief allocate an inode
  * @details allocates the first free inode in the inode table
@@ -378,7 +412,64 @@ int fs_alloc_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t 
 	return 0;
 }
 
-int fs_free_inod(struct fs_filesyst fs, struct fs_super_block super, uint32_t no){
+int fs_free_inode(struct fs_filesyst fs, struct fs_super_block* super, uint32_t inodenum){
+	uint32_t blkno = inodenum / (FS_INODES_PER_BLOCK * FS_BLOCK_SIZE) + super->inode_bitmap_loc;
+	union fs_block blk;
+	if(fs_read_block(fs, blkno, &blk)) {
+		fprintf(stderr, "fs_free_inode: fs_read_block!\n");
+		return FUNC_ERROR;
+	}
+	uint32_t blkoff = inodenum % (BITS_PER_BYTE * FS_BLOCK_SIZE);
+	uint32_t byteoff = blkoff % 8;
 
+	uint8_t byte = blk.data[blkoff/8];
+	uint8_t unmarked_byte = 1;
+	unmarked_byte <<=  byteoff;
+	unmarked_byte = ~unmarked_byte;
+	unmarked_byte &= byte;
+	
+	blk.data[blkoff/8] = unmarked_byte;
+	super->free_inode_count++;
+	
+	/* write to disk */
+	if(fs_write_block(fs, blkno, &blk, FS_BLOCK_SIZE) < 0) {
+		fprintf(stderr, "fs_free_inode: fs_write_block!\n");
+		return FUNC_ERROR;
+	}
+	if(fs_write_block(fs, 0, super, sizeof(*super)) < 0) {
+		fprintf(stderr, "fs_free_inode: fs_write_block!\n");
+		return FUNC_ERROR;	
+	}
+	return 0;
+}
+
+int fs_free_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t datanum){
+	uint32_t blkno = datanum / (BITS_PER_BYTE * FS_BLOCK_SIZE) + super->data_bitmap_loc;
+	union fs_block blk;
+	if(fs_read_block(fs, blkno, &blk)) {
+		fprintf(stderr, "fs_free_inode: fs_read_block!\n");
+		return FUNC_ERROR;
+	}
+	uint32_t blkoff = datanum % (BITS_PER_BYTE * FS_BLOCK_SIZE);
+	uint32_t byteoff = blkoff % 8;
+
+	uint8_t byte = blk.data[blkoff/8];
+	uint8_t unmarked_byte = 1;
+	unmarked_byte <<= byteoff;
+	unmarked_byte = ~unmarked_byte;
+	unmarked_byte &= byte;
+	
+	blk.data[blkoff/8] = unmarked_byte;
+	super->free_data_count++;
+	
+	/* write to disk */
+	if(fs_write_block(fs, blkno, &blk, FS_BLOCK_SIZE) < 0) {
+		fprintf(stderr, "fs_free_inode: fs_write_block!\n");
+		return FUNC_ERROR;
+	}
+	if(fs_write_block(fs, 0, super, sizeof(*super)) < 0) {
+		fprintf(stderr, "fs_free_inode: fs_write_block!\n");
+		return FUNC_ERROR;	
+	}
 	return 0;
 }
