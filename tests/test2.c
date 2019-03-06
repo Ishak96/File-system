@@ -49,16 +49,17 @@ int main(int argc, char** argv) {
 	
 	for(int i=0; i<65; i++) {
 		printf("\n[%d]ALLOCATING\n", i);
-		fs_alloc_inode(fs, super, &no);
+		fs_alloc_inode(fs, &super, &no);
 		fs_write_inode(fs, super,no, &ind);
 		fs_dump_inode(fs, super, no);
 	}
 	
-	uint32_t data[5];
-	fs_alloc_data(fs, super, data, 5);
-	for(int i=0; i<5; i++) {
+	uint32_t data[20];
+	fs_alloc_data(fs, &super, data, 20);
+	for(int i=0; i<20; i++) {
 		printf("allocated %u\n", data[i]);
 	}
+	fs_dump_super(fs);
 	
 	disk_close(&fs);
 	return 0;

@@ -73,7 +73,7 @@ int fs_format_super(struct fs_filesyst fs) {
 	
 	/* all blocks are free */
 	super.free_data_count = super.data_count;
-	super.free_inode_count = super.inode_count;
+	super.free_inode_count = super.inode_count * FS_INODES_PER_BLOCK;
 	
 	/* getting the locations */
 	super.inode_bitmap_loc = 1; /* directly after the superblock */
@@ -120,6 +120,8 @@ int fs_dump_super(struct fs_filesyst fs) {
 	printf("    number of reads: %d\n", super.nreads);
 	printf("    number of writes: %d\n", super.nwrites);
 	printf("    number of mounts: %d\n", super.mounts);
+	printf("    number of free inodes spaces: %d\n", super.free_inode_count);
+	printf("    number of free data spaces: %d\n", super.free_data_count);
 	
 	printf("    last mount time: %s", timetostr(super.mtime));
 	printf("    last write time: %s", timetostr(super.wtime));
@@ -176,12 +178,16 @@ int fs_format(struct fs_filesyst fs) {
  * @details allocates the first free inode in the inode table
  * @arg fs: the virtual filesystem
  * @arg super: the superblock
- * @arg inode: the inode to write
  * @arg inodenum: the inode number allocated
  */
-int fs_alloc_inode(struct fs_filesyst fs, struct fs_super_block super, uint32_t *inodenum) {
-	uint32_t start = super.inode_bitmap_loc;
-	uint32_t end = super.inode_bitmap_loc + super.inode_bitmap_size;
+int fs_alloc_inode(struct fs_filesyst fs, struct fs_super_block* super, uint32_t *inodenum) {
+	if(super->free_inode_count == 0){
+		fprintf(stderr, "fs_alloc_inode: no space left!\n");
+		return FUNC_ERROR;
+	}
+
+	uint32_t start = super->inode_bitmap_loc;
+	uint32_t end = super->inode_bitmap_loc + super->inode_bitmap_size;
 	if(inodenum == NULL){
 		fprintf(stderr, "fs_alloc_inode: invalid inodenum!\n");
 		return FUNC_ERROR;		
@@ -231,17 +237,24 @@ int fs_alloc_inode(struct fs_filesyst fs, struct fs_super_block super, uint32_t 
 		}
 	}
 	
-	/* real inode offset in blocks from super.inode_loc */
+	/* real inode offset in blocks from super->inode_loc */
 	uint32_t indno = ((blknum - start - 1) * FS_BLOCK_SIZE * BITS_PER_BYTE) + off;
 	*inodenum = indno;
 
 	uint32_t blkno = indno / FS_INODES_PER_BLOCK;
 
-	if(!found || blkno >= super.inode_count) {
+	if(!found || blkno >= super->inode_count) {
 		fprintf(stderr, "fs_alloc_inode: no space left\n");
 		return FUNC_ERROR;
 	}
 
+	super->free_inode_count--;
+	printf("free = %d\n", super->free_inode_count);
+	/* write to disk */
+	if(fs_write_block(fs, 0, super, sizeof(*super)) < 0) {
+		fprintf(stderr, "fs_alloc_inode: fs_write_block!\n");
+		return FUNC_ERROR;
+	}
 	return 0;
 }
 
@@ -294,15 +307,19 @@ int fs_dump_inode(struct fs_filesyst fs, struct fs_super_block super, uint32_t i
 	return 0;
 }
 
-int fs_alloc_data(struct fs_filesyst fs, struct fs_super_block super, uint32_t data[], size_t size) {
+int fs_alloc_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t data[], size_t size) {
+	if(super->free_data_count > size){
+		fprintf(stderr, "fs_alloc_inode: no space left!\n");
+		return FUNC_ERROR;
+	}
 	/* param check */
 	if(data == NULL || size <= 0) {
 		fprintf(stderr, "fs_alloc_data: invalid arguments!\n");
 		return FUNC_ERROR;
 	}
 
-	uint32_t start = super.data_bitmap_loc;
-	uint32_t end = super.data_bitmap_loc + super.data_bitmap_size;
+	uint32_t start = super->data_bitmap_loc;
+	uint32_t end = super->data_bitmap_loc + super->data_bitmap_size;
 	if(end <= start) {
 		fprintf(stderr, "fs_alloc_inode: invalid bitmap blocks!\n");
 		return FUNC_ERROR;
@@ -351,5 +368,17 @@ int fs_alloc_data(struct fs_filesyst fs, struct fs_super_block super, uint32_t d
 			}
 		}
 	}
+	super->free_data_count -= size;
+
+	/* write to disk */
+	if(fs_write_block(fs, 0, super, sizeof(*super)) < 0) {
+		fprintf(stderr, "fs_alloc_inode: fs_write_block!\n");
+		return FUNC_ERROR;
+	}
+	return 0;
+}
+
+int fs_free_inod(struct fs_filesyst fs, struct fs_super_block super, uint32_t no){
+
 	return 0;
 }
