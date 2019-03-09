@@ -75,12 +75,12 @@ int fs_write_block(struct fs_filesyst fs, int blocknum, const void* blk, size_t 
 	if(blocknum >= fs.nblocks || blocknum < 0) {
 		/* blocknum too big or too small */
 		fprintf(stderr, 
-			   "fs_write_block: Cannot write block, invalid blocknum %d!",
+			   "fs_write_block: Cannot write block, invalid blocknum %d!\n",
 			   blocknum);
 		return FUNC_ERROR;
 	}
 	if(blksize > FS_BLOCK_SIZE) { /* blksize too big */
-		fprintf(stderr, "fs_write_block: Cannot write block, data too big %ld!", blksize);
+		fprintf(stderr, "fs_write_block: Cannot write block, data too big %ld!\n", blksize);
 		return FUNC_ERROR;
 	}
 	
@@ -88,13 +88,13 @@ int fs_write_block(struct fs_filesyst fs, int blocknum, const void* blk, size_t 
 	int fd = fs.fd;
 	/* goto the specified block */
 	if(lseek(fd, blocknum * FS_BLOCK_SIZE, SEEK_SET) < 0) {
-		perror("fs_write_block: lseek error!");
+		perror("fs_write_block: lseek error!\n");
 		return FUNC_ERROR;
 	}
 	
 	/* write the data */
 	if(write(fd, blk, blksize) != blksize) { /* write didn't write blksize bytes */
-		perror("fs_write_block: write error!");
+		perror("fs_write_block: write error!\n");
 		return FUNC_ERROR;
 	}
 
@@ -111,7 +111,7 @@ int fs_read_block(struct fs_filesyst fs, int blocknum, void* blk) {
 	if(blocknum  >= fs.nblocks || blocknum < 0) {
 		/* blocknum too big or too small */
 		fprintf(stderr,
-			   "fs_read_block: Cannot read block, invalid blocknum %d!",
+			   "fs_read_block: Cannot read block, invalid blocknum %d!\n",
 				blocknum);
 		return FUNC_ERROR;
 	}
@@ -121,12 +121,12 @@ int fs_read_block(struct fs_filesyst fs, int blocknum, void* blk) {
 	
 	/* goto the specified block */
 	if(lseek(fd, blocknum * FS_BLOCK_SIZE, SEEK_SET) < 0) {
-		perror("fs_read_block: lseek error!");
+		perror("fs_read_block: lseek error!\n");
 		return FUNC_ERROR;
 	}
 	/* read the data */
 	if(read(fd, blk, FS_BLOCK_SIZE) != FS_BLOCK_SIZE) { /* read didn't read all bytes */
-		perror("fs_read_block: read error!");
+		perror("fs_read_block: read error!\n");
 		return FUNC_ERROR;		
 	}
 

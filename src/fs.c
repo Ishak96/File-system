@@ -174,6 +174,7 @@ int fs_format(struct fs_filesyst fs) {
 }
 
 int fs_is_block_allocated(struct fs_filesyst fs, struct fs_super_block super, uint32_t datanum) {
+	datanum --;
 	uint32_t blkno = datanum / (BITS_PER_BYTE * FS_BLOCK_SIZE) + super.data_bitmap_loc;
 	union fs_block blk;
 	if(fs_read_block(fs, blkno, &blk)) {
@@ -283,7 +284,7 @@ int fs_alloc_inode(struct fs_filesyst fs, struct fs_super_block* super, uint32_t
 	}
 
 	super->free_inode_count--;
-	printf("free = %d\n", super->free_inode_count);
+
 	/* write to disk */
 	if(fs_write_block(fs, 0, super, sizeof(*super)) < 0) {
 		fprintf(stderr, "fs_alloc_inode: fs_write_block!\n");
@@ -376,8 +377,9 @@ int fs_dump_inode(struct fs_filesyst fs, struct fs_super_block super, uint32_t i
 }
 
 int fs_alloc_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t data[], size_t size) {
-	if(super->free_data_count > size){
-		fprintf(stderr, "fs_alloc_inode: no space left!\n");
+	/* todo: remove super from argument (read from file directly) and write at the end */
+	if(super->free_data_count == 0) {
+		fprintf(stderr, "fs_alloc_data: no space left!\n");
 		return FUNC_ERROR;
 	}
 	/* param check */
@@ -389,7 +391,7 @@ int fs_alloc_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t 
 	uint32_t start = super->data_bitmap_loc;
 	uint32_t end = super->data_bitmap_loc + super->data_bitmap_size;
 	if(end <= start) {
-		fprintf(stderr, "fs_alloc_inode: invalid bitmap blocks!\n");
+		fprintf(stderr, "fs_alloc_data: invalid bitmap blocks!\n");
 		return FUNC_ERROR;
 	}
 	
@@ -401,7 +403,7 @@ int fs_alloc_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t 
 	for(blknum=start; blknum<end && left>0; blknum++) {
 		/* read the block */
 		if(fs_read_block(fs, blknum, &blk) < 0) {
-			fprintf(stderr, "fs_alloc_inode: fs_read_block!\n");
+			fprintf(stderr, "fs_alloc_data: fs_read_block!\n");
 			return FUNC_ERROR;
 		}
 		/* parse the block for a null bit */
@@ -423,11 +425,12 @@ int fs_alloc_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t 
 				blk.data[i] = marked_byte;
 
 				left --;
-				data[left] = ((blknum - start) * FS_BLOCK_SIZE * BITS_PER_BYTE) + off;
+				data[left] = ((blknum - start) * FS_BLOCK_SIZE * BITS_PER_BYTE) + off + 1;
+				/* todo: add test to check if we surpassed the capacity */
 				
 				/* write to disk */
 				if(fs_write_block(fs, blknum, &blk, FS_BLOCK_SIZE) < 0) {
-					fprintf(stderr, "fs_alloc_inode: fs_write_block!\n");
+					fprintf(stderr, "fs_alloc_data: fs_write_block!\n");
 					return FUNC_ERROR;
 				}
 				if(byte != 255 && left != 0) {
@@ -440,7 +443,7 @@ int fs_alloc_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t 
 
 	/* write to disk */
 	if(fs_write_block(fs, 0, super, sizeof(*super)) < 0) {
-		fprintf(stderr, "fs_alloc_inode: fs_write_block!\n");
+		fprintf(stderr, "fs_alloc_data: fs_write_block!\n");
 		return FUNC_ERROR;
 	}
 	return 0;
@@ -477,7 +480,8 @@ int fs_free_inode(struct fs_filesyst fs, struct fs_super_block* super, uint32_t 
 	return 0;
 }
 
-int fs_free_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t datanum){
+int fs_free_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t datanum) {
+	datanum --;
 	uint32_t blkno = datanum / (BITS_PER_BYTE * FS_BLOCK_SIZE) + super->data_bitmap_loc;
 	union fs_block blk;
 	if(fs_read_block(fs, blkno, &blk)) {
@@ -517,15 +521,26 @@ int fs_write_data(struct fs_filesyst fs, struct fs_super_block super,
 	}
 	
 	for(int i=0; i<size; i++) {
-		uint32_t blknum = blknums[i];
-		union fs_block* d = data + i + super.data_loc;
-		if(fs_write_block(fs, blknum, d, FS_BLOCK_SIZE)) {
-			fprintf(stderr, "fs_write_data: fs_write_block");
+		uint32_t blknum = blknums[i] - 1 + super.data_loc;
+		union fs_block* d = data + i;
+		//~ printf("%d\n", blknums[i]);
+		if(fs_write_block(fs, blknum, d, FS_BLOCK_SIZE) < 0) {
+			fprintf(stderr, "fs_write_data: fs_write_block\n");
 			return FUNC_ERROR;
 		}
 	}
 	return 0;
 }
+//~ int fs_write_data_block(struct fs_filesyst fs, struct fs_super_block super,
+				  //~ union fs_block data, uint32_t blknum)
+//~ {
+	//~ union fs_block* d = data + super.data_loc;
+	//~ if(fs_write_block(fs, blknum, &data, FS_BLOCK_SIZE)) {
+		//~ fprintf(stderr, "fs_write_data: fs_write_block");
+		//~ return FUNC_ERROR;
+	//~ }
+	//~ return 0;
+//~ }
 
 int fs_read_data(struct fs_filesyst fs, struct fs_super_block super,
 				 union fs_block *data, uint32_t *blknums, size_t size)
@@ -536,10 +551,10 @@ int fs_read_data(struct fs_filesyst fs, struct fs_super_block super,
 	}
 	
 	for(int i=0; i<size; i++) {
-		uint32_t blknum = blknums[i];
-		union fs_block* d = data + i + super.data_loc;
-		if(fs_read_block(fs, blknum, d)) {
-			fprintf(stderr, "fs_write_data: fs_write_block");
+		uint32_t blknum = blknums[i] - 1 + super.data_loc;
+		union fs_block* d = data + i;
+		if(fs_read_block(fs, blknum, d) < 0) {
+			fprintf(stderr, "fs_write_data: fs_write_block\n");
 			return FUNC_ERROR;
 		}
 	}

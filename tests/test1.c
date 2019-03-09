@@ -26,10 +26,7 @@ int main(int argc, char** argv) {
 	/* test creatfile */
 	int ret = creatfile(filename, 100000, &fs);
 	assert(ret == 0);
-	
-	printf("disk size..\n");
-	/* test disk_size*/
-	printf("[test1] size: %d\n", disk_size(fs));
+	fs_format(fs);
 
 	printf("writing block..\n");
 	/* test write */
