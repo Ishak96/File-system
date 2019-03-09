@@ -1,0 +1,48 @@
+<pre>Inode table:
+            start: 3 -- size: 1
+Data blocks:
+            start: 4 -- size: 20
+Log:
+    number of reads: 0
+    number of writes: 0
+    number of mounts: 1
+    number of free inodes spaces: 63
+    number of free data spaces: 20
+    last mount time: Thu Mar  7 20:37:17 2019
+    last write time: Thu Mar  7 20:37:17 2019
+fd = 0
+all_need1 = 2
+IN
+str = 4095
+<font color=#EF2929><b>root@kali</b></font>:<font color=#729FCF><b>~/projet_os</b></font># make test
+gcc -std=c99 -Wall -g -Iinclude -c src/io.c -o obj/io.o
+gcc obj/io.o obj/devutils.o obj/disk.o obj/fs.o obj/test2.o -o bin/test2 -lm
+gcc obj/io.o obj/devutils.o obj/disk.o obj/fs.o obj/test6.o -o bin/test6 -lm
+<font color=#EF2929><b>root@kali</b></font>:<font color=#729FCF><b>~/projet_os</b></font># bin/test6 
+Creating filesyst..
+[3] nblocks: 24
+Superblock dump:
+Magic: f0f03410
+Bitmaps: 
+         inode: 
+                start: 1 -- size: 1
+         data: 
+               start: 2 -- size: 1
+Inode table:
+            start: 3 -- size: 1
+Data blocks:
+            start: 4 -- size: 20
+Log:
+    number of reads: 0
+    number of writes: 0
+    number of mounts: 1
+    number of free inodes spaces: 63
+    number of free data spaces: 20
+    last mount time: Thu Mar  7 20:37:28 2019
+    last write time: Thu Mar  7 20:37:28 2019
+fd = 0
+all_need1 = 2
+IN
+str = 4095
+<font color=#EF2929><b>root@kali</b></font>:<font color=#729FCF><b>~/projet_os</b></font># 
+</pre>
