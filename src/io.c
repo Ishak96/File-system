@@ -130,7 +130,7 @@ int io_lazy_alloc(struct fs_filesyst fs, struct fs_super_block super,
 		}
 		free(dt);
 	}
-	printf("indirect = %d\n", ind->indirect);
+
 	/* level 1 (eg. indirect) */
 	/* read the indirect block */
 	if(ind->indirect == 0 || level1range_e == -1) {
