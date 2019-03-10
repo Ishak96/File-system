@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
 	str2[4096*3-1] = '\0';
 
 	io_lseek(fs, super, fd, 128);
-	io_write(fs, super, fd, str, sizeof(str));
+	io_write(fs, super, fd, str, 400);
 	io_lseek(fs, super, fd, 4096*6+128);
 	io_write(fs, super, fd, str, sizeof(str));
 	io_lseek(fs, super, fd, 4096*12+128);
@@ -74,9 +74,10 @@ int main(int argc, char** argv) {
 	
 	char strtest[4096*15] = {0};
 	io_read(fs, super, fd, strtest, sizeof(strtest));
-	printf("1/%d\n", strcmp(strtest, str2));
-	printf("2/%d\n", strcmp(strtest+4096*6, str2));
-	printf("3/%d\n", strcmp(strtest+4096*12, str2));
+	printf("1/%d\n", strcmp(strtest+4096*6, str2));
+	printf("2/%d\n", strcmp(strtest+4096*12, str2));
+	str2[400] = '\0',
+	printf("3/%d %d\n",strlen(strtest), strcmp(strtest, str2));
 	//~ printf("str = %ld %d\n", strlen(str), strcmp(str, str2));
 
 	disk_close(&fs);
