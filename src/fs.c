@@ -531,22 +531,12 @@ int fs_write_data(struct fs_filesyst fs, struct fs_super_block super,
 	}
 	return 0;
 }
-//~ int fs_write_data_block(struct fs_filesyst fs, struct fs_super_block super,
-				  //~ union fs_block data, uint32_t blknum)
-//~ {
-	//~ union fs_block* d = data + super.data_loc;
-	//~ if(fs_write_block(fs, blknum, &data, FS_BLOCK_SIZE)) {
-		//~ fprintf(stderr, "fs_write_data: fs_write_block");
-		//~ return FUNC_ERROR;
-	//~ }
-	//~ return 0;
-//~ }
 
 int fs_read_data(struct fs_filesyst fs, struct fs_super_block super,
 				 union fs_block *data, uint32_t *blknums, size_t size)
 {
 	if(data == NULL || blknums == NULL) {
-		fprintf(stderr, "fs_write_data: invalid arguments!\n");
+		fprintf(stderr, "fs_read_data: invalid arguments!\n");
 		return FUNC_ERROR;
 	}
 	
@@ -554,7 +544,7 @@ int fs_read_data(struct fs_filesyst fs, struct fs_super_block super,
 		uint32_t blknum = blknums[i] - 1 + super.data_loc;
 		union fs_block* d = data + i;
 		if(fs_read_block(fs, blknum, d) < 0) {
-			fprintf(stderr, "fs_write_data: fs_write_block\n");
+			fprintf(stderr, "fs_read_data: fs_read_block\n");
 			return FUNC_ERROR;
 		}
 	}

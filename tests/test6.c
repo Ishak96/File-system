@@ -53,22 +53,32 @@ int main(int argc, char** argv) {
 	int fd = io_iopen(fs, super, no);
 	fs_dump_super(fs);
 	printf("fd = %d\n", fd);
-	char str[4096*11] = {0};
-	char str2[4096*11] = {0};
-	for(int i=0; i<4096*11-1; i++) {
+	char str[4096*3] = {0};
+	char str2[4096*3] = {0};
+	for(int i=0; i<4096*3-1; i++) {
 		str[i] = 'A' + rand()%26;
 		str2[i] = str[i];
 	}
-	str[4096*11-1] = '\0';
-	str2[4096*11-1] = '\0';
-	io_lseek(fs, super, fd, 2);
+	str[4096*3-1] = '\0';
+	str2[4096*3-1] = '\0';
 
+	io_lseek(fs, super, fd, 0);
 	io_write(fs, super, fd, str, sizeof(str));
-	io_lseek(fs, super, fd, 2);
-	memset(str, 0, sizeof(str));
-	io_read(fs, super, fd, str, 4096*11);
+	io_lseek(fs, super, fd, 4096*6);
+	io_write(fs, super, fd, str, sizeof(str));
+	io_lseek(fs, super, fd, 4096*12);
+	io_write(fs, super, fd, str, sizeof(str));
 
-	printf("str = %ld %d\n", strlen(str), strcmp(str, str2));
+	memset(str, 0, sizeof(str));
+	io_lseek(fs, super, fd, 0);
+	
+	char strtest[4096*15] = {0};
+	io_read(fs, super, fd, strtest, sizeof(strtest));
+	printf("1/%d\n", strcmp(strtest, str2));
+	printf("2/%d\n", strcmp(strtest+4096*6, str2));
+	printf("3/%d\n", strcmp(strtest+4096*12, str2));
+	//~ printf("str = %ld %d\n", strlen(str), strcmp(str, str2));
+
 	disk_close(&fs);
 	return 0;
 }

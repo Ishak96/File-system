@@ -74,14 +74,7 @@ int io_lazy_alloc(struct fs_filesyst fs, struct fs_super_block super,
 	uint32_t level0range_s, level0range_e;
 	level0range_s = (off < direct_off)? off: direct_off;
 	level0range_e = (off + size < direct_off)? off+size-1: direct_off+FS_BLOCK_SIZE-1;
-	
-	//~ uint32_t level1range_s, level1range_e;
-	//~ level1range_s = (level0range_e < direct_off)? -1: /* no indirect blocks needed */
-					//~ (level0range_s == direct_off )? off: /* only indirect blocks needed */
-					 //~ 0; /* direct and indirect needed */
-	//~ level1range_e = (level0range_e < direct_off)? -1: /* no indirect blocks needed */
-					//~ (level0range_s == direct_off)? off+size-1: /* only indirect blocks needed */
-					//~ (off+size-(direct_off+off))-1; /* direct and indirect needed */
+
 	uint32_t level1range_s, level1range_e;
 	level1range_s = (off < direct_off)? 0: off-direct_off;
 	level1range_e = (off + size < direct_off)? 0: off+size-direct_off-1;
@@ -98,10 +91,10 @@ int io_lazy_alloc(struct fs_filesyst fs, struct fs_super_block super,
 	int allocs_needed = 0;
 	for(int i=start; i<=end; i++) {
 		if(i == FS_DIRECT_POINTERS_PER_INODE) {
-			allocs_needed += ind->indirect == 0;
+			allocs_needed += (ind->indirect == 0);
 			continue;
 		}
-		allocs_needed += ind->direct[i] == 0;
+		allocs_needed += (ind->direct[i] == 0);
 	}
 
 	if(allocs_needed) {
@@ -137,12 +130,12 @@ int io_lazy_alloc(struct fs_filesyst fs, struct fs_super_block super,
 		}
 		free(dt);
 	}
-	//~ printf("all_need1 = %d\n", allocs_needed);
 	/* level 1 (eg. indirect) */
 	/* read the indirect block */
 	if(ind->indirect == 0 || level1range_e == -1) {
 		return 0; /* no more allocation needed */
 	}
+	
 	union fs_block indirect_data;
 	if(fs_read_data(fs, super, &indirect_data, &ind->indirect, 1) < 0) {
 		fprintf(stderr, "fs_lazy_alloc: fs_read_data\n");
@@ -153,9 +146,8 @@ int io_lazy_alloc(struct fs_filesyst fs, struct fs_super_block super,
 	end = level1range_e / FS_BLOCK_SIZE;
 	allocs_needed = 0;
 	for(int i=start; i<=end; i++) {
-		allocs_needed += indirect_data.pointers[i] == 0;
+		allocs_needed += (indirect_data.pointers[i] == 0);
 	}
-	//~ printf("all_need2 = %d\n", allocs_needed);
 	if(allocs_needed) {
 		uint32_t *dt = malloc(sizeof(uint32_t) * allocs_needed);
 		if(dt == NULL) {
@@ -225,9 +217,8 @@ int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
 		goto indirect_writing;
 	}
 	uint32_t start = level0range_s/FS_BLOCK_SIZE, end = level0range_e/FS_BLOCK_SIZE;
-	printf("really %d %d %d %d\n", level0range_s, level0range_e, level1range_s, level1range_e);
-	printf("start = %d; end = %d\n", start, end);
 	int data_index = 0;
+	
 	if(start == end) {
 		union fs_block datablk;
 		if(fs_read_data(fs, super, &datablk, &start, 1) < 0) {
@@ -235,8 +226,7 @@ int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			return FUNC_ERROR;
 		}
 		for(int i=level0range_s%FS_BLOCK_SIZE; i<=level0range_e%FS_BLOCK_SIZE; i++) {
-			//~ printf("[%d]%d %d\n", start, i, i-level0range_s % FS_BLOCK_SIZE);
-			datablk.data[i] = ((uint8_t*) data) [i-level0range_s % FS_BLOCK_SIZE];
+			datablk.data[i] = ((uint8_t*) data) [data_index++];
 		}
 		if(fs_write_data(fs, super, &datablk, &ind.direct[start], 1) < 0) {
 			fprintf(stderr, "io_write: fs_write_data!\n");
@@ -252,41 +242,34 @@ int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			fprintf(stderr, "io_write: fs_read_data!\n");
 			return FUNC_ERROR;
 		}
-		//~ printf("blk = %d\n", ind.direct[start]);
-		//~ printf("blk = %d\n", ind.direct[end]);
-
-		//~ printf("%d %d\n", level0range_s, level0range_e);
-		//~ printf("srt = %d %d\n",level0range_s%FS_BLOCK_SIZE, FS_BLOCK_SIZE);
-		//~ printf("end = %d %d\n",0, level0range_e%FS_BLOCK_SIZE);
+		/* start */
 		for(int i=level0range_s%FS_BLOCK_SIZE; i<FS_BLOCK_SIZE; i++) {
-			printf("[%d]%d %d\n", start, i, i-level0range_s%FS_BLOCK_SIZE);
-			datablk_s.data[i] = ((uint8_t*) data) [i-level0range_s%FS_BLOCK_SIZE];
-			//~ printf("[%d] = %c\n",i,  datablk_s.data[i]);
-		}
-		for(int i=0; i<=level0range_e%FS_BLOCK_SIZE; i++) {
-			printf("[%d]%d %d\n", end, i, i+end*FS_BLOCK_SIZE);
-			datablk_e.data[i] = ((uint8_t*) data) [i+(level0range_e-level0range_e%FS_BLOCK_SIZE)];
+			datablk_s.data[i] = ((uint8_t*) data) [data_index++];
 		}
 		if(fs_write_data(fs, super, &datablk_s, &ind.direct[start], 1) < 0) {
 			fprintf(stderr, "io_write: fs_write_data!\n");
 			return FUNC_ERROR;
-		} /* todo: combine the two ifs*/
-		if(fs_write_data(fs, super, &datablk_e, &ind.direct[end], 1) < 0) {
-			fprintf(stderr, "io_write: fs_write_data!\n");
-			return FUNC_ERROR;
 		}
 		
+		/* middle */
 		for(uint32_t i=start+1; i<=end-1 && start+1 <= end-1; i++) {
-			printf("[%d]%d %d\n", i, i, (i+1)*FS_BLOCK_SIZE - (FS_BLOCK_SIZE-level0range_s%FS_BLOCK_SIZE));
-			//~ printf("blk = %d\n", ind.direct[i]);
 			union fs_block* datablk;
-			datablk = data  + (i+1)*FS_BLOCK_SIZE - (FS_BLOCK_SIZE-level0range_s%FS_BLOCK_SIZE);
-			//~ printf("d[%d]%d %d\n", i, i, (i+1)*FS_BLOCK_SIZE - (FS_BLOCK_SIZE-level0range_s%FS_BLOCK_SIZE));
+			datablk = data  + data_index;
+			data_index += FS_BLOCK_SIZE;
 			if(fs_write_data(fs, super, datablk, &ind.direct[i], 1) < 0) { /* todo: change write and read to do one block at a time*/
 				fprintf(stderr, "io_write: fs_write_data!\n");
 				return FUNC_ERROR;
 			}
 		}
+		/* end */
+		for(int i=0; i<=level0range_e%FS_BLOCK_SIZE; i++) {
+			datablk_e.data[i] = ((uint8_t*) data) [data_index++];
+		}
+		if(fs_write_data(fs, super, &datablk_e, &ind.direct[end], 1) < 0) {
+			fprintf(stderr, "io_write: fs_write_data!\n");
+			return FUNC_ERROR;
+		}
+
 	}
 	
 	indirect_writing:
@@ -301,20 +284,14 @@ int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	}
 
 	start = level1range_s/FS_BLOCK_SIZE, end = level1range_e/FS_BLOCK_SIZE;
-	uint32_t indirect_offset = level0range_e-level0range_s;
-	//~ printf("%d %d\n", direct_off - off, level0range_e-level0range_s);
-	//~ printf("start = %d; end = %d\n", start, end);
-
 	if(start == end) {
 		union fs_block datablk;
 		if(fs_read_data(fs, super, &datablk, &indirect_data.pointers[start], 1) < 0) {
 			fprintf(stderr, "io_write: fs_read_data!\n");
 			return FUNC_ERROR;
 		}
-		//~ printf("%d %d\n",level1range_s % FS_BLOCK_SIZE, level1range_e % FS_BLOCK_SIZE);
 		for(int i=level1range_s%FS_BLOCK_SIZE; i<=level1range_e%FS_BLOCK_SIZE; i++) {
-			//~ printf("[%d]%d %d\n", start, i, i-level1range_s % FS_BLOCK_SIZE+indirect_offset);
-			datablk.data[i] = ((uint8_t*) data) [i-level1range_s % FS_BLOCK_SIZE+indirect_offset];
+			datablk.data[i] = ((uint8_t*) data) [data_index++];
 		}
 		if(fs_write_data(fs, super, &datablk, &indirect_data.pointers[start], 1) < 0) {
 			fprintf(stderr, "io_write: fs_write_data!\n");
@@ -330,42 +307,32 @@ int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			fprintf(stderr, "io_write: fs_read_data!\n");
 			return FUNC_ERROR;
 		}
-		//~ printf("iblk = %d\n", indirect_data.pointers[start]);
-		//~ printf("iblk = %d\n", indirect_data.pointers[end]);
-		//~ printf("srt = %d %d\n",level1range_s%FS_BLOCK_SIZE, FS_BLOCK_SIZE);
-		//~ printf("end = %d %d\n",0, level1range_e%FS_BLOCK_SIZE);
 		for(int i=level1range_s%FS_BLOCK_SIZE; i<FS_BLOCK_SIZE; i++) {
-			printf("[%d]%d %d\n", start, i, i-level1range_s%FS_BLOCK_SIZE+indirect_offset);
-			datablk_s.data[i] = ((uint8_t*) data) [i-level1range_s%FS_BLOCK_SIZE+indirect_offset];
-		}
-		for(int i=0; i<=level1range_e%FS_BLOCK_SIZE; i++) {
-			printf("[%d]%d %d\n", end, i, i+level1range_e-level1range_e%FS_BLOCK_SIZE+indirect_offset);
-			datablk_e.data[i] = ((uint8_t*) data) [i+level1range_e-level1range_e%FS_BLOCK_SIZE+indirect_offset];
+			datablk_s.data[i] = ((uint8_t*) data) [data_index++];
 		}
 		if(fs_write_data(fs, super, &datablk_s, &indirect_data.pointers[start], 1) < 0) {
 			fprintf(stderr, "io_write: fs_write_data!\n");
 			return FUNC_ERROR;
 		} /* todo: combine the two ifs*/
-		if(fs_write_data(fs, super, &datablk_e, &indirect_data.pointers[end], 1) < 0) {
-			fprintf(stderr, "io_write: fs_write_data!\n");
-			return FUNC_ERROR;
-		}
 
 		for(uint32_t i=start+1; i<=end-1 && start+1 <= end-1; i++) {
-			printf("i[%d]%d %d\n", i, i, (i+1)*FS_BLOCK_SIZE - (FS_BLOCK_SIZE-level1range_s%FS_BLOCK_SIZE)+indirect_offset);
 			union fs_block* datablk;
-			datablk = data  + (i+1)*FS_BLOCK_SIZE - (FS_BLOCK_SIZE-level1range_s%FS_BLOCK_SIZE)+indirect_offset;
-			//~ printf("iblk = %d\n", indirect_data.pointers[i]);
-			//~ printf("i[%d]%d %d\n", i, i, (i+1)*FS_BLOCK_SIZE - (FS_BLOCK_SIZE-level0range_s%FS_BLOCK_SIZE));
-			
+			datablk = data  + data_index;
+			data_index += FS_BLOCK_SIZE;
 			if(fs_write_data(fs, super, datablk, &indirect_data.pointers[i], 1) < 0) { /* todo: change write and read to do one block at a time*/
 				fprintf(stderr, "io_write: fs_write_data!\n");
 				return FUNC_ERROR;
 			}
 		}
+		for(int i=0; i<=level1range_e%FS_BLOCK_SIZE; i++) {
+			datablk_e.data[i] = ((uint8_t*) data) [data_index++];
+		}
+		if(fs_write_data(fs, super, &datablk_e, &indirect_data.pointers[end], 1) < 0) {
+			fprintf(stderr, "io_write: fs_write_data!\n");
+			return FUNC_ERROR;
+		}
 	}
 	filedesc_table.fds[fd].offset += size;
-	//~ printf("%d\n", filedesc_table.fds[fd].offset);
 	return 0;
 }
 int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
@@ -396,17 +363,14 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	
 	/* direct reading */
 	if(level0range_s == level0range_e) { /* no direct writing needed*/
-		goto indirect_writing;
+		goto indirect_reading;
 	}
-	//~ union fs_block null_block;
-	//~ memset(null_block, 0, sizeof(null_block));
+	int data_index = 0;
 	uint32_t start = level0range_s/FS_BLOCK_SIZE, end = level0range_e/FS_BLOCK_SIZE;
 	if(start == end) {
-		//~ printf("start==end direct\n");
-		/* if not allocated return null block*/
 		if(!ind.direct[start] || !fs_is_block_allocated(fs, super, ind.direct[start])) {
 			for(int i=level0range_s % FS_BLOCK_SIZE; i<level0range_e % FS_BLOCK_SIZE; i++) {
-				((uint8_t*) data) [i-level0range_s % FS_BLOCK_SIZE] = 0;
+				((uint8_t*) data) [data_index++] = 0;
 			}
 		} else {
 			/* else return values */
@@ -416,73 +380,60 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 				return FUNC_ERROR;
 			}
 			for(int i=level0range_s % FS_BLOCK_SIZE; i<level0range_e % FS_BLOCK_SIZE; i++) {
-				((uint8_t*) data) [i-level0range_s % FS_BLOCK_SIZE] = datablk.data[i];
+				((uint8_t*) data) [data_index++] = datablk.data[i];
 			}
 		}
-	} else {
-		//~ printf("start direct\n");
-
+	} else {		
 		union fs_block datablk_s, datablk_e;
+		/* start */
 		if(!ind.direct[start] || !fs_is_block_allocated(fs, super, ind.direct[start])) {
 			for(int i=level0range_s%FS_BLOCK_SIZE; i<FS_BLOCK_SIZE; i++) {
-				((uint8_t*) data) [i-level0range_s%FS_BLOCK_SIZE] = 0;
+				((uint8_t*) data) [data_index++] = 0;
 			}
 		} else {
 			if(fs_read_data(fs, super, &datablk_s, &ind.direct[start], 1) < 0) {
 				fprintf(stderr, "io_read: fs_read_data!\n");
 				return FUNC_ERROR;
-			} /* todo: combine the two ifs*/
-			//~ printf("read = %c\n", datablk_s.data[0]);
+			}
 			for(int i=level0range_s%FS_BLOCK_SIZE; i<FS_BLOCK_SIZE; i++) {
-				//~ printf("sd[%d]%d %d\n", start, i, i-level0range_s%FS_BLOCK_SIZE);
-				((uint8_t*) data) [i-level0range_s%FS_BLOCK_SIZE] = datablk_s.data[i];
+				((uint8_t*) data) [data_index++] = datablk_s.data[i];
 			}
 		}
-		//~ printf("end direct\n");
-
-		if(!ind.direct[end] || !fs_is_block_allocated(fs, super, ind.direct[end])) {
-			for(int i=0; i<=level0range_e%FS_BLOCK_SIZE; i++) {
-				//~ printf("ed[%d]%d %d\n", end, i, i+level0range_e-level0range_e%FS_BLOCK_SIZE);
-				((uint8_t*) data) [i+level0range_e-level0range_e%FS_BLOCK_SIZE] = 0;
-			}			
-		} else {
-			if(fs_read_data(fs, super, &datablk_e, &ind.direct[start], 1) < 0) {
-				fprintf(stderr, "io_read: fs_read_data!\n");
-				return FUNC_ERROR;
-			}
-			for(int i=0; i<=level0range_e%FS_BLOCK_SIZE; i++) {
-				//~ printf("ed[%d]%d %d\n", end, i, i+level0range_e-level0range_e%FS_BLOCK_SIZE);
-				((uint8_t*) data) [i+level0range_e-level0range_e%FS_BLOCK_SIZE] = datablk_e.data[i];
-			}
-		}
-		//~ printf("blk = %d\n", ind.direct[start]);
-		//~ printf("blk = %d %d\n",end, ind.direct[end]);
-		//~ printf("%d %d\n", start, end);
-		//~ printf("%d %d\n", start, end);
 		for(uint32_t i=start+1; i<=end-1 && start+1 <= end-1; i++) {
-			//~ printf("d[%d]%d %d\n", i, i, (i+1)*FS_BLOCK_SIZE - (FS_BLOCK_SIZE-level0range_s%FS_BLOCK_SIZE));
 			union fs_block datablk;
 			if(!ind.direct[i] || !fs_is_block_allocated(fs, super, ind.direct[i])) {
 				for(uint32_t j=0; j<FS_BLOCK_SIZE; j++) {
-					//~ printf("[%d]%d %d\n", i, i*FS_BLOCK_SIZE + j - level0range_s%FS_BLOCK_SIZE, j);
-					((uint8_t*) data)[j+(i+1)*FS_BLOCK_SIZE - (FS_BLOCK_SIZE-level0range_s%FS_BLOCK_SIZE)] = 0;
-				}				
+					((uint8_t*) data)[data_index++] = 0;
+				}
 			} else {
 				if(fs_read_data(fs, super, &datablk, &ind.direct[i], 1) < 0) { /* todo: change write and read to do one block at a time*/
 					fprintf(stderr, "io_read: fs_write_data!\n");
 					return FUNC_ERROR;
 				}
 				for(uint32_t j=0; j<FS_BLOCK_SIZE; j++) {
-					//~ printf("[%d]%d %d\n", i, i*FS_BLOCK_SIZE + j - level0range_s%FS_BLOCK_SIZE, j);
-					((uint8_t*) data)[j+(i+1)*FS_BLOCK_SIZE - (FS_BLOCK_SIZE-level0range_s%FS_BLOCK_SIZE)] = datablk.data[j];
+					((uint8_t*) data)[data_index++] = datablk.data[j];
 				}
+			}
+		}
+		/* end */
+		if(!ind.direct[end] || !fs_is_block_allocated(fs, super, ind.direct[end])) {
+			for(int i=0; i<=level0range_e%FS_BLOCK_SIZE; i++) {
+				((uint8_t*) data) [data_index++] = 0;
+			}			
+		} else {
+			if(fs_read_data(fs, super, &datablk_e, &ind.direct[end], 1) < 0) {
+				fprintf(stderr, "io_read: fs_read_data!\n");
+				return FUNC_ERROR;
+			}
+			for(int i=0; i<=level0range_e%FS_BLOCK_SIZE; i++) {
+				((uint8_t*) data) [data_index++] = datablk_e.data[i];
 			}
 		}
 	}
 	
-	indirect_writing:
+	indirect_reading:
 	/* indirect reading */
-	if(level1range_s == level1range_e) { /* no indirect reading needed */
+	if(level1range_s == level1range_e || ind.indirect == 0) { /* no indirect reading needed */
 		return 0;
 	}
 	union fs_block indirect_data;
@@ -492,14 +443,11 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	}
 
 	start = level1range_s/FS_BLOCK_SIZE, end = level1range_e/FS_BLOCK_SIZE;
-	uint32_t indirect_offset = level0range_e-level0range_s;
-	//~ printf("%d %d\n", direct_off - off, level0range_e-level0range_s);
 	if(start == end) {
 		union fs_block datablk;
-		//~ printf("start==end indirect\n");
 		if(!indirect_data.pointers[start] || !fs_is_block_allocated(fs, super, indirect_data.pointers[start])) {
 			for(int i=level0range_s % FS_BLOCK_SIZE; i<level0range_e % FS_BLOCK_SIZE; i++) {
-				((uint8_t*) data) [i-level1range_s % FS_BLOCK_SIZE+indirect_offset] = 0;
+				((uint8_t*) data) [data_index++] = 0;
 			}		
 		} else {
 			if(fs_read_data(fs, super, &datablk, &indirect_data.pointers[start], 1) < 0) {
@@ -507,32 +455,47 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 				return FUNC_ERROR;
 			}
 			for(int i=level0range_s % FS_BLOCK_SIZE; i<level0range_e % FS_BLOCK_SIZE; i++) {
-				((uint8_t*) data) [i-level1range_s % FS_BLOCK_SIZE+indirect_offset] = datablk.data[i];
+				((uint8_t*) data) [data_index++] = datablk.data[i];
 			}
 		}
 	} else {
-		//~ printf("start indirect %d\n", indirect_data.pointers[start]);
 		union fs_block datablk_s, datablk_e;
+		/* start */
 		if(!indirect_data.pointers[start] || !fs_is_block_allocated(fs, super, indirect_data.pointers[start])) {
 			for(int i=level1range_s%FS_BLOCK_SIZE; i<FS_BLOCK_SIZE; i++) {
-				//~ printf("[%d]%d %d\n", start, i-level0range_s%FS_BLOCK_SIZE, i);
-				((uint8_t*) data) [i-level1range_s%FS_BLOCK_SIZE+indirect_offset] = 0;
+				((uint8_t*) data) [data_index++] = 0;
 			}			
 		} else { 
 			if(fs_read_data(fs, super, &datablk_s, &indirect_data.pointers[start], 1) < 0) {
 				fprintf(stderr, "io_read: fs_read_data!\n");
 				return FUNC_ERROR;
-			} /* todo: combine the two ifs*/
+			}
 			for(int i=level1range_s%FS_BLOCK_SIZE; i<FS_BLOCK_SIZE; i++) {
-				//~ printf("si[%d]%d %d\n", start, i-level1range_s%FS_maLOCK_SIZE+indirect_offset, i);
-				((uint8_t*) data) [i-level1range_s%FS_BLOCK_SIZE+indirect_offset] = datablk_s.data[i];
+				((uint8_t*) data) [data_index++] = datablk_s.data[i];
 			}
 		}
-		//~ printf("end indirect\n");
+		
+		/* middle */
+		for(uint32_t i=start+1; i<=end-1 && start+1 <= end-1; i++) {
+			union fs_block datablk;
+			if(!indirect_data.pointers[i] || !fs_is_block_allocated(fs, super, indirect_data.pointers[i])) {
+				for(uint32_t j=0; j<FS_BLOCK_SIZE; j++) {
+					((uint8_t*) data)[data_index++] = 0;
+				}
+			} else {
+				if(fs_read_data(fs, super, &datablk, &indirect_data.pointers[i], 1) < 0) { /* todo: change write and read to do one block at a time*/
+					fprintf(stderr, "io_read: fs_write_data!\n");
+					return FUNC_ERROR;
+				}
+				for(uint32_t j=0; j<FS_BLOCK_SIZE; j++) {
+					((uint8_t*) data)[data_index++] = datablk.data[j];
+				}
+			}
+		}
+		/* end */
 		if(!indirect_data.pointers[end] || !fs_is_block_allocated(fs, super, indirect_data.pointers[end])) {
 			for(int i=0; i<=level1range_e%FS_BLOCK_SIZE; i++) {
-				//~ printf("ei[%d]%d %d\n", end, i+size-level0range_e%FS_BLOCK_SIZE-1, i);
-				((uint8_t*) data) [i+size-level1range_e%FS_BLOCK_SIZE-1] = 0;
+				((uint8_t*) data) [data_index++] = 0;
 			}			
 		} else {
 			if(fs_read_data(fs, super, &datablk_e, &indirect_data.pointers[end], 1) < 0) {
@@ -540,33 +503,9 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 				return FUNC_ERROR;
 			}
 			for(int i=0; i<=level1range_e%FS_BLOCK_SIZE; i++) {
-				//~ printf("ei[%d]%d %d\n", end, i+size-level0range_e%FS_BLOCK_SIZE-1, i);
-				((uint8_t*) data) [i+size-level1range_e%FS_BLOCK_SIZE-1] = datablk_e.data[i];
-			}
-		}
-		//~ printf("iblk = %d\n", indirect_data.pointers[start]);
-		//~ printf("iblk = %d\n", indirect_data.pointers[end]);
-		for(uint32_t i=start+1; i<=end-1 && start+1 <= end-1; i++) {
-			union fs_block datablk;
-			if(!indirect_data.pointers[i] || !fs_is_block_allocated(fs, super, indirect_data.pointers[i])) {
-				for(uint32_t j=0; j<FS_BLOCK_SIZE; j++) {
-					//~ printf("[%d]%d %d\n", i, i*FS_BLOCK_SIZE + j - level0range_s%FS_BLOCK_SIZE, j);
-					((uint8_t*) data)[j+(i+1)*FS_BLOCK_SIZE - (FS_BLOCK_SIZE-level1range_s%FS_BLOCK_SIZE)+indirect_offset] = 0;
-				}
-			} else {
-				//~ printf("i[%d]%d %d\n", i, i, (i+1)*FS_BLOCK_SIZE - (FS_BLOCK_SIZE-level1range_s%FS_BLOCK_SIZE)+indirect_offset);
-				if(fs_read_data(fs, super, &datablk, &indirect_data.pointers[i], 1) < 0) { /* todo: change write and read to do one block at a time*/
-					fprintf(stderr, "io_read: fs_write_data!\n");
-					return FUNC_ERROR;
-				}
-				//~ printf("iblk = %d\n", indirect_data.pointers[i]);
-				for(uint32_t j=0; j<FS_BLOCK_SIZE; j++) {
-					//~ printf("[%d]%d %d\n", i, i*FS_BLOCK_SIZE + j - level0range_s%FS_BLOCK_SIZE, j);
-					((uint8_t*) data)[j+(i+1)*FS_BLOCK_SIZE - (FS_BLOCK_SIZE-level1range_s%FS_BLOCK_SIZE)+indirect_offset] = datablk.data[j];
-				}
+				((uint8_t*) data) [data_index++] = datablk_e.data[i];
 			}
 		}
 	}
-	
 	return 0;
 }
