@@ -62,15 +62,15 @@ int main(int argc, char** argv) {
 	str[4096*3-1] = '\0';
 	str2[4096*3-1] = '\0';
 
-	io_lseek(fs, super, fd, 0);
+	io_lseek(fs, super, fd, 128);
 	io_write(fs, super, fd, str, sizeof(str));
-	io_lseek(fs, super, fd, 4096*6);
+	io_lseek(fs, super, fd, 4096*6+128);
 	io_write(fs, super, fd, str, sizeof(str));
-	io_lseek(fs, super, fd, 4096*12);
+	io_lseek(fs, super, fd, 4096*12+128);
 	io_write(fs, super, fd, str, sizeof(str));
 
 	memset(str, 0, sizeof(str));
-	io_lseek(fs, super, fd, 0);
+	io_lseek(fs, super, fd, 128);
 	
 	char strtest[4096*15] = {0};
 	io_read(fs, super, fd, strtest, sizeof(strtest));

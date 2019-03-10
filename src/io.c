@@ -130,6 +130,7 @@ int io_lazy_alloc(struct fs_filesyst fs, struct fs_super_block super,
 		}
 		free(dt);
 	}
+	printf("indirect = %d\n", ind->indirect);
 	/* level 1 (eg. indirect) */
 	/* read the indirect block */
 	if(ind->indirect == 0 || level1range_e == -1) {
@@ -211,13 +212,14 @@ int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	uint32_t level1range_s, level1range_e;
 	level1range_s = (off < direct_off)? 0: off-direct_off;
 	level1range_e = (off + size < direct_off)? 0: off+size-1-direct_off;
+
+	int data_index = 0;
 	
 	/* direct writing */
 	if(level0range_s == level0range_e) { /* no direct writing needed*/
 		goto indirect_writing;
 	}
 	uint32_t start = level0range_s/FS_BLOCK_SIZE, end = level0range_e/FS_BLOCK_SIZE;
-	int data_index = 0;
 	
 	if(start == end) {
 		union fs_block datablk;
@@ -360,12 +362,13 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	uint32_t level1range_s, level1range_e;
 	level1range_s = (off < direct_off)? 0: off-direct_off;
 	level1range_e = (off + size < direct_off)? 0: off+size-1-direct_off;
+
+	int data_index = 0;
 	
 	/* direct reading */
 	if(level0range_s == level0range_e) { /* no direct writing needed*/
 		goto indirect_reading;
 	}
-	int data_index = 0;
 	uint32_t start = level0range_s/FS_BLOCK_SIZE, end = level0range_e/FS_BLOCK_SIZE;
 	if(start == end) {
 		if(!ind.direct[start] || !fs_is_block_allocated(fs, super, ind.direct[start])) {
