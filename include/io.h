@@ -26,4 +26,5 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			 void* data, size_t size);
 int io_lseek(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			  size_t new_off);
+int io_rm(struct fs_filesyst fs, struct fs_super_block super, int fd);
 #endif

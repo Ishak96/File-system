@@ -79,7 +79,8 @@ int main(int argc, char** argv) {
 	str2[400] = '\0',
 	printf("3/%ld %d\n",strlen(strtest), strcmp(strtest, str2));
 	//~ printf("str = %ld %d\n", strlen(str), strcmp(str, str2));
-
+	io_rm(fs, super, fd);
+	io_read(fs, super, fd, strtest, sizeof(strtest));
 	disk_close(&fs);
 	return 0;
 }

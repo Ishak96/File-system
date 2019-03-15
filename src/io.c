@@ -371,7 +371,7 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	}
 	uint32_t start = level0range_s/FS_BLOCK_SIZE, end = level0range_e/FS_BLOCK_SIZE;
 	if(start == end) {
-		if(!ind.direct[start] || !fs_is_data_allocated(fs, super, ind.direct[start])) {/* todo: remove second test when adding security to fs_read and fs_write */
+		if(!ind.direct[start]) {/* todo: remove second test when adding security to fs_read and fs_write */
 			for(int i=level0range_s % FS_BLOCK_SIZE; i<level0range_e % FS_BLOCK_SIZE; i++) {
 				((uint8_t*) data) [data_index++] = 0;
 			}
@@ -389,7 +389,7 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	} else {		
 		union fs_block datablk_s, datablk_e;
 		/* start */
-		if(!ind.direct[start] || !fs_is_data_allocated(fs, super, ind.direct[start])) {
+		if(!ind.direct[start]) {
 			for(int i=level0range_s%FS_BLOCK_SIZE; i<FS_BLOCK_SIZE; i++) {
 				((uint8_t*) data) [data_index++] = 0;
 			}
@@ -509,6 +509,58 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 				((uint8_t*) data) [data_index++] = datablk_e.data[i];
 			}
 		}
+	}
+	return 0;
+}
+
+int io_rm(struct fs_filesyst fs, struct fs_super_block super, int fd) {
+	if(filedesc_table.fds[fd].is_allocated == 0) {
+		fprintf(stderr, "io_read: fd closed!\n");
+		return FUNC_ERROR;
+	}
+	uint32_t inodenum = filedesc_table.fds[fd].inodenum;
+
+	struct fs_inode ind;
+	if(fs_read_inode(fs, super, inodenum, &ind) < 0) {
+		fprintf(stderr, "io_read: fs_read_inode\n");
+		return FUNC_ERROR;
+	}
+	if(ind.indirect) {
+		union fs_block indirect_data;
+		if(fs_read_data(fs, super, &indirect_data, &ind.indirect, 1) < 0) {
+			fprintf(stderr, "io_read: fs_read_data\n");
+			return FUNC_ERROR;
+		}
+		for(int i=0; i<FS_POINTERS_PER_BLOCK; i++) {
+			if(indirect_data.pointers[i]) {
+				if(fs_free_data(fs, &super, indirect_data.pointers[i]) < 0) {
+					fprintf(stderr, "io_rm: fs_free_data\n");
+					return FUNC_ERROR;
+				}
+			}
+		}
+		if(fs_free_data(fs, &super, ind.indirect) < 0) {
+			fprintf(stderr, "io_rm: fs_free_data\n");
+			return FUNC_ERROR;
+		}
+	}
+	
+	for(int i=0; i<FS_DIRECT_POINTERS_PER_INODE; i++) {
+		if(ind.direct[i]) {
+			if(fs_free_data(fs, &super, ind.direct[i]) < 0) {
+				fprintf(stderr, "io_rm: fs_free_data\n");
+				return FUNC_ERROR;
+			}
+		}
+	}
+	if(fs_free_inode(fs, &super, inodenum) < 0) {
+		fprintf(stderr, "io_rm: fs_free_inode\n");
+		return FUNC_ERROR;
+	}
+	
+	if(io_close_fd(fd) < 0) {
+		fprintf(stderr, "io_rm: io_close_fd\n");
+		return FUNC_ERROR;		
 	}
 	return 0;
 }
