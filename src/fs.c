@@ -2,7 +2,7 @@
  * @file fs.c
  * @author ABDELMOUMENE Djahid 
  * @author AYAD Ishak
- * @brief main filesystem functions
+ * @brief main filesystem utilities
  * @details initializing the partition files and utility functions
  *  to interact with the os
  */

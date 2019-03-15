@@ -1,3 +1,11 @@
+/**
+ * @file io.c
+ * @author ABDELMOUMENE Djahid 
+ * @author AYAD Ishak
+ * @brief filesystem input/output operations
+ * @details contains the main functions to create, destroy, read and write
+ *  to files, also contains a system of file descriptors.
+ */
 #include <io.h>
 #include <fs.h>
 #include <devutils.h>
@@ -7,8 +15,19 @@
 #include <stdint.h>
 #include <stdio.h>
 
+/**
+ * The main file descriptor table that holds information about all 
+ * currently open files.
+ */
 struct io_filedesc_table filedesc_table = {0};
 
+/**
+ * @brief allocates a new file descriptor with an inodenum
+ * @details allocates a file descriptor with the inode number given in
+ * arguments. 
+ * @return returns the a file descriptor (>0) in case of success, 
+ * else it returns -1.
+ */
 int io_open_fd(uint32_t inodenum) {
 	int found = 0;
 	for(int i=0; i<IO_MAX_FILEDESC && found==0; i++) {
@@ -27,6 +46,11 @@ int io_open_fd(uint32_t inodenum) {
 	return 0;
 }
 
+/**
+ * @brief closes an already open file descriptor
+ * @return returns 0 in case of success, -1 if the fd was never allocated
+ * or invalid.
+ */
 int io_close_fd(int fd) {
 	if(fd < 0) {
 		fprintf(stderr, "io_clode_fd: invalid file desciptor!\n");
@@ -36,7 +60,13 @@ int io_close_fd(int fd) {
 	return 0;
 }
 
-
+/**
+ * @brief opens a new file without creating a new inode
+ * @details tries to open the corresponding *inodenum* from the inode
+ * table.
+ * @return returns the fd of the now open file in case of success, 
+ * or -1 in case of failure
+ */
 int io_iopen(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum) {
 	/* get the inode */
 	struct fs_inode ind;
@@ -50,14 +80,21 @@ int io_iopen(struct fs_filesyst fs, struct fs_super_block super, uint32_t inoden
 	return fd;
 }
 
-int io_open_creat(struct fs_filesyst fs, struct fs_super_block super) {
+/**
+ * @brief creates a new file with a new inodenum
+ * @details allocates an inode and opens a new file descriptor, 
+ * @return returns an fd of the created file in case of success,
+ * else it returns -1.
+ */
+int io_open_creat(struct fs_filesyst fs, struct fs_super_block super, uint16_t mode) {
 	uint32_t inodenum;
 	if(fs_alloc_inode(fs, &super, &inodenum) < 0) {
 		fprintf(stderr, "io_open: can't allocate inode!\n");
 		return FUNC_ERROR;
 	}
-	struct fs_inode ind;
-	memset(&ind, 0, sizeof(ind));
+	struct fs_inode ind = {0};
+	ind.mode = mode;
+	/* todo: set ind values */
 	if(fs_write_inode(fs, super, inodenum, &ind) < 0) {
 		fprintf(stderr, "io_open_creat: fs_write_inode\n");
 		return FUNC_ERROR;
@@ -66,6 +103,12 @@ int io_open_creat(struct fs_filesyst fs, struct fs_super_block super) {
 	return fd;
 }
 
+/**
+ * @brief allocates blocks based on *off* and *size*
+ * @details a utility functions used by io_write to allocate the least
+ * possible amount of blocks based on the writing offset *off* and the
+ * writing size *size*.
+ */
 int io_lazy_alloc(struct fs_filesyst fs, struct fs_super_block super,
 				uint32_t inodenum, struct fs_inode *ind, size_t off, size_t size)
 {
@@ -184,6 +227,10 @@ int io_lseek(struct fs_filesyst fs, struct fs_super_block super, int fd,
 int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			 void* data, size_t size)
 {
+	if(size == 0) {
+		fprintf(stderr, "io_write: invalid argument size\n");
+		return FUNC_ERROR;
+	}
 	if(filedesc_table.fds[fd].is_allocated == 0) {
 		fprintf(stderr, "io_write: fd closed!\n");
 		return FUNC_ERROR;
@@ -340,6 +387,10 @@ int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
 int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			 void* data, size_t size)
 {
+	if(size == 0) {
+		fprintf(stderr, "io_write: invalid argument size\n");
+		return FUNC_ERROR;
+	}
 	if(filedesc_table.fds[fd].is_allocated == 0) {
 		fprintf(stderr, "io_read: fd closed!\n");
 		return FUNC_ERROR;

@@ -8,31 +8,15 @@
 #ifndef DIRENT_H
 #define DIRENT_H
 
-#include <wchar.h>
-
-struct _WDIR {
-    struct _wdirent ent;                        /* Current directory entry */
-    int cached;                                 /* True if data is valid */
-    wchar_t *patt;                              /* Initial directory name */
-};
-typedef struct _WDIR _WDIR;
+#define S_DIR 01000
 
 struct dirent {
-    long d_ino;                                 /* Always zero */
-    int d_type;                                 /* File type */
-    char d_name[PATH_MAX];                      /* File name */
+    uint32_t d_ino;
+    int d_type;                            /* File type  */
+    char d_name[256];                      /* File name  */
 };
-typedef struct dirent dirent;
 
-struct DIR {
-    struct dirent ent;
-    struct _WDIR *wdirp;
-};
-typedef struct DIR DIR;
-
-DIR *opendir (const char *dirname);
-struct dirent *readdir (DIR *dirp);
-int closedir (DIR *dirp);
-void rewinddir (DIR* dirp);
-
+int opendir(struct fs_filesyst fs, struct fs_super_block super);
+int insertFile(struct fs_filesyst fs, struct fs_super_block super,
+			   int dirfd, struct dirent file);
 #endif

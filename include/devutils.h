@@ -12,7 +12,6 @@
 #define SET_MINMAX(a,min,max) (((a) > min)? ((a) < max)? (a): max: min)
 #define NOT_NULL(a) ((a)<=0)? 1: (a);
 
-
 void die(const char* msg);
 uint32_t get_cur_time();
 char* timetostr(uint32_t tm);
