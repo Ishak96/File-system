@@ -19,4 +19,6 @@ struct dirent {
 int opendir(struct fs_filesyst fs, struct fs_super_block super);
 int insertFile(struct fs_filesyst fs, struct fs_super_block super,
 			   int dirfd, struct dirent file);
+int findFile(struct fs_filesyst fs, struct fs_super_block super,
+			   int dirfd, char* filename, struct dirent *res);
 #endif

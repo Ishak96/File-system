@@ -50,7 +50,22 @@ int main(int argc, char** argv) {
 		.d_type = 12,
 		.d_name = "FILENAME"
 	};
+	
 	insertFile(fs, super, dirfd, ent);
+	strcpy(ent.d_name, "BANANA");
+	insertFile(fs, super, dirfd, ent);
+	strcpy(ent.d_name, "BANANA1");
+	insertFile(fs, super, dirfd, ent);
+	strcpy(ent.d_name, "BANANA2");
+	insertFile(fs, super, dirfd, ent);
+	strcpy(ent.d_name, "BANANA3");
+	insertFile(fs, super, dirfd, ent);
+	strcpy(ent.d_name, "BANANA4");
+	insertFile(fs, super, dirfd, ent);
+
+	findFile(fs, super, dirfd, "BANANA4", &ent);
+	printf("%d %d %s\n", ent.d_ino, ent.d_type, ent.d_name);
+
 	disk_close(&fs);
 	return 0;
 }

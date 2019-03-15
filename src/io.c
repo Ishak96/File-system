@@ -270,7 +270,7 @@ int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	
 	if(start == end) {
 		union fs_block datablk;
-		if(fs_read_data(fs, super, &datablk, &start, 1) < 0) {
+		if(fs_read_data(fs, super, &datablk, &ind.direct[start], 1) < 0) {
 			fprintf(stderr, "io_write: fs_read_data!\n");
 			return FUNC_ERROR;
 		}
@@ -324,7 +324,7 @@ int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	indirect_writing:
 	/* indirect writing */
 	if(level1range_s == level1range_e) { /* no indirect writing needed */
-		return 0;
+		goto end_write;
 	}
 	union fs_block indirect_data;
 	if(fs_read_data(fs, super, &indirect_data, &ind.indirect, 1) < 0) {
@@ -381,6 +381,7 @@ int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			return FUNC_ERROR;
 		}
 	}
+	end_write:
 	filedesc_table.fds[fd].offset += size;
 	return 0;
 }
@@ -488,7 +489,7 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	indirect_reading:
 	/* indirect reading */
 	if(level1range_s == level1range_e || ind.indirect == 0) { /* no indirect reading needed */
-		return 0;
+		goto end_read;
 	}
 	union fs_block indirect_data;
 	if(fs_read_data(fs, super, &indirect_data, &ind.indirect, 1) < 0) {
@@ -561,6 +562,8 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			}
 		}
 	}
+	end_read:
+	filedesc_table.fds[fd].offset += size;
 	return 0;
 }
 
