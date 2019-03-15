@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
 	io_read(fs, super, fd, strtest, sizeof(strtest));
 	printf("1/%d\n", strcmp(strtest+4096*6, str2));
 	printf("2/%d\n", strcmp(strtest+4096*12, str2));
-	str2[400] = '\0',
+	str2[400] = '\0';
 	printf("3/%d %d\n",strlen(strtest), strcmp(strtest, str2));
 	//~ printf("str = %ld %d\n", strlen(str), strcmp(str, str2));
 

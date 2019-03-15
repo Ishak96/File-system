@@ -371,7 +371,7 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	}
 	uint32_t start = level0range_s/FS_BLOCK_SIZE, end = level0range_e/FS_BLOCK_SIZE;
 	if(start == end) {
-		if(!ind.direct[start] || !fs_is_block_allocated(fs, super, ind.direct[start])) {
+		if(!ind.direct[start] || !fs_is_block_allocated(fs, super, ind.direct[start])) { /* todo: remove second test when adding security to fs_read and fs_write */
 			for(int i=level0range_s % FS_BLOCK_SIZE; i<level0range_e % FS_BLOCK_SIZE; i++) {
 				((uint8_t*) data) [data_index++] = 0;
 			}
@@ -512,3 +512,4 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	}
 	return 0;
 }
+
