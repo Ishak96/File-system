@@ -91,7 +91,7 @@ int fs_alloc_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t 
 int fs_write_inode(struct fs_filesyst fs, struct fs_super_block super, uint32_t indno, struct fs_inode *inode);
 int fs_free_inode(struct fs_filesyst fs, struct fs_super_block* super, uint32_t inodenum);
 int fs_free_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t datanum);
-int fs_is_block_allocated(struct fs_filesyst fs, struct fs_super_block super, uint32_t datanum);
+int fs_is_data_allocated(struct fs_filesyst fs, struct fs_super_block super, uint32_t datanum);
 int fs_is_inode_allocated(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum); 
 int fs_write_data(struct fs_filesyst fs, struct fs_super_block super,
 				  union fs_block *data, uint32_t *blknums, size_t size);

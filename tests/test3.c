@@ -25,10 +25,7 @@ int main(int argc, char** argv) {
 
 	printf("formatting filesystem..\n");
 	fs_format(fs);
-	
-	printf("dumping superblock\n");
-	fs_dump_super(fs);
-	
+
 	/* read the super block*/
 	union fs_block blk;
 	struct fs_super_block super;
@@ -37,7 +34,7 @@ int main(int argc, char** argv) {
 		return FUNC_ERROR;
 	}
 	super = blk.super;
-	
+
 	uint32_t no;
 	struct fs_inode ind;
 	memset(&ind, 0, sizeof(ind));
@@ -45,32 +42,47 @@ int main(int argc, char** argv) {
 	ind.uid = 123;
 	ind.gid = 123;
 	ind.atime = 123;
-	ind.mtime = 123;	
-	
-	for(int i=0; i<60; i++) {
-		printf("\n[%d]ALLOCATING\n", i);
-		fs_alloc_inode(fs, &super, &no);
-		fs_write_inode(fs, super,no, &ind);
-		fs_dump_inode(fs, super, no);
-	}
+	ind.mtime = 123;
 
-	fs_free_inode(fs, &super, 0);
+	int nbdata = 20;
+	int nbinode = 64;
+	for(int i=0; i<nbinode; i++)
+		fs_alloc_inode(fs, &super, &no);
+
+	uint32_t data[nbdata];
 	
-	uint32_t data[20];
-	
-	union fs_block b[20];
+	union fs_block b[nbdata];
 	memset(&b, 0, sizeof(b));
 
-	fs_alloc_data(fs, &super, data, 20);
-	fs_write_data(fs, super, b, data, 20);
-	for(int i=0; i<20; i++) {
-		printf("allocated %u\n", data[i]);
-		
+	fs_alloc_data(fs, &super, data, nbdata);
+	for(int i=1; i<nbdata; i+=2)
+		fs_free_data(fs, &super, i);
+	for(int i=0; i<nbinode; i+=2){
+		fs_free_inode(fs, &super, i);
 	}
-	fs_read_data(fs, super, b, data, 20);
 
-	fs_dump_super(fs);
+	printf("data is allocated ...\n");
+	int nballoc,nbnotalloc;
+	nballoc = nbnotalloc = 0;
+	for(int i=1; i<nbdata; i++){
+		if(fs_is_data_allocated(fs, super, i))
+			nballoc += 1;
+		else
+			nbnotalloc += 1;
+	}
+	printf("their is [%d] data allocated and [%d] not allocated\n", nballoc, nbnotalloc);
+
+	printf("inode is allocated ...\n");
+	nballoc = nbnotalloc = 0;
+	for(int i=0; i<nbinode; i++){
+		if(fs_is_inode_allocated(fs, super, i))
+			nballoc += 1;
+		else
+			nbnotalloc += 1;
+	}
+	printf("their is [%d] inode allocated and [%d] not allocated\n", nballoc, nbnotalloc);
 	
 	disk_close(&fs);
+
 	return 0;
 }

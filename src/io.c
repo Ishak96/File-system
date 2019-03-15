@@ -371,7 +371,7 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	}
 	uint32_t start = level0range_s/FS_BLOCK_SIZE, end = level0range_e/FS_BLOCK_SIZE;
 	if(start == end) {
-		if(!ind.direct[start] || !fs_is_block_allocated(fs, super, ind.direct[start])) { /* todo: remove second test when adding security to fs_read and fs_write */
+		if(!ind.direct[start] || !fs_is_data_allocated(fs, super, ind.direct[start])) {/* todo: remove second test when adding security to fs_read and fs_write */
 			for(int i=level0range_s % FS_BLOCK_SIZE; i<level0range_e % FS_BLOCK_SIZE; i++) {
 				((uint8_t*) data) [data_index++] = 0;
 			}
@@ -389,7 +389,7 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	} else {		
 		union fs_block datablk_s, datablk_e;
 		/* start */
-		if(!ind.direct[start] || !fs_is_block_allocated(fs, super, ind.direct[start])) {
+		if(!ind.direct[start] || !fs_is_data_allocated(fs, super, ind.direct[start])) {
 			for(int i=level0range_s%FS_BLOCK_SIZE; i<FS_BLOCK_SIZE; i++) {
 				((uint8_t*) data) [data_index++] = 0;
 			}
@@ -404,7 +404,7 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 		}
 		for(uint32_t i=start+1; i<=end-1 && start+1 <= end-1; i++) {
 			union fs_block datablk;
-			if(!ind.direct[i] || !fs_is_block_allocated(fs, super, ind.direct[i])) {
+			if(!ind.direct[i] || !fs_is_data_allocated(fs, super, ind.direct[i])) {
 				for(uint32_t j=0; j<FS_BLOCK_SIZE; j++) {
 					((uint8_t*) data)[data_index++] = 0;
 				}
@@ -419,7 +419,7 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			}
 		}
 		/* end */
-		if(!ind.direct[end] || !fs_is_block_allocated(fs, super, ind.direct[end])) {
+		if(!ind.direct[end] || !fs_is_data_allocated(fs, super, ind.direct[end])) {
 			for(int i=0; i<=level0range_e%FS_BLOCK_SIZE; i++) {
 				((uint8_t*) data) [data_index++] = 0;
 			}			
@@ -448,7 +448,7 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	start = level1range_s/FS_BLOCK_SIZE, end = level1range_e/FS_BLOCK_SIZE;
 	if(start == end) {
 		union fs_block datablk;
-		if(!indirect_data.pointers[start] || !fs_is_block_allocated(fs, super, indirect_data.pointers[start])) {
+		if(!indirect_data.pointers[start] || !fs_is_data_allocated(fs, super, indirect_data.pointers[start])) {
 			for(int i=level0range_s % FS_BLOCK_SIZE; i<level0range_e % FS_BLOCK_SIZE; i++) {
 				((uint8_t*) data) [data_index++] = 0;
 			}		
@@ -464,7 +464,7 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	} else {
 		union fs_block datablk_s, datablk_e;
 		/* start */
-		if(!indirect_data.pointers[start] || !fs_is_block_allocated(fs, super, indirect_data.pointers[start])) {
+		if(!indirect_data.pointers[start] || !fs_is_data_allocated(fs, super, indirect_data.pointers[start])) {
 			for(int i=level1range_s%FS_BLOCK_SIZE; i<FS_BLOCK_SIZE; i++) {
 				((uint8_t*) data) [data_index++] = 0;
 			}			
@@ -481,7 +481,7 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 		/* middle */
 		for(uint32_t i=start+1; i<=end-1 && start+1 <= end-1; i++) {
 			union fs_block datablk;
-			if(!indirect_data.pointers[i] || !fs_is_block_allocated(fs, super, indirect_data.pointers[i])) {
+			if(!indirect_data.pointers[i] || !fs_is_data_allocated(fs, super, indirect_data.pointers[i])) {
 				for(uint32_t j=0; j<FS_BLOCK_SIZE; j++) {
 					((uint8_t*) data)[data_index++] = 0;
 				}
@@ -496,7 +496,7 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			}
 		}
 		/* end */
-		if(!indirect_data.pointers[end] || !fs_is_block_allocated(fs, super, indirect_data.pointers[end])) {
+		if(!indirect_data.pointers[end] || !fs_is_data_allocated(fs, super, indirect_data.pointers[end])) {
 			for(int i=0; i<=level1range_e%FS_BLOCK_SIZE; i++) {
 				((uint8_t*) data) [data_index++] = 0;
 			}			
