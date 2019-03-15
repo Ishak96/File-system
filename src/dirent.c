@@ -112,7 +112,7 @@ int insertFile(struct fs_filesyst fs, struct fs_super_block super,
 }
 
 int findFile(struct fs_filesyst fs, struct fs_super_block super,
-			   int dirfd, char* filename, struct dirent *res)
+			   int dirfd, char* filename, struct dirent *res, int* idx)
 {
 	if(dirfd < 0 && strlen(filename) < 256) {
 		fprintf(stderr, "findFile: invalid arguments\n");
@@ -144,9 +144,54 @@ int findFile(struct fs_filesyst fs, struct fs_super_block super,
 		struct dirent temp = {0};
 		temp.d_ino = -1;
 		*res = temp;
+		*idx = -1;
 	} else {
 		*res = files[m];
+		*idx = m;
 	}
+	free(files);
+	return 0;
+}
+
+int delFile(struct fs_filesyst fs, struct fs_super_block super,
+			   int dirfd, char* filename)
+{
+	int idx = 0;
+	struct dirent res;
+	if(findFile(fs, super, dirfd, filename, &res, &idx) < 0) {
+		fprintf(stderr, "delFile: findFile\n");
+		return FUNC_ERROR;
+	}
+	if(idx < 0) {
+		return FUNC_ERROR;
+	}
+	struct dirent* files = NULL;
+	int size = 0;
+	if(getFiles(fs, super, dirfd, &files, &size) < 0) {
+		fprintf(stderr, "findFile: invalid arguments\n");
+		return FUNC_ERROR;
+	}
+	if(size > 0) {
+		while(idx+1 < size) {
+			files[idx] = files[idx+1];
+			idx ++;
+		}
+		io_lseek(fs, super, dirfd, sizeof(int));
+		if(size > 0 && io_write(fs, super, dirfd, files, sizeof(struct dirent) * (size-1)) < 0) {
+			fprintf(stderr, "insertFile: io_write\n");
+			free(files);
+			return FUNC_ERROR;
+		}
+		io_lseek(fs, super, dirfd, 0);
+		size --;
+		
+		if(io_write(fs, super, dirfd, &size, sizeof(int)) < 0) {
+			fprintf(stderr, "insertFile: io_write\n");
+			free(files);
+			return FUNC_ERROR;
+		}
+	}
+	
 	free(files);
 	return 0;
 }

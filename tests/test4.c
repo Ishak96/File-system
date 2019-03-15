@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
 		.d_type = 12,
 		.d_name = "FILENAME"
 	};
-	
+
 	insertFile(fs, super, dirfd, ent);
 	strcpy(ent.d_name, "BANANA");
 	insertFile(fs, super, dirfd, ent);
@@ -62,9 +62,25 @@ int main(int argc, char** argv) {
 	insertFile(fs, super, dirfd, ent);
 	strcpy(ent.d_name, "BANANA4");
 	insertFile(fs, super, dirfd, ent);
+	
+	io_lseek(fs, super, dirfd, 0);
+	delFile(fs, super, dirfd, "BANANA4");
 
-	findFile(fs, super, dirfd, "BANANA4", &ent);
-	printf("%d %d %s\n", ent.d_ino, ent.d_type, ent.d_name);
+	io_lseek(fs, super, dirfd, 0);
+	int size = 0;
+	io_read(fs, super, dirfd, &size, sizeof(int));
+	printf("%d\n", size);
+	
+	for(int i=0; i<size; i++) {
+		io_read(fs, super, dirfd, &ent, sizeof(struct dirent));
+		printf("%d %d %s\n", ent.d_ino, ent.d_type, ent.d_name);
+	}
+	
+	int idx;
+	findFile(fs, super, dirfd, "BANANA4", &ent, &idx);
+	printf("FOUND %d %d %s\n", ent.d_ino, ent.d_type, ent.d_name);
+	findFile(fs, super, dirfd, "BANANA3", &ent, &idx);
+	printf("FOUND %d %d %s\n", ent.d_ino, ent.d_type, ent.d_name);
 
 	disk_close(&fs);
 	return 0;
