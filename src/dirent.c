@@ -40,7 +40,7 @@ int getFiles(struct fs_filesyst fs, struct fs_super_block super,
 		fprintf(stderr, "getFile: invalid arguments\n");
 		return FUNC_ERROR;
 	}
-	
+
 	*size = 0;
 	io_lseek(fs, super, dirfd, 0);
 	if(io_read(fs, super, dirfd, size, sizeof(int)) < 0) {

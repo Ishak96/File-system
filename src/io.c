@@ -230,27 +230,16 @@ int io_lseek(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	filedesc_table.fds[fd].offset = new_off;
 	return 0;
 }
-/* todo: change fd to inode num and create another function with fd */
-int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
-			 void* data, size_t size)
-{
-	if(size == 0) {
-		fprintf(stderr, "io_write: invalid argument size\n");
-		return FUNC_ERROR;
-	}
-	if(filedesc_table.fds[fd].is_allocated == 0) {
-		fprintf(stderr, "io_write: fd closed!\n");
-		return FUNC_ERROR;
-	}
-	uint32_t inodenum = filedesc_table.fds[fd].inodenum;
 
+int io_write_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum,
+			 void* data, uint32_t off, size_t size)
+{
 	struct fs_inode ind;
 	if(fs_read_inode(fs, super, inodenum, &ind) < 0) {
 		fprintf(stderr, "io_write: fs_read_inode\n");
 		return FUNC_ERROR;
 	}
-	/* current offset*/
-	uint32_t off = filedesc_table.fds[fd].offset;
+
 	/* lazy allocation */
 	if(io_lazy_alloc(fs, super, inodenum, &ind, off, size) < 0) {
 		fprintf(stderr, "io_write: lazy allocation failed\n");
@@ -389,10 +378,9 @@ int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
 		}
 	}
 	end_write:
-	filedesc_table.fds[fd].offset += size;
 	return 0;
 }
-int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
+int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			 void* data, size_t size)
 {
 	if(size == 0) {
@@ -400,17 +388,31 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 		return FUNC_ERROR;
 	}
 	if(filedesc_table.fds[fd].is_allocated == 0) {
-		fprintf(stderr, "io_read: fd closed!\n");
+		fprintf(stderr, "io_write: fd closed!\n");
 		return FUNC_ERROR;
 	}
 	uint32_t inodenum = filedesc_table.fds[fd].inodenum;
 
+	/* current offset*/
+	uint32_t off = filedesc_table.fds[fd].offset;
+	
+	if(io_write_ino(fs, super, inodenum, data, off, size) < 0) {
+		fprintf(stderr, "io_write: io_write_ino\n");
+		return FUNC_ERROR;
+	}
+	
+	filedesc_table.fds[fd].offset += size;
+	return 0;
+}
+
+int io_read_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum,
+			 void* data, uint32_t off, size_t size)
+{
 	struct fs_inode ind;
 	if(fs_read_inode(fs, super, inodenum, &ind) < 0) {
 		fprintf(stderr, "io_read: fs_read_inode\n");
 		return FUNC_ERROR;
 	}
-	uint32_t off = filedesc_table.fds[fd].offset;
 
 	uint32_t direct_off = FS_DIRECT_POINTERS_PER_INODE * FS_BLOCK_SIZE;
 	
@@ -570,7 +572,29 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 		}
 	}
 	end_read:
-	filedesc_table.fds[fd].offset += size;
+	return 0;
+}
+
+int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
+			 void* data, size_t size)
+{
+	if(size == 0) {
+		fprintf(stderr, "io_write: invalid argument size\n");
+		return FUNC_ERROR;
+	}
+	if(filedesc_table.fds[fd].is_allocated == 0) {
+		fprintf(stderr, "io_read: fd closed!\n");
+		return FUNC_ERROR;
+	}
+	uint32_t inodenum = filedesc_table.fds[fd].inodenum;
+
+	uint32_t off = filedesc_table.fds[fd].offset;
+
+	if(io_read_ino(fs, super, inodenum, data, off, size) < 0) {
+		fprintf(stderr, "io_write: io_read_ino\n");
+		return FUNC_ERROR;
+	}
+	filedesc_table.fds[fd].offset += size;	
 	return 0;
 }
 
