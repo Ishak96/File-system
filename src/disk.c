@@ -113,7 +113,7 @@ int fs_read_block(struct fs_filesyst fs, int blocknum, void* blk) {
 		fprintf(stderr,"fs_read_block: Cannot read block, invalid blocknum %d!\n",blocknum);
 		return FUNC_ERROR;
 	}
-	
+
 	/* main functionality */
 	int fd = fs.fd;
 	

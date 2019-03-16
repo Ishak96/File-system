@@ -15,35 +15,31 @@
 #include <stdint.h>
 #include <stdio.h>
 
-int formatdir(struct fs_filesyst fs, struct fs_super_block super) {
-	uint16_t mode = 0;
+int formatdir(struct fs_filesyst fs, struct fs_super_block super, uint32_t* inodenum, uint16_t mode) {
 	mode |= S_DIR;
-
-	int fd = io_open_creat(fs, super, mode);
-	if(fd < 0) {
-		fprintf(stderr, "opendir: io_open_creat\n");
+	if(io_open_creat(fs, super, mode, inodenum) < 0) {
+		fprintf(stderr, "formatdir: io_open_creat\n");
 		return FUNC_ERROR;
 	}
 	int size = 0;
-	if(io_write(fs, super, fd, &size, sizeof(int)) < 0) {
+	if(io_write_ino(fs, super, *inodenum, &size, 0, sizeof(int)) < 0) {
 		fprintf(stderr, "opendir: io_write\n");
 		return FUNC_ERROR;
 	}
 
-	return fd;
+	return 0;
 }
 
 int getFiles(struct fs_filesyst fs, struct fs_super_block super, 
-		     int dirfd, struct dirent** files, int* size)
+		     uint32_t dirino, struct dirent** files, int* size)
 {
-	if(size == NULL || dirfd < 0) {
+	if(size == NULL) {
 		fprintf(stderr, "getFile: invalid arguments\n");
 		return FUNC_ERROR;
 	}
-
 	*size = 0;
-	io_lseek(fs, super, dirfd, 0);
-	if(io_read(fs, super, dirfd, size, sizeof(int)) < 0) {
+
+	if(io_read_ino(fs, super, dirino, size, 0, sizeof(int)) < 0) {
 		fprintf(stderr, "getFiles: io_read\n");
 		return FUNC_ERROR;
 	}
@@ -53,7 +49,9 @@ int getFiles(struct fs_filesyst fs, struct fs_super_block super,
 		fprintf(stderr, "getFiles: malloc err!\n");
 		return FUNC_ERROR;
 	}
-	if(*size > 0 && io_read(fs, super, dirfd, *files, sizeof(struct dirent) * (*size)) < 0) {
+	if(*size > 0 && io_read_ino(fs, super, dirino, *files, sizeof(int),
+								sizeof(struct dirent) * (*size)) < 0)
+	{
 		fprintf(stderr, "getFile: io_read\n");
 		free(*files);
 		return FUNC_ERROR;
@@ -61,70 +59,17 @@ int getFiles(struct fs_filesyst fs, struct fs_super_block super,
 	return 0;
 }
 
-int insertFile(struct fs_filesyst fs, struct fs_super_block super,
-			   int dirfd, struct dirent file)
-{
-	/* todo: add test for name integrity */
-	if(dirfd < 0) {
-		fprintf(stderr, "insertFile: invalid arguments\n");
-		return FUNC_ERROR;
-	}
-
-	struct dirent* files = NULL;
-	int size = 0;
-	if(getFiles(fs, super, dirfd, &files, &size) < 0) {
-		fprintf(stderr, "insertFile: invalid arguments\n");
-		return FUNC_ERROR;
-	}
-
-	int i = size-1;
-	if(i >= 0 && strcmp(file.d_name, files[i].d_name) < 0) {
-		struct dirent temp = file;
-		file = files[i];
-		files[i] = temp;
-	}
-	while(i-1 >= 0 && strcmp(files[i].d_name, files[i-1].d_name) < 0) {
-		struct dirent temp = files[i];
-		files[i] = files[i-1];
-		files[i-1] = temp;
-		i++;
-	}
-	io_lseek(fs, super, dirfd, sizeof(int));
-	if(size > 0 && io_write(fs, super, dirfd, files, sizeof(struct dirent) * size) < 0) {
-		fprintf(stderr, "insertFile: io_write\n");
-		free(files);
-		return FUNC_ERROR;
-	}
-
-	if(io_write(fs, super, dirfd, &file, sizeof(struct dirent)) < 0) {
-		fprintf(stderr, "insertFile: io_write\n");
-		free(files);
-		return FUNC_ERROR;
-	}
-	io_lseek(fs, super, dirfd, 0);
-	size ++;
-	
-	if(io_write(fs, super, dirfd, &size, sizeof(int)) < 0) {
-		fprintf(stderr, "insertFile: io_write\n");
-		free(files);
-		return FUNC_ERROR;
-	}
-
-	free(files);
-	return 0;
-}
-
 int findFile(struct fs_filesyst fs, struct fs_super_block super,
-			   int dirfd, char* filename, struct dirent *res, int* idx)
+			   uint32_t dirino, char* filename, struct dirent *res, int* idx)
 {
-	if(dirfd < 0 && strlen(filename) < 256) {
+	if(strlen(filename) >= 256) {
 		fprintf(stderr, "findFile: invalid arguments\n");
 		return FUNC_ERROR;
 	}
-	
+
 	struct dirent* files = NULL;
 	int size = 0;
-	if(getFiles(fs, super, dirfd, &files, &size) < 0) {
+	if(getFiles(fs, super, dirino, &files, &size) < 0) {
 		fprintf(stderr, "findFile: invalid arguments\n");
 		return FUNC_ERROR;
 	}
@@ -156,12 +101,64 @@ int findFile(struct fs_filesyst fs, struct fs_super_block super,
 	return 0;
 }
 
+int insertFile(struct fs_filesyst fs, struct fs_super_block super,
+			   uint32_t dirino, struct dirent file)
+{
+	struct dirent* files = NULL;
+	int size = 0;
+	if(getFiles(fs, super, dirino, &files, &size) < 0) {
+		fprintf(stderr, "insertFile: invalid arguments\n");
+		return FUNC_ERROR;
+	}
+
+	int i = size-1;
+	if(i >= 0 && strcmp(file.d_name, files[i].d_name) < 0) {
+		struct dirent temp = file;
+		file = files[i];
+		files[i] = temp;
+	}
+	while(i-1 >= 0 && strcmp(files[i].d_name, files[i-1].d_name) < 0) {
+		struct dirent temp = files[i];
+		files[i] = files[i-1];
+		files[i-1] = temp;
+		i++;
+	}
+	//io_lseek(fs, super, dirfd, sizeof(int));
+	if(size > 0 && io_write_ino(fs, super, dirino, files, sizeof(int),
+									sizeof(struct dirent) * size) < 0)
+	{
+		fprintf(stderr, "insertFile: io_write\n");
+		free(files);
+		return FUNC_ERROR;
+	}
+
+	if(io_write_ino(fs, super, dirino, &file, sizeof(struct dirent) * size + sizeof(int),
+					sizeof(struct dirent)) < 0)
+	{
+		fprintf(stderr, "insertFile: io_write\n");
+		free(files);
+		return FUNC_ERROR;
+	}
+	//io_lseek(fs, super, dirfd, 0);
+	size ++;
+	
+	if(io_write_ino(fs, super, dirino, &size, 0, sizeof(int)) < 0) {
+		fprintf(stderr, "insertFile: io_write\n");
+		free(files);
+		return FUNC_ERROR;
+	}
+
+	free(files);
+	return 0;
+}
+
 int delFile(struct fs_filesyst fs, struct fs_super_block super,
-			   int dirfd, char* filename)
+			   uint32_t dirino, char* filename)
 {
 	int idx = 0;
 	struct dirent res;
-	if(findFile(fs, super, dirfd, filename, &res, &idx) < 0) {
+
+	if(findFile(fs, super, dirino, filename, &res, &idx) < 0) {
 		fprintf(stderr, "delFile: findFile\n");
 		return FUNC_ERROR;
 	}
@@ -170,7 +167,7 @@ int delFile(struct fs_filesyst fs, struct fs_super_block super,
 	}
 	struct dirent* files = NULL;
 	int size = 0;
-	if(getFiles(fs, super, dirfd, &files, &size) < 0) {
+	if(getFiles(fs, super, dirino, &files, &size) < 0) {
 		fprintf(stderr, "findFile: invalid arguments\n");
 		return FUNC_ERROR;
 	}
@@ -179,16 +176,15 @@ int delFile(struct fs_filesyst fs, struct fs_super_block super,
 			files[idx] = files[idx+1];
 			idx ++;
 		}
-		io_lseek(fs, super, dirfd, sizeof(int));
-		if(size > 0 && io_write(fs, super, dirfd, files, sizeof(struct dirent) * (size-1)) < 0) {
+		if(size > 0 && io_write_ino(fs, super, dirino,
+		 files, sizeof(int), sizeof(struct dirent) * (size-1)) < 0) {
 			fprintf(stderr, "insertFile: io_write\n");
 			free(files);
 			return FUNC_ERROR;
 		}
-		io_lseek(fs, super, dirfd, 0);
 		size --;
 		
-		if(io_write(fs, super, dirfd, &size, sizeof(int)) < 0) {
+		if(io_write_ino(fs, super, dirino, &size, 0, sizeof(int)) < 0) {
 			fprintf(stderr, "insertFile: io_write\n");
 			free(files);
 			return FUNC_ERROR;
@@ -199,87 +195,154 @@ int delFile(struct fs_filesyst fs, struct fs_super_block super,
 	return 0;
 }
 
-int findpath(struct fs_filesyst fs, struct fs_super_block super, char* filename) {
+int findpath(struct fs_filesyst fs, struct fs_super_block super, uint32_t* ino, char* filename) {
 	if(!strcmp(filename, "/")) {
-		return io_open_fd(0);
+		*ino = 0;
+		return 0;
 	}
 	char delim[2] = "/";
 	char* tok = strtok(filename, delim);
 
 	uint32_t dir = 0; // the root directory always has the inodenum 0
-	int dirfd = io_open_fd(dir);
 	struct dirent filefound = {0};
 	int idx;
 
 	while(tok != NULL) {
-		if(findFile(fs, super, dirfd, tok, &filefound, &idx) < 0) {
+		if(findFile(fs, super, dir, tok, &filefound, &idx) < 0) {
 			fprintf(stderr, "findpath: findFile\n");
 			return FUNC_ERROR;
 		}
 		if(filefound.d_ino == -1) {
-			fprintf(stderr, "findpath: file not found\n");
 			return FUNC_ERROR;
 		}
 		dir = filefound.d_ino;
-		// io_close_fd(dirfd);
-		dirfd = io_open_fd(dir);
 		tok = strtok(NULL, delim);
 	}
-
-	return dirfd;
+	*ino = dir;
+	return 0;
 }
 
-int opendir(struct fs_filesyst fs, struct fs_super_block super, const char* filepath) {
-	int dirfd = formatdir(fs, super); // the created dir fd
-	//~ printf("[%s] cur = %d\n", filepath, dirfd);
-	if(dirfd < 0) {
-		fprintf(stderr, "creatdir: formatdir\n");
+int opendir_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t dirino,
+			const char* filepath)
+{
+	struct fs_inode ind;
+	fs_read_inode(fs, super, dirino, &ind);
+	uint16_t mode = ind.mode;
+	if((mode & S_DIR) == 0) {
+		fprintf(stderr, "open_ino: %ud is a regular file\n", dirino);
 		return FUNC_ERROR;
 	}
-	uint32_t curino = io_getino(dirfd);
+	/* todo: verify type and get mode*/
 	struct dirent cur = {0};
 	
 	// put the . in the created directory
-	cur.d_ino = curino;
+	cur.d_ino = dirino;
 	cur.d_type = S_DIR;	
 	strcpy(cur.d_name, ".");
-	if(insertFile(fs, super, dirfd, cur) < 0) {
+	if(insertFile(fs, super, dirino, cur) < 0) {
 		fprintf(stderr, "creatdir: insertFile\n");
 		return FUNC_ERROR;
 	}
 
 	// get parent path and file basename
-	char* path_copy1 = strdup(filepath); // note: we need to copies because the
+	char* path_copy1 = strdup(filepath); // note: we need two copies because the
 	char* path_copy2 = strdup(filepath); // basename and dirname funcs change the values of the strings
 	char* child_name = basename(path_copy1);
 	char* parent_path = dirname(path_copy2);
-	//~ printf("[%s] %s -- %s\n", filepath, parent_path, child_name);
+
+	uint32_t parent;
+	findpath(fs, super, &parent, parent_path); // get the parent's fd
 	
-	int parent = findpath(fs, super, parent_path); // get the parent's fd
-	//~ printf("[%s] parent = %d\n", filepath, parent);
-	
-	// make .. in the created dir as the parent
-	cur.d_ino = io_getino(parent);
+	// put .. in the created dir as the parent
+	cur.d_ino = parent;
 	strcpy(cur.d_name, "..");
-	if(insertFile(fs, super, dirfd, cur) < 0) {
+	if(insertFile(fs, super, dirino, cur) < 0) {
 		fprintf(stderr, "creatdir: insertFile\n");
 		return FUNC_ERROR;
 	}
 	
-	// put the current dir in the parent
+	// put the current dir in the parent dir
 	if(strcmp("/", filepath)) {  // the root dir is a special case
-		cur.d_ino = io_getino(dirfd);
+		cur.d_ino = dirino;
+		cur.d_type = mode;
 		strcpy(cur.d_name, child_name);
 		if(insertFile(fs, super, parent, cur) < 0) {
 			fprintf(stderr, "creatdir: insertFile\n");
 			return FUNC_ERROR;
 		}
-		// io_close_fd(parent); // close the parent fd
 	}
-	
+
 	free(path_copy1);
 	free(path_copy2);
 	
-	return dirfd;
+	return 0;
 }
 
+int opendir_creat(struct fs_filesyst fs, struct fs_super_block super, uint32_t* dirino,
+			uint16_t perms, const char* filepath)
+{
+	/* increment the inode hardlink count here */
+	perms |= S_DIR;
+	if(formatdir(fs, super, dirino, perms) < 0) {
+		fprintf(stderr, "creatdir: formatdir\n");
+		return FUNC_ERROR;
+	}
+	
+	if(opendir_ino(fs, super, *dirino, filepath) < 0) {
+		fprintf(stderr, "opendir_creat: opendir_ino\n");
+		return FUNC_ERROR;
+	}
+	return 0;
+}
+
+int open_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t fileino,
+			 const char* filepath)
+{
+	struct fs_inode ind;
+	fs_read_inode(fs, super, fileino, &ind);
+	uint16_t mode = ind.mode;
+	if(mode & S_DIR) {
+		// fprintf(stderr, "open_ino: %ud is a directory\n", fileino);
+		return FUNC_ERROR;
+	}
+	/* todo: verify type and mode*/
+	struct dirent cur = {0};
+
+	// get parent path and file basename
+	char* path_copy1 = strdup(filepath); // note: we need two copies because the
+	char* path_copy2 = strdup(filepath); // basename and dirname funcs change the values of the strings
+	char* child_name = basename(path_copy1);
+	char* parent_path = dirname(path_copy2);
+
+	uint32_t parent;
+	findpath(fs, super, &parent, parent_path); // get the parent's fd
+	
+	cur.d_type = mode;
+	cur.d_ino = fileino;
+	strcpy(cur.d_name, child_name);
+	
+	if(insertFile(fs, super, parent, cur) < 0) {
+		fprintf(stderr, "open_ino: insertFile\n");
+		return FUNC_ERROR;
+	}
+	
+	return 0;
+}
+
+int open_creat(struct fs_filesyst fs, struct fs_super_block super, uint32_t* fileino,
+			uint16_t mode, const char* filepath)
+{
+	mode &= (~S_DIR);
+	
+
+	if(io_open_creat(fs, super, mode, fileino) < 0) {
+		fprintf(stderr, "open_creat: io_open_creat\n");
+		return FUNC_ERROR;
+	}
+
+	if(open_ino(fs, super, *fileino, filepath) < 0) {
+		fprintf(stderr, "open_creat: opendir_ino\n");
+		return FUNC_ERROR;
+	}
+	return 0;
+}

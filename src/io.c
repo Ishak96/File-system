@@ -86,27 +86,39 @@ int io_iopen(struct fs_filesyst fs, struct fs_super_block super, uint32_t inoden
 
 	return fd;
 }
-
-/**
- * @brief creates a new file with a new inodenum
- * @details allocates an inode and opens a new file descriptor, 
- * @return returns an fd of the created file in case of success,
- * else it returns -1.
- */
-int io_open_creat(struct fs_filesyst fs, struct fs_super_block super, uint16_t mode) {
-	uint32_t inodenum;
-	if(fs_alloc_inode(fs, &super, &inodenum) < 0) {
+int io_open_creat(struct fs_filesyst fs, struct fs_super_block super,
+						uint16_t mode, uint32_t* inodenum)
+{
+	if(fs_alloc_inode(fs, &super, inodenum) < 0) {
 		fprintf(stderr, "io_open: can't allocate inode!\n");
 		return FUNC_ERROR;
 	}
 	struct fs_inode ind = {0};
 	ind.mode = mode;
 	/* todo: set ind values */
-	if(fs_write_inode(fs, super, inodenum, &ind) < 0) {
+	if(fs_write_inode(fs, super, *inodenum, &ind) < 0) {
 		fprintf(stderr, "io_open_creat: fs_write_inode\n");
 		return FUNC_ERROR;
 	}
+	return 0;
+}
+/**
+ * @brief creates a new file with a new inodenum
+ * @details allocates an inode and opens a new file descriptor, 
+ * @return returns an fd of the created file in case of success,
+ * else it returns -1.
+ */
+int io_open_creat_fd(struct fs_filesyst fs, struct fs_super_block super, uint16_t mode) {
+	uint32_t inodenum = 0;
+	if(io_open_creat(fs, super, mode, &inodenum) < 0) {
+		fprintf(stderr, "io_open_creat_fd: io_open_creat\n");
+		return FUNC_ERROR;
+	}
 	int fd = io_open_fd(inodenum);
+	if(fd < 0) {
+		fprintf(stderr, "io_open_creat_fd: io_open_creat\n");
+		return FUNC_ERROR;
+	}
 	return fd;
 }
 
@@ -380,6 +392,7 @@ int io_write_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t in
 	end_write:
 	return 0;
 }
+
 int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			 void* data, size_t size)
 {

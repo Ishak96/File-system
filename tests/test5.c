@@ -40,11 +40,23 @@ int main(int argc, char** argv) {
 	}
 	super = blk.super;
 
-	int dirfd = opendir(fs, super, "/"); // open two dirs
+	uint32_t dirino;
+	opendir_creat(fs, super, &dirino, S_DIR, "/"); // open two dirs
+	int dirfd = io_open_fd(dirino);
 	printf("created /\n");
-	int childfd = opendir(fs, super, "/BANANA");
+	
+	uint32_t childino;
+	opendir_creat(fs, super, &childino, S_DIR, "/BANANA"); // open two dirs
+	int childfd = io_open_fd(childino);
 	printf("created /BANANA\n");
-	int dchildfd = opendir(fs, super, "/BANANA/BANANA1");
+	uint32_t childfileino;
+	open_creat(fs, super, &childfileino, 0, "/BANANA/FILE");
+	open_creat(fs, super, &childfileino, 0, "/BANANA/FILE2");
+	
+	
+	uint32_t dchildino;
+	opendir_creat(fs, super, &dchildino, S_DIR, "/BANANA/BANANA1");
+	int dchildfd = io_open_fd(dchildino);
 	printf("created /BANANA/BANANA1\n");
 	struct dirent ent = {0};
 
@@ -59,7 +71,7 @@ int main(int argc, char** argv) {
 		io_read(fs, super, dirfd, &ent, sizeof(struct dirent));
 		printf("%d %d %s\n", ent.d_ino, ent.d_type, ent.d_name);
 	}
-	/***/
+	/* * */
 
 	//~ char abc[] = "/BANANA";
 	//~ int fd = findpath(fs, super, abc);
@@ -76,7 +88,7 @@ int main(int argc, char** argv) {
 		io_read(fs, super, childfd, &ent, sizeof(struct dirent));
 		printf("%d %d %s\n", ent.d_ino, ent.d_type, ent.d_name);
 	}
-	/***/
+	/* * */
 	
 	/* ls /BANANA/BANANA1 */
 	printf("\nls of /BANANA/BANANA1:\n");
@@ -89,7 +101,7 @@ int main(int argc, char** argv) {
 		io_read(fs, super, dchildfd, &ent, sizeof(struct dirent));
 		printf("%d %d %s\n", ent.d_ino, ent.d_type, ent.d_name);
 	}
-	/***/
+	/* * */
 
 	disk_close(&fs);
 	return 0;

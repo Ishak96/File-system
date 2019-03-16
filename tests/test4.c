@@ -39,28 +39,29 @@ int main(int argc, char** argv) {
 		return FUNC_ERROR;
 	}
 	super = blk.super;
-	int dirfd = formatdir(fs, super);
-
+	uint32_t dirino;
+	formatdir(fs, super, &dirino, S_DIR);
+	int dirfd = io_open_fd(dirino);
 	struct dirent ent = {
 		.d_ino = 323232,
 		.d_type = 12,
 		.d_name = "FILENAME"
 	};
 	
-	insertFile(fs, super, dirfd, ent);
+	insertFile(fs, super, dirino, ent);
 	strcpy(ent.d_name, "BANANA");
-	insertFile(fs, super, dirfd, ent);
+	insertFile(fs, super, dirino, ent);
 	strcpy(ent.d_name, "BANANA1");
-	insertFile(fs, super, dirfd, ent);
+	insertFile(fs, super, dirino, ent);
 	strcpy(ent.d_name, "BANANA2");
-	insertFile(fs, super, dirfd, ent);
+	insertFile(fs, super, dirino, ent);
 	strcpy(ent.d_name, "BANANA3");
-	insertFile(fs, super, dirfd, ent);
+	insertFile(fs, super, dirino, ent);
 	strcpy(ent.d_name, "BANANA4");
-	insertFile(fs, super, dirfd, ent);
+	insertFile(fs, super, dirino, ent);
 	
-	io_lseek(fs, super, dirfd, 0);
-	delFile(fs, super, dirfd, "BANANA4");
+	//io_lseek(fs, super, dirfd, 0);
+	delFile(fs, super, dirino, "BANANA4");
 
 	io_lseek(fs, super, dirfd, 0);
 	int size = 0;

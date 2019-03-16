@@ -20,9 +20,14 @@ struct io_filedesc_table {
 int io_open_fd(uint32_t inodenum);
 int io_close_fd(int fd);
 int io_iopen(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum);
-int io_open_creat(struct fs_filesyst fs, struct fs_super_block super, uint16_t mode);
+int io_open_creat(struct fs_filesyst fs, struct fs_super_block super, uint16_t mode,
+					uint32_t* inodenum);
+int io_write_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum,
+			 void* data, uint32_t off, size_t size);
 int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			 void* data, size_t size);
+int io_read_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum,
+			 void* data, uint32_t off, size_t size);
 int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			 void* data, size_t size);
 int io_lseek(struct fs_filesyst fs, struct fs_super_block super, int fd,
