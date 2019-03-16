@@ -29,6 +29,13 @@ struct io_filedesc_table filedesc_table = {0};
  * else it returns -1.
  */
 int io_open_fd(uint32_t inodenum) {
+	/* cas ou le ino existe deja */
+	for(int i=0; i<IO_MAX_FILEDESC; i++) {
+		if(filedesc_table.fds[i].is_allocated == 1 && 
+		   filedesc_table.fds[i].inodenum == inodenum) {
+			return i;
+		}
+	}
 	int found = 0;
 	for(int i=0; i<IO_MAX_FILEDESC && found==0; i++) {
 		if(filedesc_table.fds[i].is_allocated == 0) {
@@ -223,7 +230,7 @@ int io_lseek(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	filedesc_table.fds[fd].offset = new_off;
 	return 0;
 }
-
+/* todo: change fd to inode num and create another function with fd */
 int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			 void* data, size_t size)
 {
@@ -617,5 +624,18 @@ int io_rm(struct fs_filesyst fs, struct fs_super_block super, int fd) {
 		return FUNC_ERROR;		
 	}
 	return 0;
+}
+
+uint32_t io_getino(int fd) {
+	if(fd > IO_MAX_FILEDESC) {
+		fprintf(stderr, "io_getino: invalid fd %d\n", fd);
+		return FUNC_ERROR;
+	}
+	if(!filedesc_table.fds[fd].is_allocated) {
+		fprintf(stderr, "io_getino: %d not allocated\n", fd);
+		return FUNC_ERROR;
+	}
+	
+	return filedesc_table.fds[fd].inodenum;
 }
 

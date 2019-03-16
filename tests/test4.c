@@ -39,18 +39,14 @@ int main(int argc, char** argv) {
 		return FUNC_ERROR;
 	}
 	super = blk.super;
+	int dirfd = formatdir(fs, super);
 
-	int dirfd = opendir(fs, super);
-	if(dirfd < 0)  {
-		printf("NOO\n");
-		return 0;
-	}
 	struct dirent ent = {
 		.d_ino = 323232,
 		.d_type = 12,
 		.d_name = "FILENAME"
 	};
-
+	
 	insertFile(fs, super, dirfd, ent);
 	strcpy(ent.d_name, "BANANA");
 	insertFile(fs, super, dirfd, ent);

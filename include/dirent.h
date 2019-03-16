@@ -16,11 +16,13 @@ struct dirent {
     char d_name[256];                      /* File name  */
 };
 
-int opendir(struct fs_filesyst fs, struct fs_super_block super);
+int formatdir(struct fs_filesyst fs, struct fs_super_block super);
 int insertFile(struct fs_filesyst fs, struct fs_super_block super,
 			   int dirfd, struct dirent file);
 int findFile(struct fs_filesyst fs, struct fs_super_block super,
 			   int dirfd, char* filename, struct dirent *res, int* idx);
 int delFile(struct fs_filesyst fs, struct fs_super_block super,
 			   int dirfd, char* filename);
+int findpath(struct fs_filesyst fs, struct fs_super_block super, char* dirname);
+int opendir(struct fs_filesyst fs, struct fs_super_block super, const char* dirname);
 #endif

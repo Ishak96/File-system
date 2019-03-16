@@ -11,7 +11,7 @@ TESTDIR=tests
 OBJDIR=obj
 DOXCONF=docsgen.conf
 
-CFLAGS=-std=c99 -Wall -g -I$(INCDIR)
+CFLAGS=-Wall -g -I$(INCDIR)
 
 # getting source files and obj names
 SOURCES  := $(wildcard $(SRCDIR)/*.c)

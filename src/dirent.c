@@ -10,11 +10,12 @@
 #include <disk.h>
 #include <dirent.h>
 
+#include <libgen.h>
 #include <string.h>
 #include <stdint.h>
 #include <stdio.h>
 
-int opendir(struct fs_filesyst fs, struct fs_super_block super) {
+int formatdir(struct fs_filesyst fs, struct fs_super_block super) {
 	uint16_t mode = 0;
 	mode |= S_DIR;
 
@@ -63,11 +64,12 @@ int getFiles(struct fs_filesyst fs, struct fs_super_block super,
 int insertFile(struct fs_filesyst fs, struct fs_super_block super,
 			   int dirfd, struct dirent file)
 {
+	/* todo: add test for name integrity */
 	if(dirfd < 0) {
 		fprintf(stderr, "insertFile: invalid arguments\n");
 		return FUNC_ERROR;
 	}
-	
+
 	struct dirent* files = NULL;
 	int size = 0;
 	if(getFiles(fs, super, dirfd, &files, &size) < 0) {
@@ -93,6 +95,7 @@ int insertFile(struct fs_filesyst fs, struct fs_super_block super,
 		free(files);
 		return FUNC_ERROR;
 	}
+
 	if(io_write(fs, super, dirfd, &file, sizeof(struct dirent)) < 0) {
 		fprintf(stderr, "insertFile: io_write\n");
 		free(files);
@@ -191,7 +194,92 @@ int delFile(struct fs_filesyst fs, struct fs_super_block super,
 			return FUNC_ERROR;
 		}
 	}
-	
+
 	free(files);
 	return 0;
 }
+
+int findpath(struct fs_filesyst fs, struct fs_super_block super, char* filename) {
+	if(!strcmp(filename, "/")) {
+		return io_open_fd(0);
+	}
+	char delim[2] = "/";
+	char* tok = strtok(filename, delim);
+
+	uint32_t dir = 0; // the root directory always has the inodenum 0
+	int dirfd = io_open_fd(dir);
+	struct dirent filefound = {0};
+	int idx;
+
+	while(tok != NULL) {
+		if(findFile(fs, super, dirfd, tok, &filefound, &idx) < 0) {
+			fprintf(stderr, "findpath: findFile\n");
+			return FUNC_ERROR;
+		}
+		if(filefound.d_ino == -1) {
+			fprintf(stderr, "findpath: file not found\n");
+			return FUNC_ERROR;
+		}
+		dir = filefound.d_ino;
+		// io_close_fd(dirfd);
+		dirfd = io_open_fd(dir);
+		tok = strtok(NULL, delim);
+	}
+
+	return dirfd;
+}
+
+int opendir(struct fs_filesyst fs, struct fs_super_block super, const char* filepath) {
+	int dirfd = formatdir(fs, super); // the created dir fd
+	//~ printf("[%s] cur = %d\n", filepath, dirfd);
+	if(dirfd < 0) {
+		fprintf(stderr, "creatdir: formatdir\n");
+		return FUNC_ERROR;
+	}
+	uint32_t curino = io_getino(dirfd);
+	struct dirent cur = {0};
+	
+	// put the . in the created directory
+	cur.d_ino = curino;
+	cur.d_type = S_DIR;	
+	strcpy(cur.d_name, ".");
+	if(insertFile(fs, super, dirfd, cur) < 0) {
+		fprintf(stderr, "creatdir: insertFile\n");
+		return FUNC_ERROR;
+	}
+
+	// get parent path and file basename
+	char* path_copy1 = strdup(filepath); // note: we need to copies because the
+	char* path_copy2 = strdup(filepath); // basename and dirname funcs change the values of the strings
+	char* child_name = basename(path_copy1);
+	char* parent_path = dirname(path_copy2);
+	//~ printf("[%s] %s -- %s\n", filepath, parent_path, child_name);
+	
+	int parent = findpath(fs, super, parent_path); // get the parent's fd
+	//~ printf("[%s] parent = %d\n", filepath, parent);
+	
+	// make .. in the created dir as the parent
+	cur.d_ino = io_getino(parent);
+	strcpy(cur.d_name, "..");
+	if(insertFile(fs, super, dirfd, cur) < 0) {
+		fprintf(stderr, "creatdir: insertFile\n");
+		return FUNC_ERROR;
+	}
+	
+	// put the current dir in the parent
+	if(strcmp("/", filepath)) {  // the root dir is a special case
+		cur.d_ino = io_getino(dirfd);
+		strcpy(cur.d_name, child_name);
+		if(insertFile(fs, super, parent, cur) < 0) {
+			fprintf(stderr, "creatdir: insertFile\n");
+			return FUNC_ERROR;
+		}
+		// io_close_fd(parent); // close the parent fd
+	}
+	
+	free(path_copy1);
+	free(path_copy2);
+	
+	return dirfd;
+}
+
