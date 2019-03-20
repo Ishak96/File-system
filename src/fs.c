@@ -173,7 +173,7 @@ int fs_format(struct fs_filesyst fs) {
 	return 0;
 }
 
-int fs_is_block_allocated(struct fs_filesyst fs, struct fs_super_block super, uint32_t datanum) {
+int fs_is_data_allocated(struct fs_filesyst fs, struct fs_super_block super, uint32_t datanum) {
 	datanum --;
 	uint32_t blkno = datanum / (BITS_PER_BYTE * FS_BLOCK_SIZE) + super.data_bitmap_loc;
 	union fs_block blk;
