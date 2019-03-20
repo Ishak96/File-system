@@ -110,9 +110,7 @@ int fs_read_block(struct fs_filesyst fs, int blocknum, void* blk) {
 	/* checking the params */
 	if(blocknum  >= fs.nblocks || blocknum < 0) {
 		/* blocknum too big or too small */
-		fprintf(stderr,
-			   "fs_read_block: Cannot read block, invalid blocknum %d!\n",
-				blocknum);
+		fprintf(stderr,"fs_read_block: Cannot read block, invalid blocknum %d!\n",blocknum);
 		return FUNC_ERROR;
 	}
 	

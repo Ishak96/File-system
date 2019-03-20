@@ -296,7 +296,7 @@ int fs_alloc_inode(struct fs_filesyst fs, struct fs_super_block* super, uint32_t
 int fs_write_inode(struct fs_filesyst fs, struct fs_super_block super,
 				   uint32_t indno, struct fs_inode *inode)
 {
-	if(inode == NULL) {
+	if(inode == NULL || !fs_is_inode_allocated(fs, super, indno)) {
 		fprintf(stderr, "fs_read_inode: invalid arguments!\n");
 		return FUNC_ERROR;
 	}
@@ -329,7 +329,7 @@ int fs_write_inode(struct fs_filesyst fs, struct fs_super_block super,
 int fs_read_inode(struct fs_filesyst fs, struct fs_super_block super,
 				   uint32_t indno, struct fs_inode *inode)
 {
-	if(inode == NULL) {
+	if(inode == NULL || !fs_is_inode_allocated(fs, super, indno)) {
 		fprintf(stderr, "fs_read_inode: invalid arguments!\n");
 		return FUNC_ERROR;
 	}
@@ -378,7 +378,7 @@ int fs_dump_inode(struct fs_filesyst fs, struct fs_super_block super, uint32_t i
 
 int fs_alloc_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t data[], size_t size) {
 	/* todo: remove super from argument (read from file directly) and write at the end */
-	if(super->free_data_count == 0) {
+	if(super->free_data_count < size) {
 		fprintf(stderr, "fs_alloc_data: no space left!\n");
 		return FUNC_ERROR;
 	}

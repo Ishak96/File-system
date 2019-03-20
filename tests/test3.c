@@ -43,35 +43,44 @@ int main(int argc, char** argv) {
 	ind.gid = 123;
 	ind.atime = 123;
 	ind.mtime = 123;
-	for(int i=0; i<60; i++) {
-		fs_alloc_inode(fs, &super, &no);
-		fs_write_inode(fs, super,no, &ind);
-	}
-
-	fs_free_inode(fs, &super, 0);
-	
-	uint32_t data[20];
-	
-	union fs_block b[20];
-	memset(&b, 0, sizeof(b));
-
-	fs_alloc_data(fs, &super, data, 20);
 
 	int nbdata = 20;
-	int nbinode = 60;
+	int nbinode = 64;
+	for(int i=0; i<nbinode; i++)
+		fs_alloc_inode(fs, &super, &no);
 
-	for(int i=0; i<nbdata; i+=2)
+	uint32_t data[nbdata];
+	
+	union fs_block b[nbdata];
+	memset(&b, 0, sizeof(b));
+
+	fs_alloc_data(fs, &super, data, nbdata);
+	for(int i=1; i<nbdata; i+=2)
 		fs_free_data(fs, &super, i);
-	for(int i=0; i<nbinode; i+=2)
+	for(int i=0; i<nbinode; i+=2){
 		fs_free_inode(fs, &super, i);
+	}
 
 	printf("data is allocated ...\n");
-	for(int i=0; i<nbdata; i++)
-		printf("data[%d]===> is %s\n", i, fs_is_data_allocated(fs, super, i)? "allocated" : "not allocated");
+	int nballoc,nbnotalloc;
+	nballoc = nbnotalloc = 0;
+	for(int i=1; i<nbdata; i++){
+		if(fs_is_data_allocated(fs, super, i))
+			nballoc += 1;
+		else
+			nbnotalloc += 1;
+	}
+	printf("their is [%d] data allocated and [%d] not allocated\n", nballoc, nbnotalloc);
 
 	printf("inode is allocated ...\n");
-	for(int i=0; i<nbinode; i++)
-		printf("inode[%d]===> is %s\n", i, fs_is_inode_allocated(fs, super, i)? "allocated" : "not allocated");
+	nballoc = nbnotalloc = 0;
+	for(int i=0; i<nbinode; i++){
+		if(fs_is_inode_allocated(fs, super, i))
+			nballoc += 1;
+		else
+			nbnotalloc += 1;
+	}
+	printf("their is [%d] inode allocated and [%d] not allocated\n", nballoc, nbnotalloc);
 	
 	disk_close(&fs);
 
