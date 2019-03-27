@@ -58,39 +58,94 @@ int getParentInode(const char* filepath, uint32_t* parentino) {
 	return 0;
 }
 
-int ls_(const char* dirpath) {
-	uint32_t dirino = 0;
-	char* tempstr = strdup(dirpath);
+DIR_* opendir_(const char* dirname, uint16_t perms) {
+	DIR_* dir = malloc(sizeof(DIR_));
+	dir->size = 2;
+	uint32_t dirino;
+	char* tempstr = strdup(dirname);
 	if(findpath(fs, super, &dirino, tempstr) < 0) {
-		fprintf(stderr, "ls_: Directory doesn't exist\n");
-		return FUNC_ERROR;
+		// check perms here
+		if(opendir_creat(fs, super, &dirino, perms, dirname) < 0) {
+			fprintf(stderr, "opendir_: opendir_creat\n");
+			return NULL;
+		}
+		free(tempstr);
+		dir->fd = io_open_fd(dirino);
+		dir->files = malloc(sizeof(struct dirent) * dir->size);
+		if(io_read(fs, super, dir->fd , dir->files, sizeof(struct dirent) * dir->size) < 0) {
+			fprintf(stderr, "opendir_: io_read\n");
+			return NULL;
+		}
+				
+		return dir;
 	}
-	
-	// checks the type
+	/* verify type */
 	struct fs_inode ind;
 	fs_read_inode(fs, super, dirino, &ind);
 	uint16_t mode = ind.mode;
 	if((mode & S_DIR) == 0) {
-		fprintf(stderr, "ls_: %s is a regular file\n", dirpath);
+		fprintf(stderr, "opendir_: %s is a regular file (use open_)\n", dirname);
+		return NULL;
+	}
+
+	int size = 0;
+	if(io_read(fs, super, dir->fd , &size, sizeof(int)) < 0) {
+		fprintf(stderr, "opendir_: io_read\n");
+		return NULL;
+	} // getting the number of files
+	dir->size = size;
+
+	dir->files = malloc(sizeof(struct dirent) * dir->size);
+	if(io_read(fs, super, dir->fd , dir->files, sizeof(struct dirent) * dir->size) < 0) {
+		fprintf(stderr, "opendir_: io_read\n");
+		return NULL;
+	}
+
+	free(tempstr);
+	// check perms here
+	dir->fd = io_open_fd(dirino);
+	return dir;
+}
+
+struct dirent readdir_(DIR_* dir) {
+	struct dirent d = {0};
+	size_t offset = io_getoff(dir->fd);
+	
+	io_lseek(fs, super, dir->fd, 0);
+	int size = 0;
+	if(io_read(fs, super, dir->fd , &size, sizeof(int)) < 0) {
+		fprintf(stderr, "opendir_: io_read\n");
+		return d;
+	} // getting the number of files	
+	dir->size = size;
+	
+	io_lseek(fs, super, dir->fd, offset);
+	if(dir->size < (offset - sizeof(int)) / sizeof(struct dirent)) {
+		return d;
+	}
+	
+	if(io_read(fs, super, dir->fd, &d, sizeof(struct dirent)) < 0) {
+		fprintf(stderr, "readdir_: io_read\n");
+		return d;
+	}
+	return d;
+}
+
+int closedir_(DIR_* dir) {
+	if(io_close_fd(dir->fd) < 0) {
+		fprintf(stderr, "close_: can't close %d\n", dir->fd);
 		return FUNC_ERROR;
 	}
-
-	
-	free(tempstr);
-	int dirfd = io_open_fd(dirino);
-	
-	struct dirent ent = {0};
-	io_lseek(fs, super, dirfd, 0);
-	int size = 0;
-	io_read(fs, super, dirfd, &size, sizeof(int)); // getting the number of files
-	printf("ls of '%s' len = %d:\n", dirpath, size);
-
-	for(int i=0; i<size; i++) { // parsing the directory files
-		io_read(fs, super, dirfd, &ent, sizeof(struct dirent));
-		printf("%d %d %s\n", ent.d_ino, ent.d_type, ent.d_name);
-	}
-	io_close_fd(dirfd);
-	
+	free(dir);
+	return 0;
+}
+int ls_(DIR_* dir) {
+	struct dirent d = {0};
+	printf("len=%ld\n", dir->size);
+	do {
+		printf("%d %d %s\n", d.d_ino, d.d_type, d.d_name);
+		d = readdir_(dir);
+	} while(d.d_type);
 	return 0;
 }
 
@@ -152,36 +207,41 @@ int read_(int fd, void* data, int size) {
 	return 0;
 }
 
-int opendir_(const char* dirname) {
-	// test existence
-	// if not create and return fd
-	// else open and return fd
+
+int rm_(const char* filename) {
+	uint32_t fileino;
+	char* tempstr = strdup(filename);
+	if(findpath(fs, super, &fileino, tempstr) < 0) {
+		fprintf(stderr, "rm_: findpath\n");
+		return FUNC_ERROR;
+	}
+	struct fs_inode ind;
+	fs_read_inode(fs, super, fileino, &ind);
+	uint16_t mode = ind.mode;
+	if((mode & S_DIR) != 0) {
+		fprintf(stderr, "rm_: %s is a directory (use opendir_)\n", filename);
+		return FUNC_ERROR;
+	}
+
+	uint32_t ino;
+	if(getParentInode(filename, &ino) < 0) {
+		fprintf(stderr, "rm_: invalid file path %s\n", filename);
+		return FUNC_ERROR;
+	}
+	free(tempstr);
+	tempstr = strdup(filename);
+	char* base = basename(tempstr);
+
+	if(delFile(fs, super, ino, base) < 0) {
+		fprintf(stderr, "rm_: can't remove file\n");
+		return FUNC_ERROR;
+	}
+	
+	//~ /* decrement the inode hardlink count here */
+	
+	free(tempstr);
 	return 0;
 }
-
-//~ int rm(const char* filename) {
-	/* decrement the inode hardlink count here */
-	//~ uint32_t fileino;
-	//~ findpath(fs, super, &ino, filename);
-	
-	//~ char* filename_copy1 = strdup(filename);
-	//~ char* filename_copy2 = strdup(filename);
-	
-	//~ char* filename_base = basename(filename_copy1);
-	//~ char* filename_path = dirname(filename_copy2);
-	
-	//~ uint32_t filename_parent;
-	//~ findpath(fs, super, &filename_parent, filename_path); // get the parent's fd
-
-	//~ delFile(fs, super, filename_parent, filename_base);
-	
-	//~ // todo: fix io_rm to work with inode numbers and decrease the hardlink count
-	//~ // io_rm(fs, super, 
-	
-	//~ free(filename_copy1);
-	//~ free(filename_copy2);
-	//~ return 0;
-//~ }
 
 int cp(const char* src, const char* dest) {
 	return 0;

@@ -34,4 +34,5 @@ int io_lseek(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			  size_t new_off);
 int io_rm(struct fs_filesyst fs, struct fs_super_block super, int fd);
 uint32_t io_getino(int fd);
+size_t io_getoff(int fd);
 #endif

@@ -16,6 +16,12 @@ struct dirent {
     char d_name[256];                      /* File name  */
 };
 
+typedef struct {
+	int fd;
+	size_t size;
+	struct dirent* files;
+} DIR_;
+
 int formatdir(struct fs_filesyst fs, struct fs_super_block super, uint32_t* inodenum, uint16_t mode);
 int insertFile(struct fs_filesyst fs, struct fs_super_block super,
 			   uint32_t dirino, struct dirent file);

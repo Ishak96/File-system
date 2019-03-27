@@ -36,21 +36,16 @@ int io_open_fd(uint32_t inodenum) {
 			return i;
 		}
 	}
-	int found = 0;
-	for(int i=0; i<IO_MAX_FILEDESC && found==0; i++) {
+	for(int i=0; i<IO_MAX_FILEDESC; i++) {
 		if(filedesc_table.fds[i].is_allocated == 0) {
-			found = 1;
 			filedesc_table.fds[i].is_allocated = 1;
 			filedesc_table.fds[i].offset = 0;
 			filedesc_table.fds[i].inodenum = inodenum;
 			return i;
 		}
 	}
-	if(!found) {
-		fprintf(stderr, "io_alloc_fd: can't allocate a file descriptor!\n");
-		return FUNC_ERROR;
-	}
-	return 0;
+	fprintf(stderr, "io_alloc_fd: can't allocate a file descriptor!\n");
+	return FUNC_ERROR;
 }
 
 /**
@@ -664,7 +659,7 @@ int io_rm(struct fs_filesyst fs, struct fs_super_block super, int fd) {
 }
 
 uint32_t io_getino(int fd) {
-	if(fd > IO_MAX_FILEDESC) {
+	if(fd > IO_MAX_FILEDESC || fd < 0) {
 		fprintf(stderr, "io_getino: invalid fd %d\n", fd);
 		return FUNC_ERROR;
 	}
@@ -674,5 +669,17 @@ uint32_t io_getino(int fd) {
 	}
 	
 	return filedesc_table.fds[fd].inodenum;
+}
+size_t io_getoff(int fd) {
+	if(fd > IO_MAX_FILEDESC || fd < 0) {
+		fprintf(stderr, "io_getoff: invalid fd %d\n", fd);
+		return FUNC_ERROR;
+	}
+	if(!filedesc_table.fds[fd].is_allocated) {
+		fprintf(stderr, "io_getoff: %d not allocated\n", fd);
+		return FUNC_ERROR;
+	}
+	
+	return filedesc_table.fds[fd].offset;
 }
 
