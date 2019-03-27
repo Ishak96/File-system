@@ -6,10 +6,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
-#include <time.h>
-#include <assert.h>
 #include <errno.h>
 
 #include <fs.h>
@@ -22,8 +19,7 @@
 int main(int argc, char *argv[])
 {
 
-	char line[1024];
-	int quit = 0;
+	char id[100], password[100];
 	char* root = "root";
 
 	if(argc!=3) {
@@ -41,12 +37,12 @@ int main(int argc, char *argv[])
 	int filepswd = open_("/passwd", 0);
 	write_(filepswd, root, sizeof(root));
 
-	while(!quit){
+	printf("Username :\n");
+	gets(id);
+	printf("Password :\n");
+	gets(password);
 
-		if(!fgets(line,sizeof(line),stdin))
-			quit = 1;
-
-	}
+	printf("%s, %s\n", id, password);
 
 	closedir_(rootdir);
 	close_(filepswd);
