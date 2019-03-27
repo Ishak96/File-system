@@ -192,6 +192,25 @@ int delFile(struct fs_filesyst fs, struct fs_super_block super,
 	}
 
 	free(files);
+	
+	struct fs_inode ind;
+	if(fs_read_inode(fs, super, dirino, &ind) < 0) {
+		fprintf(stderr, "open_ino: fs_read_inode\n");
+		return FUNC_ERROR;
+	}
+	ind.hcount --;
+	if(ind.hcount <= 0) {
+		if(io_rm_ino(fs, super, res.d_ino) < 0) {
+			fprintf(stderr, "rm_: couldn't delete inode no %d\n", dirino);
+			return FUNC_ERROR;
+		}
+	} else {
+		printf("new hcount %d\n", ind.hcount);
+		if(fs_write_inode(fs, super, dirino, &ind) < 0) {
+			fprintf(stderr, "open_ino: fs_write_inode\n");
+			return FUNC_ERROR;
+		}
+	}
 	return 0;
 }
 
@@ -226,7 +245,16 @@ int opendir_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t dir
 			const char* filepath)
 {
 	struct fs_inode ind;
-	fs_read_inode(fs, super, dirino, &ind);
+	if(fs_read_inode(fs, super, dirino, &ind) < 0) {
+		fprintf(stderr, "open_ino: fs_read_inode\n");
+		return FUNC_ERROR;
+	}
+	ind.hcount ++;
+	if(fs_write_inode(fs, super, dirino, &ind) < 0) {
+		fprintf(stderr, "open_ino: fs_write_inode\n");
+		return FUNC_ERROR;
+	}
+	
 	uint16_t mode = ind.mode;
 	if((mode & S_DIR) == 0) {
 		fprintf(stderr, "open_ino: %ud is a regular file\n", dirino);
@@ -299,7 +327,16 @@ int open_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t filein
 			 const char* filepath)
 {
 	struct fs_inode ind;
-	fs_read_inode(fs, super, fileino, &ind);
+	if(fs_read_inode(fs, super, fileino, &ind) < 0) {
+		fprintf(stderr, "open_ino: fs_read_inode\n");
+		return FUNC_ERROR;
+	}
+	ind.hcount ++;
+	if(fs_write_inode(fs, super, fileino, &ind) < 0) {
+		fprintf(stderr, "open_ino: fs_write_inode\n");
+		return FUNC_ERROR;
+	}
+	
 	uint16_t mode = ind.mode;
 	if(mode & S_DIR) {
 		// fprintf(stderr, "open_ino: %ud is a directory\n", fileino);
@@ -334,7 +371,6 @@ int open_creat(struct fs_filesyst fs, struct fs_super_block super, uint32_t* fil
 {
 	mode &= (~S_DIR);
 	
-
 	if(io_open_creat(fs, super, mode, fileino) < 0) {
 		fprintf(stderr, "open_creat: io_open_creat\n");
 		return FUNC_ERROR;

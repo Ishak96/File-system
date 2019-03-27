@@ -282,7 +282,12 @@ int fs_alloc_inode(struct fs_filesyst fs, struct fs_super_block* super, uint32_t
 		fprintf(stderr, "fs_alloc_inode: no space left\n");
 		return FUNC_ERROR;
 	}
-
+	
+	struct fs_inode nilino = {0};
+	if(fs_write_inode(fs, *super, indno, &nilino) < 0) {
+		fprintf(stderr, "fs_alloc_inode: can't reinit value\n");
+		return FUNC_ERROR;
+	}
 	super->free_inode_count--;
 
 	/* write to disk */
