@@ -63,6 +63,7 @@ struct fs_inode {
 	uint32_t atime; 							  /**< last access time in seconds since the epoch */
 	uint32_t mtime; 							  /**< last modification time in seconds since the epoch*/
 	uint32_t size; 								  /**< size of the file in bytes */
+	uint32_t hcount;
 	uint32_t direct[FS_DIRECT_POINTERS_PER_INODE];/**< direct data blocks */
 	uint32_t indirect; 							  /**< indirect data blocks */
 };

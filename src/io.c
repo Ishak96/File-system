@@ -606,13 +606,7 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	return 0;
 }
 
-int io_rm(struct fs_filesyst fs, struct fs_super_block super, int fd) {
-	if(filedesc_table.fds[fd].is_allocated == 0) {
-		fprintf(stderr, "io_read: fd closed!\n");
-		return FUNC_ERROR;
-	}
-	uint32_t inodenum = filedesc_table.fds[fd].inodenum;
-
+int io_rm_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum) {
 	struct fs_inode ind;
 	if(fs_read_inode(fs, super, inodenum, &ind) < 0) {
 		fprintf(stderr, "io_read: fs_read_inode\n");
@@ -648,6 +642,20 @@ int io_rm(struct fs_filesyst fs, struct fs_super_block super, int fd) {
 	}
 	if(fs_free_inode(fs, &super, inodenum) < 0) {
 		fprintf(stderr, "io_rm: fs_free_inode\n");
+		return FUNC_ERROR;
+	}
+	return 0;
+}
+
+int io_rm(struct fs_filesyst fs, struct fs_super_block super, int fd) {
+	if(filedesc_table.fds[fd].is_allocated == 0) {
+		fprintf(stderr, "io_read: fd closed!\n");
+		return FUNC_ERROR;
+	}
+	uint32_t inodenum = filedesc_table.fds[fd].inodenum;
+	
+	if(io_rm_ino(fs, super, inodenum) < 0) {
+		fprintf(stderr, "io_rm: io_rm_ino\n");
 		return FUNC_ERROR;
 	}
 	

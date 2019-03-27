@@ -99,9 +99,15 @@ DIR_* opendir_(const char* dirname, uint16_t perms) {
 }
 
 struct dirent* readdir_(DIR_* dir) {
+	free(dir->files);
+	uint32_t ino = io_getino(dir->fd);
+	if(getFiles(fs, super, ino, &(dir->files), &(dir->size)) < 0) {
+		fprintf(stderr, "readdir_: cannot update files\n");
+		return NULL;
+	}
 	if(dir->idx >= dir->size) {
 		return NULL;
-	} 
+	}
 	return dir->files + (dir->idx++);
 }
 
@@ -124,6 +130,7 @@ int ls_(DIR_* dir) {
 }
 
 int open_(const char* filename, uint16_t perms) {
+
 	uint32_t fileino;
 	char* tempstr = strdup(filename);
 	if(findpath(fs, super, &fileino, tempstr) < 0) {
@@ -210,9 +217,7 @@ int rm_(const char* filename) {
 		fprintf(stderr, "rm_: can't remove file\n");
 		return FUNC_ERROR;
 	}
-	
-	//~ /* decrement the inode hardlink count here */
-	
+		
 	free(tempstr);
 	return 0;
 }

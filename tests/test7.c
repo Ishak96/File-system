@@ -24,10 +24,9 @@
 int main(int argc, char** argv) {
 	initfs("./bin/partition", 100000);
 	
-	DIR_* dir = opendir_("/DIR", 0);
 	DIR_* rootdir = opendir_("/", 0);
-	int filefd = open_("/DIR/FILE", 0);
-	int filefd1 = open_("/DIR/FILE2", 0);
+	int filefd = open_("/FILE", 0);
+	int filefd1 = open_("/FILE2", 0);
 	
 	int value = 12312313;
 	write_(filefd, &value, sizeof(int));
@@ -35,18 +34,18 @@ int main(int argc, char** argv) {
 	
 	lseek_(filefd, 0);
 	read_(filefd, &value, sizeof(int));
-	rm_("/DIR/FILE2");
+	rm_("/FILE2");
 	
 	printf("The value written is %d\n", value);
 	
-	printf("ls of /DIR\n");
-	ls_(dir);
+	//~ printf("ls of /DIR\n");
+	//~ ls_(dir);
 	printf("ls of /\n");
 	ls_(rootdir);
 
 	
-	closedir_(dir);
-	closedir_(rootdir);
+	//~ closedir_(dir);
+	//~ closedir_(rootdir);
 	close_(filefd);
 	close_(filefd1);
 	closefs();
