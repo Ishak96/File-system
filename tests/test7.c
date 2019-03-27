@@ -39,7 +39,9 @@ int main(int argc, char** argv) {
 	
 	printf("The value written is %d\n", value);
 	
+	printf("ls of /DIR\n");
 	ls_(dir);
+	printf("ls of /\n");
 	ls_(rootdir);
 	
 	//~ open_("/", 0);

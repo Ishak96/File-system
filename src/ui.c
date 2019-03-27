@@ -61,6 +61,7 @@ int getParentInode(const char* filepath, uint32_t* parentino) {
 DIR_* opendir_(const char* dirname, uint16_t perms) {
 	DIR_* dir = malloc(sizeof(DIR_));
 	dir->size = 2;
+	dir->idx = 0;
 	uint32_t dirino;
 	char* tempstr = strdup(dirname);
 	if(findpath(fs, super, &dirino, tempstr) < 0) {
@@ -71,12 +72,10 @@ DIR_* opendir_(const char* dirname, uint16_t perms) {
 		}
 		free(tempstr);
 		dir->fd = io_open_fd(dirino);
-		dir->files = malloc(sizeof(struct dirent) * dir->size);
-		if(io_read(fs, super, dir->fd , dir->files, sizeof(struct dirent) * dir->size) < 0) {
-			fprintf(stderr, "opendir_: io_read\n");
+		if(getFiles(fs, super, dirino, &(dir->files), &(dir->size)) < 0) {
+			fprintf(stderr, "opendir_: cannot read files\n");
 			return NULL;
 		}
-				
 		return dir;
 	}
 	/* verify type */
@@ -88,47 +87,22 @@ DIR_* opendir_(const char* dirname, uint16_t perms) {
 		return NULL;
 	}
 
-	int size = 0;
-	if(io_read(fs, super, dir->fd , &size, sizeof(int)) < 0) {
-		fprintf(stderr, "opendir_: io_read\n");
-		return NULL;
-	} // getting the number of files
-	dir->size = size;
-
-	dir->files = malloc(sizeof(struct dirent) * dir->size);
-	if(io_read(fs, super, dir->fd , dir->files, sizeof(struct dirent) * dir->size) < 0) {
-		fprintf(stderr, "opendir_: io_read\n");
+	dir->fd = io_open_fd(dirino);
+	if(getFiles(fs, super, dirino, &(dir->files), &(dir->size)) < 0) {
+		fprintf(stderr, "opendir_: cannot read files\n");
 		return NULL;
 	}
 
 	free(tempstr);
 	// check perms here
-	dir->fd = io_open_fd(dirino);
 	return dir;
 }
 
-struct dirent readdir_(DIR_* dir) {
-	struct dirent d = {0};
-	size_t offset = io_getoff(dir->fd);
-	
-	io_lseek(fs, super, dir->fd, 0);
-	int size = 0;
-	if(io_read(fs, super, dir->fd , &size, sizeof(int)) < 0) {
-		fprintf(stderr, "opendir_: io_read\n");
-		return d;
-	} // getting the number of files	
-	dir->size = size;
-	
-	io_lseek(fs, super, dir->fd, offset);
-	if(dir->size < (offset - sizeof(int)) / sizeof(struct dirent)) {
-		return d;
-	}
-	
-	if(io_read(fs, super, dir->fd, &d, sizeof(struct dirent)) < 0) {
-		fprintf(stderr, "readdir_: io_read\n");
-		return d;
-	}
-	return d;
+struct dirent* readdir_(DIR_* dir) {
+	if(dir->idx >= dir->size) {
+		return NULL;
+	} 
+	return dir->files + (dir->idx++);
 }
 
 int closedir_(DIR_* dir) {
@@ -136,16 +110,16 @@ int closedir_(DIR_* dir) {
 		fprintf(stderr, "close_: can't close %d\n", dir->fd);
 		return FUNC_ERROR;
 	}
+	free(dir->files);
 	free(dir);
 	return 0;
 }
 int ls_(DIR_* dir) {
-	struct dirent d = {0};
-	printf("len=%ld\n", dir->size);
-	do {
-		printf("%d %d %s\n", d.d_ino, d.d_type, d.d_name);
-		d = readdir_(dir);
-	} while(d.d_type);
+	struct dirent* d;
+	printf("len=%d\n", dir->size);
+	while((d = readdir_(dir)) != NULL){
+		printf("%d %d %s\n", d->d_ino, d->d_type, d->d_name);
+	}
 	return 0;
 }
 

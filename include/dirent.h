@@ -18,7 +18,8 @@ struct dirent {
 
 typedef struct {
 	int fd;
-	size_t size;
+	int size;
+	int idx;
 	struct dirent* files;
 } DIR_;
 
