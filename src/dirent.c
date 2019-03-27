@@ -2,7 +2,7 @@
  * @file dirent.c
  * @author ABDELMOUMENE Djahid 
  * @author AYAD Ishak
- * @brief main dirent functions
+ * @brief main directory managment and naming functions
  */
 #include <io.h>
 #include <fs.h>
@@ -15,6 +15,11 @@
 #include <stdint.h>
 #include <stdio.h>
 
+/**
+ * @brief format and empty directory
+ * @details allocate the inode for the directory and initialize
+ * the size (to 0) in the first byte
+ */
 int formatdir(struct fs_filesyst fs, struct fs_super_block super, uint32_t* inodenum, uint16_t mode) {
 	mode |= S_DIR;
 	if(io_open_creat(fs, super, mode, inodenum) < 0) {
@@ -30,6 +35,11 @@ int formatdir(struct fs_filesyst fs, struct fs_super_block super, uint32_t* inod
 	return 0;
 }
 
+/**
+ * @brief get the files in a directory with inode *inodenum* 
+ * @details allocates an array of struct dirent's and puts the files
+ * and the number of files in files and size respectively
+ */
 int getFiles(struct fs_filesyst fs, struct fs_super_block super, 
 		     uint32_t dirino, struct dirent** files, int* size)
 {
@@ -59,6 +69,14 @@ int getFiles(struct fs_filesyst fs, struct fs_super_block super,
 	return 0;
 }
 
+
+/**
+ * @brief find a filename in a directory
+ * @details gets the structure found in a directory of the corresponding
+ * file with name *filename* in directory with inode number *dirino*.
+ * this function uses a binary search because the file entries are sorted
+ * in the directory
+ */
 int findFile(struct fs_filesyst fs, struct fs_super_block super,
 			   uint32_t dirino, char* filename, struct dirent *res, int* idx)
 {
@@ -101,6 +119,11 @@ int findFile(struct fs_filesyst fs, struct fs_super_block super,
 	return 0;
 }
 
+/**
+ * @brief insert a file into a directory
+ * @details inserts the file structure *file* into the corresponding 
+ * directory with inode number *dirino*. the insertion is in a sorted list.
+ */
 int insertFile(struct fs_filesyst fs, struct fs_super_block super,
 			   uint32_t dirino, struct dirent file)
 {
@@ -152,6 +175,12 @@ int insertFile(struct fs_filesyst fs, struct fs_super_block super,
 	return 0;
 }
 
+/**
+ * @brief delete a file from a directory
+ * @details deletes the file with filename *filename* into the directory
+ * with inode number *dirino*. the deletion is also done as in a sorted
+ * list.
+ */
 int delFile(struct fs_filesyst fs, struct fs_super_block super,
 			   uint32_t dirino, char* filename)
 {
@@ -214,6 +243,12 @@ int delFile(struct fs_filesyst fs, struct fs_super_block super,
 	return 0;
 }
 
+/**
+ * @brief find the inode number of a file from its absolute path
+ * @details searches for the inode number of file with the absolute path
+ * *filename* and puts the value found into pointer *ino*. note that 
+ * the root directory "/" is a special case and always has inode number 0
+ */
 int findpath(struct fs_filesyst fs, struct fs_super_block super, uint32_t* ino, char* filename) {
 	if(!strcmp(filename, "/")) {
 		*ino = 0;
@@ -241,6 +276,15 @@ int findpath(struct fs_filesyst fs, struct fs_super_block super, uint32_t* ino, 
 	return 0;
 }
 
+/**
+ * @brief structures the a directory using the given filepath
+ * @details formats the main components of the directory. Meaning it creates
+ * the subdirectories . and .. and also create an instance of its directory
+ * entry in the parent directory. ex: with /DIR it puts . and .. in the 
+ * /DIR directory and DIR in the / (root) directory
+ * @param dirino   the inode number of the directory to be inserted
+ * @param filepath the full path (absolute) of the directory to be inserted
+ */
 int opendir_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t dirino,
 			const char* filepath)
 {
@@ -306,6 +350,11 @@ int opendir_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t dir
 	return 0;
 }
 
+/**
+ * @brief creates and formats a directory
+ * @details creates a new directory with a new inode number and then
+ * calls *opendir_ino*
+ */
 int opendir_creat(struct fs_filesyst fs, struct fs_super_block super, uint32_t* dirino,
 			uint16_t perms, const char* filepath)
 {
@@ -323,6 +372,15 @@ int opendir_creat(struct fs_filesyst fs, struct fs_super_block super, uint32_t* 
 	return 0;
 }
 
+/**
+ * @brief inserts a file into a directory
+ * @details insert the file with inode number *fileino* with the path 
+ * *filepath*, meaning it creates a new directory entry and puts it in
+ * the parent directory (we get this from the full path ex: /DIR/file 
+ * the parent directory is /DIR)
+ * @param fileino  the inode of the file to be inserted
+ * @param filepath the full path of the file to be inserted
+ */
 int open_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t fileino,
 			 const char* filepath)
 {
@@ -366,6 +424,12 @@ int open_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t filein
 	return 0;
 }
 
+/**
+ * @brief creates a new file
+ * @details creates a new file with a new inode number and inserts its
+ * corresponding directory entry into the appropriate directory (meaning
+ * inserts to the parent directory)
+ */
 int open_creat(struct fs_filesyst fs, struct fs_super_block super, uint32_t* fileino,
 			uint16_t mode, const char* filepath)
 {

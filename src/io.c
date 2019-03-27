@@ -231,6 +231,10 @@ int io_lazy_alloc(struct fs_filesyst fs, struct fs_super_block super,
 	return 0;
 }
 
+/**
+ * @brief changes the current offset of the file descriptor
+ * @details changes the offset of the file descriptor *fd* to *new_off*
+ */
 int io_lseek(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			  size_t new_off)
 {
@@ -238,6 +242,11 @@ int io_lseek(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	return 0;
 }
 
+/**
+ * @brief writes data to an inode number
+ * @details writes the data *data* with size *size* starting from the offset
+ * *off* into the inode number *inodenum*
+ */
 int io_write_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum,
 			 void* data, uint32_t off, size_t size)
 {
@@ -388,6 +397,10 @@ int io_write_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t in
 	return 0;
 }
 
+/**
+ * @brief writes data to a file descriptor
+ * @details does the same thing as *io_write_ino* but for file descriptors
+ */
 int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			 void* data, size_t size)
 {
@@ -413,6 +426,11 @@ int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	return 0;
 }
 
+/**
+ * @brief read data from an inode number
+ * @details reads data from the inode number *inodenum* and puts it in
+ * the pointer *data* with size *size* starting from the offset *off*
+ */
 int io_read_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum,
 			 void* data, uint32_t off, size_t size)
 {
@@ -583,6 +601,10 @@ int io_read_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t ino
 	return 0;
 }
 
+/**
+ * @brief reads data from a file descriptor
+ * @details does the same thing as *io_read_ino* but for file descriptors
+ */
 int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 			 void* data, size_t size)
 {
@@ -605,7 +627,11 @@ int io_read(struct fs_filesyst fs, struct fs_super_block super, int fd,
 	filedesc_table.fds[fd].offset += size;	
 	return 0;
 }
-
+/**
+ * @brief removes all from inode number inodenum
+ * @details frees the inode *inodenum* along with all the data
+ * blocks used by it (direct and indirect)
+ */
 int io_rm_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum) {
 	struct fs_inode ind;
 	if(fs_read_inode(fs, super, inodenum, &ind) < 0) {
@@ -647,6 +673,10 @@ int io_rm_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t inode
 	return 0;
 }
 
+/**
+ * @brief removes the inodenumber corresponding to the fd
+ * @details does the same thing as io_rm_ino but for file descriptors
+ */
 int io_rm(struct fs_filesyst fs, struct fs_super_block super, int fd) {
 	if(filedesc_table.fds[fd].is_allocated == 0) {
 		fprintf(stderr, "io_read: fd closed!\n");
@@ -666,6 +696,9 @@ int io_rm(struct fs_filesyst fs, struct fs_super_block super, int fd) {
 	return 0;
 }
 
+/**
+ * @brief get the corresponding inode number from the file descriptor
+ */
 uint32_t io_getino(int fd) {
 	if(fd > IO_MAX_FILEDESC || fd < 0) {
 		fprintf(stderr, "io_getino: invalid fd %d\n", fd);
@@ -678,6 +711,10 @@ uint32_t io_getino(int fd) {
 	
 	return filedesc_table.fds[fd].inodenum;
 }
+
+/**
+ * @brief get the corresponding offset from the file descriptor
+ */
 size_t io_getoff(int fd) {
 	if(fd > IO_MAX_FILEDESC || fd < 0) {
 		fprintf(stderr, "io_getoff: invalid fd %d\n", fd);
