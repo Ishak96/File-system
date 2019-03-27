@@ -394,6 +394,11 @@ int io_write_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t in
 		}
 	}
 	end_write:
+	ind.size = (ind.size > off+size)? ind.size: off+size;
+	if(fs_write_inode(fs, super, inodenum, &ind) < 0) {
+		fprintf(stderr, "io_write: fs_write_inode\n");
+		return FUNC_ERROR;
+	}
 	return 0;
 }
 

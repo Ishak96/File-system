@@ -3,7 +3,8 @@
 #include <dirent.h>
 
 int initfs(char* filename, size_t size);
-int ls_(DIR_* dir);
+int ls_(const char* dir);
+int ln_(const char* src, const char* dest);
 int lseek_(int fd, uint32_t newoff);
 int write_(int fd, void* data, int size);
 int read_(int fd, void* data, int size);
@@ -13,6 +14,8 @@ struct dirent readdir_(DIR_* dir);
 int rm_(const char* filename);
 int close_(int fd);
 int closedir_(DIR_* dir);
+int cp_(const char* src, const char* dest);
+int mv_(const char* src, const char* dest);
 void closefs();
 
 #endif

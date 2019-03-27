@@ -120,12 +120,16 @@ int closedir_(DIR_* dir) {
 	free(dir);
 	return 0;
 }
-int ls_(DIR_* dir) {
+int ls_(const char* direct) {
+	DIR_* dir = opendir_(direct, 0);
+	
 	struct dirent* d;
-	printf("len=%d\n", dir->size);
+	printf("%s [%d]:\n", direct, dir->size);
 	while((d = readdir_(dir)) != NULL){
 		printf("%d %d %s\n", d->d_ino, d->d_type, d->d_name);
 	}
+	
+	closedir_(dir);
 	return 0;
 }
 
@@ -139,6 +143,8 @@ int open_(const char* filename, uint16_t perms) {
 			fprintf(stderr, "open_: open_creat\n");
 			return FUNC_ERROR;
 		}
+		struct fs_inode ind;
+		fs_read_inode(fs, super, fileino, &ind);
 		free(tempstr);
 		return io_open_fd(fileino);
 	}
@@ -203,7 +209,6 @@ int rm_(const char* filename) {
 		fprintf(stderr, "rm_: %s is a directory (use opendir_)\n", filename);
 		return FUNC_ERROR;
 	}
-
 	uint32_t ino;
 	if(getParentInode(filename, &ino) < 0) {
 		fprintf(stderr, "rm_: invalid file path %s\n", filename);
@@ -222,33 +227,89 @@ int rm_(const char* filename) {
 	return 0;
 }
 
-int cp(const char* src, const char* dest) {
+int cp_(const char* src, const char* dest) {
+	int srcfd = open_(src, 0);
+	int destfd = open_(dest, 0);
+	if(srcfd < 0 || destfd < 0) {
+		fprintf(stderr, "cp_: cannot open src or dest\n");
+		return FUNC_ERROR;
+	}
+	
+	struct fs_inode ind = {0};
+	if(fs_read_inode(fs, super, io_getino(srcfd), &ind)) {
+		fprintf(stderr, "cp_: cannot read inode\n");
+		return FUNC_ERROR;
+	}
+	
+	size_t size = ind.size;
+	
+	lseek_(srcfd, 0);
+	void* data = malloc(size);
+	if(io_read(fs, super, srcfd, data, size) < 0) {
+		fprintf(stderr, "cp_: cannot read from the source\n");
+		return FUNC_ERROR;
+	}
+	
+	lseek_(destfd, 0);
+	if(io_write(fs, super, destfd, data, size) < 0) {
+		fprintf(stderr, "cp_: cannot write to the destination\n");
+		return FUNC_ERROR;
+	}
+	
+	close_(srcfd);
+	close_(destfd);
 	return 0;
 }
 
-//~ int mv(const char* src, const char* dest)
-//~ {
-	//~ uint32_t src_ino;
-	//~ findpath(fs, super, &src_ino, src);
+int ln_(const char* src, const char* dest) {
+	uint32_t ino;
+	char* tmpstr = strdup(src);
+	if(findpath(fs, super, &ino, tmpstr) < 0) {
+		fprintf(stderr, "ln_: %s doesn't exist\n", src);
+		free(tmpstr);
+		return FUNC_ERROR;
+	}
+	struct fs_inode ind;
+	if(fs_read_inode(fs, super, ino, &ind) < 0) {
+		fprintf(stderr, "open_ino: fs_read_inode with inodenum=%u\n", ino);
+		free(tmpstr);
+		return FUNC_ERROR;
+	}
+	uint16_t mode = ind.mode;
+	if((mode & S_DIR) == 0) {
+		if(open_ino(fs, super, ino, dest) < 0) {
+			fprintf(stderr, "ln_: cannot open %s\n", dest);
+			free(tmpstr);
+			return FUNC_ERROR;
+		}
+	} else {
+		if(opendir_ino(fs, super, ino, dest) < 0) {
+			fprintf(stderr, "ln_: cannot open %s\n", dest);
+			free(tmpstr);
+			return FUNC_ERROR;
+		}
+	}
+	if(fs_read_inode(fs, super, ino, &ind) < 0) {
+		fprintf(stderr, "open_ino: fs_read_inode with inodenum=%u\n", ino);
+		free(tmpstr);
+		return FUNC_ERROR;
+	}
+	free(tmpstr);
+	return 0;
+}
 
-	//~ char* src_copy1 = strdup(src);
-	//~ char* src_copy2 = strdup(src);
-	//~ char* src_base = dirname(src_copy1);
-	//~ char* src_path = dirname(src_copy2);
-	//~ uint32_t src_parent;
-	//~ findpath(fs, super, &src_parent, src_path);
+int mv_(const char* src, const char* dest) {
+	if(ln_(src, dest) < 0) {
+		fprintf(stderr, "mv_: cannot place the destination link\n");
+		return FUNC_ERROR;
+	}
 
-	//~ char* dest_copy1 = strdup(dest);
-	//~ char* dest_copy2 = strdup(dest);
-	//~ char* dest_base = basename(dest_copy1);
-	//~ char* dest_path = dirname(dest_copy2);
-	//~ uint32_t dest_parent;
-	//~ findpath(fs, super, &dest_parent, dest_path); // get the parent's fd
-	
-	//~ delFile(fs, super, src_ino, src_copy);
-	
-	//~ return 0;
-//~ }
+	if(rm_(src) < 0) {
+		fprintf(stderr, "mv_: cannot delete the source link\n");
+		return FUNC_ERROR;
+	}
+	return 0;
+}
 
 void closefs() {
 	printf("Closing the filesystem..\n");
