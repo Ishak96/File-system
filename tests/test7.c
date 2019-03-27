@@ -42,8 +42,7 @@ int main(int argc, char** argv) {
 	//~ ls_(dir);
 	printf("ls of /\n");
 	ls_(rootdir);
-	
-	//~ open_("/", 0);
+
 	
 	//~ closedir_(dir);
 	//~ closedir_(rootdir);
