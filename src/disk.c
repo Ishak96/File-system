@@ -15,6 +15,22 @@
 #include <sys/types.h>
 
 /**
+ * @brief utility function to check the magic number of the file
+ * and see if it matches our FS magic number
+ */
+int fs_check_magicnum(int fd) {	
+	lseek(fd, 0, SEEK_SET);
+	uint32_t magicnum;
+	if(read(fd, &magicnum, sizeof(uint32_t)) != sizeof(uint32_t)) {
+		fprintf(stderr, "fs_check_magicnum: read error\n");
+		return FUNC_ERROR;
+	}
+
+	return (magicnum == FS_MAGIC);
+}
+
+
+/**
  * @brief creat a disk image for storing the disk data
  * @details if this function is called on a disk image
  * that already exists, the function will retun -1, 

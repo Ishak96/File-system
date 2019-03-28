@@ -5,7 +5,7 @@
 #include <fs.h>
 
 #include <stdint.h>
-#define IO_MAX_FILEDESC 100
+#define IO_MAX_FILEDESC 1000
 
 struct io_filedesc {
 	int is_allocated;
