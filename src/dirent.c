@@ -135,7 +135,7 @@ int insertFile(struct fs_filesyst fs, struct fs_super_block super,
 		return FUNC_ERROR;
 	}
 	if(idx >= 0) {
-		fprintf(stderr, "insertFile: file exists already\n");
+		fprintf(stderr, "insertFile: file exists already %s\n", res.d_name);
 		return FUNC_ERROR;
 	}
 
@@ -304,6 +304,7 @@ int opendir_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t dir
 		fprintf(stderr, "opendir_ino: fs_read_inode with inodenum=%u\n", dirino);
 		return FUNC_ERROR;
 	}
+
 	uint16_t mode = ind.mode;
 	if((mode & S_DIR) == 0) {
 		fprintf(stderr, "opendir_ino: %s is a regular file\n", filepath);
@@ -316,7 +317,7 @@ int opendir_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t dir
 	cur.d_ino = dirino;
 	cur.d_type = S_DIR;	
 	strcpy(cur.d_name, ".");
-	if(insertFile(fs, super, dirino, cur) < 0) {
+	if(ind.hcount == 0 && insertFile(fs, super, dirino, cur) < 0) {
 		fprintf(stderr, "opendir_ino: insertFile\n");
 		return FUNC_ERROR;
 	}
@@ -333,7 +334,7 @@ int opendir_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t dir
 	// put .. in the created dir as the parent
 	cur.d_ino = parent;
 	strcpy(cur.d_name, "..");
-	if(insertFile(fs, super, dirino, cur) < 0) {
+	if(ind.hcount == 0 && insertFile(fs, super, dirino, cur) < 0) {
 		fprintf(stderr, "opendir_ino: insertFile\n");
 		return FUNC_ERROR;
 	}
