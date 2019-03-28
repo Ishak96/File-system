@@ -8,19 +8,13 @@
 #include<stdio.h>
 #include <unistd.h>
 #include <string.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <errno.h>
-#include <pwd.h>
-#include <time.h>
-#include <fcntl.h>
 
-#include <fs.h>
-#include <ui.h>
-#include <disk.h>
 #include <io.h>
+#include <fs.h>
 #include <devutils.h>
+#include <disk.h>
 #include <dirent.h>
+#include <ui.h>
 
 #define DEF "\x1B[0m"
 #define ARGMAX 10
@@ -358,7 +352,14 @@ void __write(char* path, char* data){
 /* copy one file to another */
 void __cp(char* file1, char* file2)
 {
-
+	if(file1 == NULL || file2 == NULL){
+		fprintf(stderr, "cannot copy file\n");
+		return ;
+	}
+	if(cp_(file1, file2) < 0){
+		fprintf(stderr, "cannot move file\n");
+		return ;
+	}
 }
 
 /* create a hard link */
@@ -390,24 +391,45 @@ void __mv(char* file1, char* file2)
 /*ls -l  lists date permissions etc*/
 void __lsl(char* path)
 {
+	char tmp_cwd[BUFSIZE] = {0};
+	if(path == NULL){
+		strcpy(tmp_cwd, cwd);
+	}
+	else{
+		strcpy(tmp_cwd, cwd);
+		strcat(tmp_cwd, path);
+	}
 
+	lsl_(tmp_cwd);
 }
 
 /* list cwd contents*/
 void __ls(char* path)
 {
-	if(path == NULL || strlen(path) == 0) {
-		ls_(cwd);
+//~ <<<<<<< HEAD
+	//~ if(path == NULL || strlen(path) == 0) {
+		//~ ls_(cwd);
+	//~ }
+	//~ else{
+		//~ char* new_path = getPath(cwd, path);
+		//~ if(new_path == NULL) {
+			//~ fprintf(stderr, "cannot resolve path\n");
+			//~ return;
+		//~ }
+		//~ ls_(new_path);
+		//~ free(new_path);
+//~ =======
+	char tmp_cwd[BUFSIZE] = {0};
+	if(path == NULL){
+		strcpy(tmp_cwd, cwd);
 	}
 	else{
-		char* new_path = getPath(cwd, path);
-		if(new_path == NULL) {
-			fprintf(stderr, "cannot resolve path\n");
-			return;
-		}
-		ls_(new_path);
-		free(new_path);
+		strcpy(tmp_cwd, cwd);
+		strcat(tmp_cwd, path);
+//~ >>>>>>> 82f8d714b8e2bd4c0619d0f3b9db6697092b5b74
 	}
+
+	ls_(tmp_cwd);
 }
 
 /* clear the screen*/

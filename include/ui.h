@@ -3,6 +3,7 @@
 #include <dirent.h>
 
 int initfs(char* filename, size_t size, int format);
+int lsl_(const char* dir);
 int ls_(const char* dir);
 int ln_(const char* src, const char* dest);
 int lseek_(int fd, uint32_t newoff);

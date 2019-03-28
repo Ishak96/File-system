@@ -36,13 +36,14 @@ int initfs(char* filename, size_t size, int format) {
 	if(creatfile(filename, size, &fs) < 0) {
 		fprintf(stderr, "initfs: can't create file %s\n", filename);
 	}
-	
+
 	union fs_block blk;
 	if(fs_read_block(fs, 0, &blk) < 0) {
 		fprintf(stderr, "fs_format: fs_read_block\n");
 		return FUNC_ERROR;
 	}
 	super = blk.super;
+
 	if(format) {
 		printf("formatting..\n");
 		if(fs_format(fs) < 0) {
@@ -195,6 +196,37 @@ int closedir_(DIR_* dir) {
 }
 
 /**
+ * @brief list the files in a directory in a long format
+ * @details lists all the files in a directory in a long format
+ * @param direct the *absolute* path from the root to the directory
+ * @return 0 in case of success or -1 in case of an error
+ */
+int lsl_(const char* direct) {
+	DIR_* dir = opendir_(direct, 0, 0);
+	if(dir == NULL) {
+		fprintf(stderr, "ls_: directory does not exist\n");
+		return FUNC_ERROR;
+	}
+	printf("[%d]%s\n", dir->size, direct);
+	struct dirent* d;
+	while((d = readdir_(dir)) != NULL){
+		if(d->d_type){
+			printf("%d %d ", d->d_ino, d->d_type);
+			printf("\033[32m");
+			printf("%s\n", d->d_name);
+			printf("\033[37m");
+
+		}
+		else{
+			printf("%d %d %s\n", d->d_ino, d->d_type, d->d_name);
+		}
+	}
+	
+	closedir_(dir);
+	return 0;
+}
+
+/**
  * @brief list the files in a directory
  * @details lists all the files in a directory
  * @param direct the *absolute* path from the root to the directory
@@ -206,12 +238,18 @@ int ls_(const char* direct) {
 		fprintf(stderr, "ls_: directory does not exist\n");
 		return FUNC_ERROR;
 	}
-	printf("[%d]%s\n", dir->size, direct);
 	struct dirent* d;
 	while((d = readdir_(dir)) != NULL){
-		printf("%d %d %s\n", d->d_ino, d->d_type, d->d_name);
+		if(d->d_type){
+			printf("\033[32m");
+			printf("%s\t",d->d_name);
+			printf("\033[37m");
+		}
+		else{
+			printf("%s\t",d->d_name);
+		}
 	}
-	
+	printf("\n");
 	closedir_(dir);
 	return 0;
 }
