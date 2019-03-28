@@ -127,6 +127,18 @@ int findFile(struct fs_filesyst fs, struct fs_super_block super,
 int insertFile(struct fs_filesyst fs, struct fs_super_block super,
 			   uint32_t dirino, struct dirent file)
 {
+	int idx = 0;
+	struct dirent res;
+
+	if(findFile(fs, super, dirino, file.d_name, &res, &idx) < 0) {
+		fprintf(stderr, "insertFile: findFile\n");
+		return FUNC_ERROR;
+	}
+	if(idx >= 0) {
+		fprintf(stderr, "insertFile: file exists already\n");
+		return FUNC_ERROR;
+	}
+
 	struct dirent* files = NULL;
 	int size = 0;
 	if(getFiles(fs, super, dirino, &files, &size) < 0) {
@@ -223,8 +235,8 @@ int delFile(struct fs_filesyst fs, struct fs_super_block super,
 	free(files);
 	
 	struct fs_inode ind;
-	if(fs_read_inode(fs, super, dirino, &ind) < 0) {
-		fprintf(stderr, "open_ino: fs_read_inode\n");
+	if(fs_read_inode(fs, super, res.d_ino, &ind) < 0) {
+		fprintf(stderr, "open_ino: fs_read_inode with inodenum=%u\n", dirino);
 		return FUNC_ERROR;
 	}
 	ind.hcount --;
@@ -234,8 +246,7 @@ int delFile(struct fs_filesyst fs, struct fs_super_block super,
 			return FUNC_ERROR;
 		}
 	} else {
-		printf("new hcount %d\n", ind.hcount);
-		if(fs_write_inode(fs, super, dirino, &ind) < 0) {
+		if(fs_write_inode(fs, super, res.d_ino, &ind) < 0) {
 			fprintf(stderr, "open_ino: fs_write_inode\n");
 			return FUNC_ERROR;
 		}
@@ -287,21 +298,15 @@ int findpath(struct fs_filesyst fs, struct fs_super_block super, uint32_t* ino, 
  */
 int opendir_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t dirino,
 			const char* filepath)
-{
+{	
 	struct fs_inode ind;
 	if(fs_read_inode(fs, super, dirino, &ind) < 0) {
-		fprintf(stderr, "open_ino: fs_read_inode\n");
+		fprintf(stderr, "opendir_ino: fs_read_inode with inodenum=%u\n", dirino);
 		return FUNC_ERROR;
 	}
-	ind.hcount ++;
-	if(fs_write_inode(fs, super, dirino, &ind) < 0) {
-		fprintf(stderr, "open_ino: fs_write_inode\n");
-		return FUNC_ERROR;
-	}
-	
 	uint16_t mode = ind.mode;
 	if((mode & S_DIR) == 0) {
-		fprintf(stderr, "open_ino: %ud is a regular file\n", dirino);
+		fprintf(stderr, "opendir_ino: %s is a regular file\n", filepath);
 		return FUNC_ERROR;
 	}
 	/* todo: verify type and get mode*/
@@ -312,7 +317,7 @@ int opendir_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t dir
 	cur.d_type = S_DIR;	
 	strcpy(cur.d_name, ".");
 	if(insertFile(fs, super, dirino, cur) < 0) {
-		fprintf(stderr, "creatdir: insertFile\n");
+		fprintf(stderr, "opendir_ino: insertFile\n");
 		return FUNC_ERROR;
 	}
 
@@ -329,7 +334,7 @@ int opendir_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t dir
 	cur.d_ino = parent;
 	strcpy(cur.d_name, "..");
 	if(insertFile(fs, super, dirino, cur) < 0) {
-		fprintf(stderr, "creatdir: insertFile\n");
+		fprintf(stderr, "opendir_ino: insertFile\n");
 		return FUNC_ERROR;
 	}
 	
@@ -339,13 +344,19 @@ int opendir_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t dir
 		cur.d_type = mode;
 		strcpy(cur.d_name, child_name);
 		if(insertFile(fs, super, parent, cur) < 0) {
-			fprintf(stderr, "creatdir: insertFile\n");
+			fprintf(stderr, "opendir_ino: insertFile\n");
 			return FUNC_ERROR;
 		}
 	}
 
 	free(path_copy1);
 	free(path_copy2);
+	
+	ind.hcount ++;
+	if(fs_write_inode(fs, super, dirino, &ind) < 0) {
+		fprintf(stderr, "opendir_ino: fs_write_inode\n");
+		return FUNC_ERROR;
+	}
 	
 	return 0;
 }
@@ -383,18 +394,12 @@ int opendir_creat(struct fs_filesyst fs, struct fs_super_block super, uint32_t* 
  */
 int open_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t fileino,
 			 const char* filepath)
-{
+{	
 	struct fs_inode ind;
 	if(fs_read_inode(fs, super, fileino, &ind) < 0) {
-		fprintf(stderr, "open_ino: fs_read_inode\n");
+		fprintf(stderr, "open_ino: fs_read_inode with inodenum=%u\n", fileino);
 		return FUNC_ERROR;
 	}
-	ind.hcount ++;
-	if(fs_write_inode(fs, super, fileino, &ind) < 0) {
-		fprintf(stderr, "open_ino: fs_write_inode\n");
-		return FUNC_ERROR;
-	}
-	
 	uint16_t mode = ind.mode;
 	if(mode & S_DIR) {
 		// fprintf(stderr, "open_ino: %ud is a directory\n", fileino);
@@ -418,6 +423,11 @@ int open_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t filein
 	
 	if(insertFile(fs, super, parent, cur) < 0) {
 		fprintf(stderr, "open_ino: insertFile\n");
+		return FUNC_ERROR;
+	}
+	ind.hcount ++;
+	if(fs_write_inode(fs, super, fileino, &ind) < 0) {
+		fprintf(stderr, "open_ino: fs_write_inode\n");
 		return FUNC_ERROR;
 	}
 	
