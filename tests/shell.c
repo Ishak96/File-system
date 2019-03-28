@@ -49,7 +49,7 @@ void screenfetch();
 
 int main(int argc, char* argv[])
 {
-   /*if(argc!=3) {
+   if(argc!=3) {
 		printf("use: %s <disk> <nblocks>\n",argv[0]);
 		return 1;
 	}
@@ -58,7 +58,8 @@ int main(int argc, char* argv[])
 		fprintf(stderr,"shell : creatfile %s\n",argv[1]);
 		return 1;
 	}
-	printf("opened emulated disk image %s\n",argv[1]);*/
+	printf("opened emulated disk image %s\n",argv[1]);
+	DIR_* rootdir = opendir_("/", 0, 0);
 	strcpy(cwd, "/");
 
     while(exitflag==0)
@@ -116,7 +117,7 @@ int main(int argc, char* argv[])
             }
         }
     }
-   // closedir_(rootdir);
+   closedir_(rootdir);
 }
 
 /*get input containing spaces and tabs and store it in argval*/
