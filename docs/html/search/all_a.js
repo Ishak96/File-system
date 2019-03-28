@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['tot_5fsize',['tot_size',['../structfs__filesyst.html#a5c41788f61d03bed3e6d33879e7b0e88',1,'fs_filesyst']]]
+  ['size',['size',['../structfs__inode.html#ac10de2ad4b7c87da65fc17b5674b5759',1,'fs_inode']]],
+  ['super',['super',['../unionfs__block.html#a567fd97fc6dbdbede24dba13bbe9fef5',1,'fs_block']]]
 ];

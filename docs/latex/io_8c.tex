@@ -1,0 +1,210 @@
+\hypertarget{io_8c}{}\section{src/io.c File Reference}
+\label{io_8c}\index{src/io.c@{src/io.c}}
+
+
+filesystem input/output operations  
+
+
+{\ttfamily \#include $<$io.\+h$>$}\newline
+{\ttfamily \#include $<$fs.\+h$>$}\newline
+{\ttfamily \#include $<$devutils.\+h$>$}\newline
+{\ttfamily \#include $<$disk.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{io_8c_ae9a3f17b95263977742268a399a76885}{io\+\_\+open\+\_\+fd}} (uint32\+\_\+t inodenum)
+\begin{DoxyCompactList}\small\item\em allocates a new file descriptor with an inodenum \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{io_8c_ae8b8faa427956aa1451e97cf262dbb99}{io\+\_\+close\+\_\+fd}} (int fd)
+\begin{DoxyCompactList}\small\item\em closes an already open file descriptor \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{io_8c_a60817fc7db566e8398a8c557791839f0}{io\+\_\+iopen}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t inodenum)
+\begin{DoxyCompactList}\small\item\em opens a new file without creating a new inode \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{io_8c_a002129a2d4cfa1109a7db73ac699059c}\label{io_8c_a002129a2d4cfa1109a7db73ac699059c}} 
+int {\bfseries io\+\_\+open\+\_\+creat} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint16\+\_\+t mode, uint32\+\_\+t $\ast$inodenum)
+\item 
+int \mbox{\hyperlink{io_8c_a6ce2e9bd7baa4d5a18509ed5f5c7ad24}{io\+\_\+open\+\_\+creat\+\_\+fd}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint16\+\_\+t mode)
+\begin{DoxyCompactList}\small\item\em creates a new file with a new inodenum \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{io_8c_a131c4531f88071191b116e1878480fd9}{io\+\_\+lazy\+\_\+alloc}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t inodenum, struct \mbox{\hyperlink{structfs__inode}{fs\+\_\+inode}} $\ast$ind, size\+\_\+t off, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em allocates blocks based on {\itshape off} and {\itshape size} \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{io_8c_a425f78cb41c640faed69ddd036060163}{io\+\_\+lseek}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, int fd, size\+\_\+t new\+\_\+off)
+\begin{DoxyCompactList}\small\item\em changes the current offset of the file descriptor \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{io_8c_a1f5fd0175b31fae9c6d7e2b6d8487373}{io\+\_\+write\+\_\+ino}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t inodenum, void $\ast$data, uint32\+\_\+t off, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em writes data to an inode number \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{io_8c_a53882c0abf3a6515c9b21b8311b47015}{io\+\_\+write}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, int fd, void $\ast$data, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em writes data to a file descriptor \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{io_8c_a2cc108673f4d7b2b6d48769dd5c3e91b}{io\+\_\+read\+\_\+ino}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t inodenum, void $\ast$data, uint32\+\_\+t off, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em read data from an inode number \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{io_8c_a694421f0120a5235b226b74cf71e99ea}{io\+\_\+read}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, int fd, void $\ast$data, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em reads data from a file descriptor \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{io_8c_a836dc951073a39b47da267d958fe9ea6}{io\+\_\+rm\+\_\+ino}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t inodenum)
+\begin{DoxyCompactList}\small\item\em removes all from inode number inodenum \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{io_8c_aabbbd49ac82118302db6b964037d6a15}{io\+\_\+rm}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, int fd)
+\begin{DoxyCompactList}\small\item\em removes the inodenumber corresponding to the fd \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{io_8c_a05d8b2ab57e89c15e551c2724895b83c}\label{io_8c_a05d8b2ab57e89c15e551c2724895b83c}} 
+uint32\+\_\+t \mbox{\hyperlink{io_8c_a05d8b2ab57e89c15e551c2724895b83c}{io\+\_\+getino}} (int fd)
+\begin{DoxyCompactList}\small\item\em get the corresponding inode number from the file descriptor \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{io_8c_a73c2ff19ed46d97a90a0521fd0163f2c}\label{io_8c_a73c2ff19ed46d97a90a0521fd0163f2c}} 
+size\+\_\+t \mbox{\hyperlink{io_8c_a73c2ff19ed46d97a90a0521fd0163f2c}{io\+\_\+getoff}} (int fd)
+\begin{DoxyCompactList}\small\item\em get the corresponding offset from the file descriptor \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structio__filedesc__table}{io\+\_\+filedesc\+\_\+table}} \mbox{\hyperlink{io_8c_a588d09692facda28c4a702c0a7d9b493}{filedesc\+\_\+table}} = \{0\}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+filesystem input/output operations 
+
+\begin{DoxyAuthor}{Author}
+A\+B\+D\+E\+L\+M\+O\+U\+M\+E\+NE Djahid 
+
+A\+Y\+AD Ishak
+\end{DoxyAuthor}
+contains the main functions to create, destroy, read and write to files, also contains a system of file descriptors. 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{io_8c_ae8b8faa427956aa1451e97cf262dbb99}\label{io_8c_ae8b8faa427956aa1451e97cf262dbb99}} 
+\index{io.c@{io.c}!io\_close\_fd@{io\_close\_fd}}
+\index{io\_close\_fd@{io\_close\_fd}!io.c@{io.c}}
+\subsubsection{\texorpdfstring{io\_close\_fd()}{io\_close\_fd()}}
+{\footnotesize\ttfamily int io\+\_\+close\+\_\+fd (\begin{DoxyParamCaption}\item[{int}]{fd }\end{DoxyParamCaption})}
+
+
+
+closes an already open file descriptor 
+
+\begin{DoxyReturn}{Returns}
+returns 0 in case of success, -\/1 if the fd was never allocated or invalid. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{io_8c_a60817fc7db566e8398a8c557791839f0}\label{io_8c_a60817fc7db566e8398a8c557791839f0}} 
+\index{io.c@{io.c}!io\_iopen@{io\_iopen}}
+\index{io\_iopen@{io\_iopen}!io.c@{io.c}}
+\subsubsection{\texorpdfstring{io\_iopen()}{io\_iopen()}}
+{\footnotesize\ttfamily int io\+\_\+iopen (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{uint32\+\_\+t}]{inodenum }\end{DoxyParamCaption})}
+
+
+
+opens a new file without creating a new inode 
+
+tries to open the corresponding {\itshape inodenum} from the inode table. \begin{DoxyReturn}{Returns}
+returns the fd of the now open file in case of success, or -\/1 in case of failure 
+\end{DoxyReturn}
+\mbox{\Hypertarget{io_8c_a131c4531f88071191b116e1878480fd9}\label{io_8c_a131c4531f88071191b116e1878480fd9}} 
+\index{io.c@{io.c}!io\_lazy\_alloc@{io\_lazy\_alloc}}
+\index{io\_lazy\_alloc@{io\_lazy\_alloc}!io.c@{io.c}}
+\subsubsection{\texorpdfstring{io\_lazy\_alloc()}{io\_lazy\_alloc()}}
+{\footnotesize\ttfamily int io\+\_\+lazy\+\_\+alloc (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{uint32\+\_\+t}]{inodenum,  }\item[{struct \mbox{\hyperlink{structfs__inode}{fs\+\_\+inode}} $\ast$}]{ind,  }\item[{size\+\_\+t}]{off,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+allocates blocks based on {\itshape off} and {\itshape size} 
+
+a utility functions used by io\+\_\+write to allocate the least possible amount of blocks based on the writing offset {\itshape off} and the writing size {\itshape size}. \mbox{\Hypertarget{io_8c_a425f78cb41c640faed69ddd036060163}\label{io_8c_a425f78cb41c640faed69ddd036060163}} 
+\index{io.c@{io.c}!io\_lseek@{io\_lseek}}
+\index{io\_lseek@{io\_lseek}!io.c@{io.c}}
+\subsubsection{\texorpdfstring{io\_lseek()}{io\_lseek()}}
+{\footnotesize\ttfamily int io\+\_\+lseek (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{int}]{fd,  }\item[{size\+\_\+t}]{new\+\_\+off }\end{DoxyParamCaption})}
+
+
+
+changes the current offset of the file descriptor 
+
+changes the offset of the file descriptor {\itshape fd} to {\itshape new\+\_\+off} \mbox{\Hypertarget{io_8c_a6ce2e9bd7baa4d5a18509ed5f5c7ad24}\label{io_8c_a6ce2e9bd7baa4d5a18509ed5f5c7ad24}} 
+\index{io.c@{io.c}!io\_open\_creat\_fd@{io\_open\_creat\_fd}}
+\index{io\_open\_creat\_fd@{io\_open\_creat\_fd}!io.c@{io.c}}
+\subsubsection{\texorpdfstring{io\_open\_creat\_fd()}{io\_open\_creat\_fd()}}
+{\footnotesize\ttfamily int io\+\_\+open\+\_\+creat\+\_\+fd (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{uint16\+\_\+t}]{mode }\end{DoxyParamCaption})}
+
+
+
+creates a new file with a new inodenum 
+
+allocates an inode and opens a new file descriptor, \begin{DoxyReturn}{Returns}
+returns an fd of the created file in case of success, else it returns -\/1. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{io_8c_ae9a3f17b95263977742268a399a76885}\label{io_8c_ae9a3f17b95263977742268a399a76885}} 
+\index{io.c@{io.c}!io\_open\_fd@{io\_open\_fd}}
+\index{io\_open\_fd@{io\_open\_fd}!io.c@{io.c}}
+\subsubsection{\texorpdfstring{io\_open\_fd()}{io\_open\_fd()}}
+{\footnotesize\ttfamily int io\+\_\+open\+\_\+fd (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{inodenum }\end{DoxyParamCaption})}
+
+
+
+allocates a new file descriptor with an inodenum 
+
+allocates a file descriptor with the inode number given in arguments. \begin{DoxyReturn}{Returns}
+returns the a file descriptor ($>$0) in case of success, else it returns -\/1. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{io_8c_a694421f0120a5235b226b74cf71e99ea}\label{io_8c_a694421f0120a5235b226b74cf71e99ea}} 
+\index{io.c@{io.c}!io\_read@{io\_read}}
+\index{io\_read@{io\_read}!io.c@{io.c}}
+\subsubsection{\texorpdfstring{io\_read()}{io\_read()}}
+{\footnotesize\ttfamily int io\+\_\+read (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{int}]{fd,  }\item[{void $\ast$}]{data,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+reads data from a file descriptor 
+
+does the same thing as {\itshape io\+\_\+read\+\_\+ino} but for file descriptors \mbox{\Hypertarget{io_8c_a2cc108673f4d7b2b6d48769dd5c3e91b}\label{io_8c_a2cc108673f4d7b2b6d48769dd5c3e91b}} 
+\index{io.c@{io.c}!io\_read\_ino@{io\_read\_ino}}
+\index{io\_read\_ino@{io\_read\_ino}!io.c@{io.c}}
+\subsubsection{\texorpdfstring{io\_read\_ino()}{io\_read\_ino()}}
+{\footnotesize\ttfamily int io\+\_\+read\+\_\+ino (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{uint32\+\_\+t}]{inodenum,  }\item[{void $\ast$}]{data,  }\item[{uint32\+\_\+t}]{off,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+read data from an inode number 
+
+reads data from the inode number {\itshape inodenum} and puts it in the pointer {\itshape data} with size {\itshape size} starting from the offset {\itshape off} \mbox{\Hypertarget{io_8c_aabbbd49ac82118302db6b964037d6a15}\label{io_8c_aabbbd49ac82118302db6b964037d6a15}} 
+\index{io.c@{io.c}!io\_rm@{io\_rm}}
+\index{io\_rm@{io\_rm}!io.c@{io.c}}
+\subsubsection{\texorpdfstring{io\_rm()}{io\_rm()}}
+{\footnotesize\ttfamily int io\+\_\+rm (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{int}]{fd }\end{DoxyParamCaption})}
+
+
+
+removes the inodenumber corresponding to the fd 
+
+does the same thing as io\+\_\+rm\+\_\+ino but for file descriptors \mbox{\Hypertarget{io_8c_a836dc951073a39b47da267d958fe9ea6}\label{io_8c_a836dc951073a39b47da267d958fe9ea6}} 
+\index{io.c@{io.c}!io\_rm\_ino@{io\_rm\_ino}}
+\index{io\_rm\_ino@{io\_rm\_ino}!io.c@{io.c}}
+\subsubsection{\texorpdfstring{io\_rm\_ino()}{io\_rm\_ino()}}
+{\footnotesize\ttfamily int io\+\_\+rm\+\_\+ino (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{uint32\+\_\+t}]{inodenum }\end{DoxyParamCaption})}
+
+
+
+removes all from inode number inodenum 
+
+frees the inode {\itshape inodenum} along with all the data blocks used by it (direct and indirect) \mbox{\Hypertarget{io_8c_a53882c0abf3a6515c9b21b8311b47015}\label{io_8c_a53882c0abf3a6515c9b21b8311b47015}} 
+\index{io.c@{io.c}!io\_write@{io\_write}}
+\index{io\_write@{io\_write}!io.c@{io.c}}
+\subsubsection{\texorpdfstring{io\_write()}{io\_write()}}
+{\footnotesize\ttfamily int io\+\_\+write (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{int}]{fd,  }\item[{void $\ast$}]{data,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+writes data to a file descriptor 
+
+does the same thing as {\itshape io\+\_\+write\+\_\+ino} but for file descriptors \mbox{\Hypertarget{io_8c_a1f5fd0175b31fae9c6d7e2b6d8487373}\label{io_8c_a1f5fd0175b31fae9c6d7e2b6d8487373}} 
+\index{io.c@{io.c}!io\_write\_ino@{io\_write\_ino}}
+\index{io\_write\_ino@{io\_write\_ino}!io.c@{io.c}}
+\subsubsection{\texorpdfstring{io\_write\_ino()}{io\_write\_ino()}}
+{\footnotesize\ttfamily int io\+\_\+write\+\_\+ino (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{uint32\+\_\+t}]{inodenum,  }\item[{void $\ast$}]{data,  }\item[{uint32\+\_\+t}]{off,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+writes data to an inode number 
+
+writes the data {\itshape data} with size {\itshape size} starting from the offset {\itshape off} into the inode number {\itshape inodenum} 
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{io_8c_a588d09692facda28c4a702c0a7d9b493}\label{io_8c_a588d09692facda28c4a702c0a7d9b493}} 
+\index{io.c@{io.c}!filedesc\_table@{filedesc\_table}}
+\index{filedesc\_table@{filedesc\_table}!io.c@{io.c}}
+\subsubsection{\texorpdfstring{filedesc\_table}{filedesc\_table}}
+{\footnotesize\ttfamily struct \mbox{\hyperlink{structio__filedesc__table}{io\+\_\+filedesc\+\_\+table}} filedesc\+\_\+table = \{0\}}
+
+The main file descriptor table that holds information about all currently open files. 

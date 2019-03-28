@@ -1,8 +1,8 @@
-\hypertarget{fs_8c}{}\doxysection{src/fs.c File Reference}
+\hypertarget{fs_8c}{}\section{src/fs.c File Reference}
 \label{fs_8c}\index{src/fs.c@{src/fs.c}}
 
 
-main filesystem functions  
+main filesystem utilities  
 
 
 {\ttfamily \#include $<$devutils.\+h$>$}\newline
@@ -12,17 +12,52 @@ main filesystem functions
 {\ttfamily \#include $<$unistd.\+h$>$}\newline
 {\ttfamily \#include $<$stdio.\+h$>$}\newline
 {\ttfamily \#include $<$math.\+h$>$}\newline
-\doxysubsection*{Functions}
+{\ttfamily \#include $<$string.\+h$>$}\newline
+\subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
 int \mbox{\hyperlink{fs_8c_a8e0f528f56de2675994ff4d38ac28942}{fs\+\_\+format\+\_\+super}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs)
 \begin{DoxyCompactList}\small\item\em format the superblock into the virtual filesystem \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{fs_8c_a7e220f2d9e463faa6ed48b24a72e79a0}{fs\+\_\+dump\+\_\+super}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs)
-\begin{DoxyCompactList}\small\item\em dump formatted content of the superblock \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em dump formatted content of the superblock \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{fs_8c_a538713b3121109eb211c8448eabffd22}{fs\+\_\+format}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs)
+\begin{DoxyCompactList}\small\item\em format the filesystem \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{fs_8c_a4c2e18bd1cc27666e2a7a6a57d0c638c}\label{fs_8c_a4c2e18bd1cc27666e2a7a6a57d0c638c}} 
+int {\bfseries fs\+\_\+is\+\_\+data\+\_\+allocated} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t datanum)
+\item 
+\mbox{\Hypertarget{fs_8c_a25a027606e27eaab605d9eacd642aace}\label{fs_8c_a25a027606e27eaab605d9eacd642aace}} 
+int {\bfseries fs\+\_\+is\+\_\+inode\+\_\+allocated} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t inodenum)
+\item 
+int \mbox{\hyperlink{fs_8c_abfc7945259a3ace7684c089d73d40338}{fs\+\_\+alloc\+\_\+inode}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} $\ast$super, uint32\+\_\+t $\ast$inodenum)
+\begin{DoxyCompactList}\small\item\em allocate an inode \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{fs_8c_a0df6f0d2778e7f25cc1f97abd66d1f96}\label{fs_8c_a0df6f0d2778e7f25cc1f97abd66d1f96}} 
+int {\bfseries fs\+\_\+write\+\_\+inode} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t indno, struct \mbox{\hyperlink{structfs__inode}{fs\+\_\+inode}} $\ast$inode)
+\item 
+\mbox{\Hypertarget{fs_8c_a47decd79b4f0cd23d217919b0f546b3d}\label{fs_8c_a47decd79b4f0cd23d217919b0f546b3d}} 
+int {\bfseries fs\+\_\+read\+\_\+inode} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t indno, struct \mbox{\hyperlink{structfs__inode}{fs\+\_\+inode}} $\ast$inode)
+\item 
+\mbox{\Hypertarget{fs_8c_a0cf2db96883c96842b9a8929d3384179}\label{fs_8c_a0cf2db96883c96842b9a8929d3384179}} 
+int {\bfseries fs\+\_\+dump\+\_\+inode} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t inodenum)
+\item 
+\mbox{\Hypertarget{fs_8c_ae55a6476e008c973536249aa38e548c5}\label{fs_8c_ae55a6476e008c973536249aa38e548c5}} 
+int {\bfseries fs\+\_\+alloc\+\_\+data} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} $\ast$super, uint32\+\_\+t data\mbox{[}$\,$\mbox{]}, size\+\_\+t size)
+\item 
+\mbox{\Hypertarget{fs_8c_acc3bb071d5340d42aa027f8bfc1a6b41}\label{fs_8c_acc3bb071d5340d42aa027f8bfc1a6b41}} 
+int {\bfseries fs\+\_\+free\+\_\+inode} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} $\ast$super, uint32\+\_\+t inodenum)
+\item 
+\mbox{\Hypertarget{fs_8c_abef1af270d59a7cb29901e47fad84946}\label{fs_8c_abef1af270d59a7cb29901e47fad84946}} 
+int {\bfseries fs\+\_\+free\+\_\+data} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} $\ast$super, uint32\+\_\+t datanum)
+\item 
+\mbox{\Hypertarget{fs_8c_a3a781019eeca85b9b95c3f910d5b2caf}\label{fs_8c_a3a781019eeca85b9b95c3f910d5b2caf}} 
+int {\bfseries fs\+\_\+write\+\_\+data} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, union \mbox{\hyperlink{unionfs__block}{fs\+\_\+block}} $\ast$data, uint32\+\_\+t $\ast$blknums, size\+\_\+t size)
+\item 
+\mbox{\Hypertarget{fs_8c_a0825ae78294f022bb91dde1b73d024a3}\label{fs_8c_a0825ae78294f022bb91dde1b73d024a3}} 
+int {\bfseries fs\+\_\+read\+\_\+data} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, union \mbox{\hyperlink{unionfs__block}{fs\+\_\+block}} $\ast$data, uint32\+\_\+t $\ast$blknums, size\+\_\+t size)
+\end{DoxyCompactItemize}
 
 
-\doxysubsection{Detailed Description}
-main filesystem functions 
+\subsection{Detailed Description}
+main filesystem utilities 
 
 \begin{DoxyAuthor}{Author}
 A\+B\+D\+E\+L\+M\+O\+U\+M\+E\+NE Djahid 
@@ -31,21 +66,43 @@ A\+Y\+AD Ishak
 \end{DoxyAuthor}
 initializing the partition files and utility functions to interact with the os 
 
-\doxysubsection{Function Documentation}
+\subsection{Function Documentation}
+\mbox{\Hypertarget{fs_8c_abfc7945259a3ace7684c089d73d40338}\label{fs_8c_abfc7945259a3ace7684c089d73d40338}} 
+\index{fs.c@{fs.c}!fs\_alloc\_inode@{fs\_alloc\_inode}}
+\index{fs\_alloc\_inode@{fs\_alloc\_inode}!fs.c@{fs.c}}
+\subsubsection{\texorpdfstring{fs\_alloc\_inode()}{fs\_alloc\_inode()}}
+{\footnotesize\ttfamily int fs\+\_\+alloc\+\_\+inode (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} $\ast$}]{super,  }\item[{uint32\+\_\+t $\ast$}]{inodenum }\end{DoxyParamCaption})}
+
+
+
+allocate an inode 
+
+allocates the first free inode in the inode table \begin{DoxyItemize}
+\item fs\+: the virtual filesystem \item super\+: the superblock \item inodenum\+: the inode number allocated \end{DoxyItemize}
 \mbox{\Hypertarget{fs_8c_a7e220f2d9e463faa6ed48b24a72e79a0}\label{fs_8c_a7e220f2d9e463faa6ed48b24a72e79a0}} 
 \index{fs.c@{fs.c}!fs\_dump\_super@{fs\_dump\_super}}
 \index{fs\_dump\_super@{fs\_dump\_super}!fs.c@{fs.c}}
-\doxysubsubsection{\texorpdfstring{fs\_dump\_super()}{fs\_dump\_super()}}
+\subsubsection{\texorpdfstring{fs\_dump\_super()}{fs\_dump\_super()}}
 {\footnotesize\ttfamily int fs\+\_\+dump\+\_\+super (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs }\end{DoxyParamCaption})}
 
 
 
 dump formatted content of the superblock 
 
-prints a human readable superblock from teh filesystem fs \mbox{\Hypertarget{fs_8c_a8e0f528f56de2675994ff4d38ac28942}\label{fs_8c_a8e0f528f56de2675994ff4d38ac28942}} 
+prints a human readable superblock from teh filesystem fs \mbox{\Hypertarget{fs_8c_a538713b3121109eb211c8448eabffd22}\label{fs_8c_a538713b3121109eb211c8448eabffd22}} 
+\index{fs.c@{fs.c}!fs\_format@{fs\_format}}
+\index{fs\_format@{fs\_format}!fs.c@{fs.c}}
+\subsubsection{\texorpdfstring{fs\_format()}{fs\_format()}}
+{\footnotesize\ttfamily int fs\+\_\+format (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs }\end{DoxyParamCaption})}
+
+
+
+format the filesystem 
+
+formats the superblock and sets the bitmaps to 0 \mbox{\Hypertarget{fs_8c_a8e0f528f56de2675994ff4d38ac28942}\label{fs_8c_a8e0f528f56de2675994ff4d38ac28942}} 
 \index{fs.c@{fs.c}!fs\_format\_super@{fs\_format\_super}}
 \index{fs\_format\_super@{fs\_format\_super}!fs.c@{fs.c}}
-\doxysubsubsection{\texorpdfstring{fs\_format\_super()}{fs\_format\_super()}}
+\subsubsection{\texorpdfstring{fs\_format\_super()}{fs\_format\_super()}}
 {\footnotesize\ttfamily int fs\+\_\+format\+\_\+super (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs }\end{DoxyParamCaption})}
 
 

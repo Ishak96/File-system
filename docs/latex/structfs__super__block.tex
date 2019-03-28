@@ -1,4 +1,4 @@
-\hypertarget{structfs__super__block}{}\doxysection{fs\+\_\+super\+\_\+block Struct Reference}
+\hypertarget{structfs__super__block}{}\section{fs\+\_\+super\+\_\+block Struct Reference}
 \label{structfs__super__block}\index{fs\_super\_block@{fs\_super\_block}}
 
 
@@ -9,7 +9,7 @@ super block structure
 
 {\ttfamily \#include $<$fs.\+h$>$}
 
-\doxysubsection*{Data Fields}
+\subsection*{Data Fields}
 \begin{DoxyCompactItemize}
 \item 
 uint32\+\_\+t \mbox{\hyperlink{structfs__super__block_a88023897ee9909bf6ff9eca784d567e2}{magic}}
@@ -46,106 +46,106 @@ uint32\+\_\+t \mbox{\hyperlink{structfs__super__block_a5d78b92b328dc31727f13679d
 \end{DoxyCompactItemize}
 
 
-\doxysubsection{Detailed Description}
+\subsection{Detailed Description}
 super block structure 
 
 the structure of the super block the first block stored stored in memory contains general information about the filesystem and other useful information, with a total size of 40 bytes. 
 
-\doxysubsection{Field Documentation}
+\subsection{Field Documentation}
 \mbox{\Hypertarget{structfs__super__block_af8051b81bc195298cec178c726c84127}\label{structfs__super__block_af8051b81bc195298cec178c726c84127}} 
 \index{fs\_super\_block@{fs\_super\_block}!data\_bitmap\_loc@{data\_bitmap\_loc}}
 \index{data\_bitmap\_loc@{data\_bitmap\_loc}!fs\_super\_block@{fs\_super\_block}}
-\doxysubsubsection{\texorpdfstring{data\_bitmap\_loc}{data\_bitmap\_loc}}
+\subsubsection{\texorpdfstring{data\_bitmap\_loc}{data\_bitmap\_loc}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::data\+\_\+bitmap\+\_\+loc}
 
 data bitmap location in block num \mbox{\Hypertarget{structfs__super__block_ab6371fd268dc5744f7fe5df0968f6b83}\label{structfs__super__block_ab6371fd268dc5744f7fe5df0968f6b83}} 
 \index{fs\_super\_block@{fs\_super\_block}!data\_bitmap\_size@{data\_bitmap\_size}}
 \index{data\_bitmap\_size@{data\_bitmap\_size}!fs\_super\_block@{fs\_super\_block}}
-\doxysubsubsection{\texorpdfstring{data\_bitmap\_size}{data\_bitmap\_size}}
+\subsubsection{\texorpdfstring{data\_bitmap\_size}{data\_bitmap\_size}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::data\+\_\+bitmap\+\_\+size}
 
 data bitmap size in blocks \mbox{\Hypertarget{structfs__super__block_a8a0178409891f1219ced9c2fd1e0068b}\label{structfs__super__block_a8a0178409891f1219ced9c2fd1e0068b}} 
 \index{fs\_super\_block@{fs\_super\_block}!data\_count@{data\_count}}
 \index{data\_count@{data\_count}!fs\_super\_block@{fs\_super\_block}}
-\doxysubsubsection{\texorpdfstring{data\_count}{data\_count}}
+\subsubsection{\texorpdfstring{data\_count}{data\_count}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::data\+\_\+count}
 
 no of data blocks \mbox{\Hypertarget{structfs__super__block_ac6a84fc2c9eba4a9582fa6d353ebfe48}\label{structfs__super__block_ac6a84fc2c9eba4a9582fa6d353ebfe48}} 
 \index{fs\_super\_block@{fs\_super\_block}!data\_loc@{data\_loc}}
 \index{data\_loc@{data\_loc}!fs\_super\_block@{fs\_super\_block}}
-\doxysubsubsection{\texorpdfstring{data\_loc}{data\_loc}}
+\subsubsection{\texorpdfstring{data\_loc}{data\_loc}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::data\+\_\+loc}
 
 location of the data in blocks \mbox{\Hypertarget{structfs__super__block_a6459a0a9030ccf53627c0e9dae409ffb}\label{structfs__super__block_a6459a0a9030ccf53627c0e9dae409ffb}} 
 \index{fs\_super\_block@{fs\_super\_block}!free\_data\_count@{free\_data\_count}}
 \index{free\_data\_count@{free\_data\_count}!fs\_super\_block@{fs\_super\_block}}
-\doxysubsubsection{\texorpdfstring{free\_data\_count}{free\_data\_count}}
+\subsubsection{\texorpdfstring{free\_data\_count}{free\_data\_count}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::free\+\_\+data\+\_\+count}
 
 no of free blocks \mbox{\Hypertarget{structfs__super__block_a75c0f4cee23a5c4fc26aebb044e04b0c}\label{structfs__super__block_a75c0f4cee23a5c4fc26aebb044e04b0c}} 
 \index{fs\_super\_block@{fs\_super\_block}!free\_inode\_count@{free\_inode\_count}}
 \index{free\_inode\_count@{free\_inode\_count}!fs\_super\_block@{fs\_super\_block}}
-\doxysubsubsection{\texorpdfstring{free\_inode\_count}{free\_inode\_count}}
+\subsubsection{\texorpdfstring{free\_inode\_count}{free\_inode\_count}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::free\+\_\+inode\+\_\+count}
 
 no of free inodes \mbox{\Hypertarget{structfs__super__block_a5e83f889d5db257bc33f950abd995f69}\label{structfs__super__block_a5e83f889d5db257bc33f950abd995f69}} 
 \index{fs\_super\_block@{fs\_super\_block}!inode\_bitmap\_loc@{inode\_bitmap\_loc}}
 \index{inode\_bitmap\_loc@{inode\_bitmap\_loc}!fs\_super\_block@{fs\_super\_block}}
-\doxysubsubsection{\texorpdfstring{inode\_bitmap\_loc}{inode\_bitmap\_loc}}
+\subsubsection{\texorpdfstring{inode\_bitmap\_loc}{inode\_bitmap\_loc}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::inode\+\_\+bitmap\+\_\+loc}
 
 inode bitmap location in block num \mbox{\Hypertarget{structfs__super__block_ae856dbcd9e4f0adcdbaa26f3ce7b8e81}\label{structfs__super__block_ae856dbcd9e4f0adcdbaa26f3ce7b8e81}} 
 \index{fs\_super\_block@{fs\_super\_block}!inode\_bitmap\_size@{inode\_bitmap\_size}}
 \index{inode\_bitmap\_size@{inode\_bitmap\_size}!fs\_super\_block@{fs\_super\_block}}
-\doxysubsubsection{\texorpdfstring{inode\_bitmap\_size}{inode\_bitmap\_size}}
+\subsubsection{\texorpdfstring{inode\_bitmap\_size}{inode\_bitmap\_size}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::inode\+\_\+bitmap\+\_\+size}
 
 inode bitmap size in blocks \mbox{\Hypertarget{structfs__super__block_a9e679848231dc7346ca94512086bdbda}\label{structfs__super__block_a9e679848231dc7346ca94512086bdbda}} 
 \index{fs\_super\_block@{fs\_super\_block}!inode\_count@{inode\_count}}
 \index{inode\_count@{inode\_count}!fs\_super\_block@{fs\_super\_block}}
-\doxysubsubsection{\texorpdfstring{inode\_count}{inode\_count}}
+\subsubsection{\texorpdfstring{inode\_count}{inode\_count}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::inode\+\_\+count}
 
 no of inodes in blocks \mbox{\Hypertarget{structfs__super__block_a8116de09befb4e9d92944f09d2b1da1b}\label{structfs__super__block_a8116de09befb4e9d92944f09d2b1da1b}} 
 \index{fs\_super\_block@{fs\_super\_block}!inode\_loc@{inode\_loc}}
 \index{inode\_loc@{inode\_loc}!fs\_super\_block@{fs\_super\_block}}
-\doxysubsubsection{\texorpdfstring{inode\_loc}{inode\_loc}}
+\subsubsection{\texorpdfstring{inode\_loc}{inode\_loc}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::inode\+\_\+loc}
 
 location of inodes in block num \mbox{\Hypertarget{structfs__super__block_a88023897ee9909bf6ff9eca784d567e2}\label{structfs__super__block_a88023897ee9909bf6ff9eca784d567e2}} 
 \index{fs\_super\_block@{fs\_super\_block}!magic@{magic}}
 \index{magic@{magic}!fs\_super\_block@{fs\_super\_block}}
-\doxysubsubsection{\texorpdfstring{magic}{magic}}
+\subsubsection{\texorpdfstring{magic}{magic}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::magic}
 
 the filesystem magic number \mbox{\Hypertarget{structfs__super__block_a80a6cf210fcf039e50f9e461fc2d194c}\label{structfs__super__block_a80a6cf210fcf039e50f9e461fc2d194c}} 
 \index{fs\_super\_block@{fs\_super\_block}!mounts@{mounts}}
 \index{mounts@{mounts}!fs\_super\_block@{fs\_super\_block}}
-\doxysubsubsection{\texorpdfstring{mounts}{mounts}}
+\subsubsection{\texorpdfstring{mounts}{mounts}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::mounts}
 
 number of mounts \mbox{\Hypertarget{structfs__super__block_a9e20ccc1cc4eddf763de59d2e108084f}\label{structfs__super__block_a9e20ccc1cc4eddf763de59d2e108084f}} 
 \index{fs\_super\_block@{fs\_super\_block}!mtime@{mtime}}
 \index{mtime@{mtime}!fs\_super\_block@{fs\_super\_block}}
-\doxysubsubsection{\texorpdfstring{mtime}{mtime}}
+\subsubsection{\texorpdfstring{mtime}{mtime}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::mtime}
 
 time of mount of the filesystem \mbox{\Hypertarget{structfs__super__block_a342bcfecfe5c06a1f8026d4aa5d8c6a8}\label{structfs__super__block_a342bcfecfe5c06a1f8026d4aa5d8c6a8}} 
 \index{fs\_super\_block@{fs\_super\_block}!nreads@{nreads}}
 \index{nreads@{nreads}!fs\_super\_block@{fs\_super\_block}}
-\doxysubsubsection{\texorpdfstring{nreads}{nreads}}
+\subsubsection{\texorpdfstring{nreads}{nreads}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::nreads}
 
 number of reads performed \mbox{\Hypertarget{structfs__super__block_ae8b149fd2b7f95fb0c277440604aabc7}\label{structfs__super__block_ae8b149fd2b7f95fb0c277440604aabc7}} 
 \index{fs\_super\_block@{fs\_super\_block}!nwrites@{nwrites}}
 \index{nwrites@{nwrites}!fs\_super\_block@{fs\_super\_block}}
-\doxysubsubsection{\texorpdfstring{nwrites}{nwrites}}
+\subsubsection{\texorpdfstring{nwrites}{nwrites}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::nwrites}
 
 number of writes performed \mbox{\Hypertarget{structfs__super__block_a5d78b92b328dc31727f13679d9148cc0}\label{structfs__super__block_a5d78b92b328dc31727f13679d9148cc0}} 
 \index{fs\_super\_block@{fs\_super\_block}!wtime@{wtime}}
 \index{wtime@{wtime}!fs\_super\_block@{fs\_super\_block}}
-\doxysubsubsection{\texorpdfstring{wtime}{wtime}}
+\subsubsection{\texorpdfstring{wtime}{wtime}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+super\+\_\+block\+::wtime}
 
 last write time 

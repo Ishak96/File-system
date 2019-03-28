@@ -1,0 +1,193 @@
+.TH "src/io.c" 3 "Thu Mar 28 2019" "File Manager" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/io.c \- filesystem input/output operations  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <io\&.h>\fP
+.br
+\fC#include <fs\&.h>\fP
+.br
+\fC#include <devutils\&.h>\fP
+.br
+\fC#include <disk\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBio_open_fd\fP (uint32_t inodenum)"
+.br
+.RI "allocates a new file descriptor with an inodenum "
+.ti -1c
+.RI "int \fBio_close_fd\fP (int fd)"
+.br
+.RI "closes an already open file descriptor "
+.ti -1c
+.RI "int \fBio_iopen\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t inodenum)"
+.br
+.RI "opens a new file without creating a new inode "
+.ti -1c
+.RI "int \fBio_open_creat\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint16_t mode, uint32_t *inodenum)"
+.br
+.ti -1c
+.RI "int \fBio_open_creat_fd\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint16_t mode)"
+.br
+.RI "creates a new file with a new inodenum "
+.ti -1c
+.RI "int \fBio_lazy_alloc\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t inodenum, struct \fBfs_inode\fP *ind, size_t off, size_t size)"
+.br
+.RI "allocates blocks based on \fIoff\fP and \fIsize\fP "
+.ti -1c
+.RI "int \fBio_lseek\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, int fd, size_t new_off)"
+.br
+.RI "changes the current offset of the file descriptor "
+.ti -1c
+.RI "int \fBio_write_ino\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t inodenum, void *data, uint32_t off, size_t size)"
+.br
+.RI "writes data to an inode number "
+.ti -1c
+.RI "int \fBio_write\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, int fd, void *data, size_t size)"
+.br
+.RI "writes data to a file descriptor "
+.ti -1c
+.RI "int \fBio_read_ino\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t inodenum, void *data, uint32_t off, size_t size)"
+.br
+.RI "read data from an inode number "
+.ti -1c
+.RI "int \fBio_read\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, int fd, void *data, size_t size)"
+.br
+.RI "reads data from a file descriptor "
+.ti -1c
+.RI "int \fBio_rm_ino\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t inodenum)"
+.br
+.RI "removes all from inode number inodenum "
+.ti -1c
+.RI "int \fBio_rm\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, int fd)"
+.br
+.RI "removes the inodenumber corresponding to the fd "
+.ti -1c
+.RI "uint32_t \fBio_getino\fP (int fd)"
+.br
+.RI "get the corresponding inode number from the file descriptor "
+.ti -1c
+.RI "size_t \fBio_getoff\fP (int fd)"
+.br
+.RI "get the corresponding offset from the file descriptor "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "struct \fBio_filedesc_table\fP \fBfiledesc_table\fP = {0}"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+filesystem input/output operations 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+ABDELMOUMENE Djahid 
+.PP
+AYAD Ishak
+.RE
+.PP
+contains the main functions to create, destroy, read and write to files, also contains a system of file descriptors\&. 
+.SH "Function Documentation"
+.PP 
+.SS "int io_close_fd (int fd)"
+
+.PP
+closes an already open file descriptor 
+.PP
+\fBReturns:\fP
+.RS 4
+returns 0 in case of success, -1 if the fd was never allocated or invalid\&. 
+.RE
+.PP
+
+.SS "int io_iopen (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t inodenum)"
+
+.PP
+opens a new file without creating a new inode tries to open the corresponding \fIinodenum\fP from the inode table\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+returns the fd of the now open file in case of success, or -1 in case of failure 
+.RE
+.PP
+
+.SS "int io_lazy_alloc (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t inodenum, struct \fBfs_inode\fP * ind, size_t off, size_t size)"
+
+.PP
+allocates blocks based on \fIoff\fP and \fIsize\fP a utility functions used by io_write to allocate the least possible amount of blocks based on the writing offset \fIoff\fP and the writing size \fIsize\fP\&. 
+.SS "int io_lseek (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, int fd, size_t new_off)"
+
+.PP
+changes the current offset of the file descriptor changes the offset of the file descriptor \fIfd\fP to \fInew_off\fP 
+.SS "int io_open_creat_fd (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint16_t mode)"
+
+.PP
+creates a new file with a new inodenum allocates an inode and opens a new file descriptor, 
+.PP
+\fBReturns:\fP
+.RS 4
+returns an fd of the created file in case of success, else it returns -1\&. 
+.RE
+.PP
+
+.SS "int io_open_fd (uint32_t inodenum)"
+
+.PP
+allocates a new file descriptor with an inodenum allocates a file descriptor with the inode number given in arguments\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+returns the a file descriptor (>0) in case of success, else it returns -1\&. 
+.RE
+.PP
+
+.SS "int io_read (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, int fd, void * data, size_t size)"
+
+.PP
+reads data from a file descriptor does the same thing as \fIio_read_ino\fP but for file descriptors 
+.SS "int io_read_ino (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t inodenum, void * data, uint32_t off, size_t size)"
+
+.PP
+read data from an inode number reads data from the inode number \fIinodenum\fP and puts it in the pointer \fIdata\fP with size \fIsize\fP starting from the offset \fIoff\fP 
+.SS "int io_rm (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, int fd)"
+
+.PP
+removes the inodenumber corresponding to the fd does the same thing as io_rm_ino but for file descriptors 
+.SS "int io_rm_ino (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t inodenum)"
+
+.PP
+removes all from inode number inodenum frees the inode \fIinodenum\fP along with all the data blocks used by it (direct and indirect) 
+.SS "int io_write (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, int fd, void * data, size_t size)"
+
+.PP
+writes data to a file descriptor does the same thing as \fIio_write_ino\fP but for file descriptors 
+.SS "int io_write_ino (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t inodenum, void * data, uint32_t off, size_t size)"
+
+.PP
+writes data to an inode number writes the data \fIdata\fP with size \fIsize\fP starting from the offset \fIoff\fP into the inode number \fIinodenum\fP 
+.SH "Variable Documentation"
+.PP 
+.SS "struct \fBio_filedesc_table\fP filedesc_table = {0}"
+The main file descriptor table that holds information about all currently open files\&. 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for File Manager from the source code\&.

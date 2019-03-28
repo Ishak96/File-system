@@ -38,14 +38,10 @@ int main(int argc, char** argv) {
 	
 	printf("The value written is %d\n", value);
 	
-	//~ printf("ls of /DIR\n");
-	//~ ls_(dir);
 	printf("ls of /\n");
 	ls_(rootdir);
 
 	
-	//~ closedir_(dir);
-	//~ closedir_(rootdir);
 	close_(filefd);
 	close_(filefd1);
 	closefs();

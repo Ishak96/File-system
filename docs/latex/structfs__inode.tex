@@ -1,4 +1,4 @@
-\hypertarget{structfs__inode}{}\doxysection{fs\+\_\+inode Struct Reference}
+\hypertarget{structfs__inode}{}\section{fs\+\_\+inode Struct Reference}
 \label{structfs__inode}\index{fs\_inode@{fs\_inode}}
 
 
@@ -9,7 +9,7 @@ inode structure
 
 {\ttfamily \#include $<$fs.\+h$>$}
 
-\doxysubsection*{Data Fields}
+\subsection*{Data Fields}
 \begin{DoxyCompactItemize}
 \item 
 uint16\+\_\+t \mbox{\hyperlink{structfs__inode_a04b2f2016a6abba84872c15d6554c6b1}{mode}}
@@ -24,64 +24,67 @@ uint32\+\_\+t \mbox{\hyperlink{structfs__inode_ab11566bfc13bcd9f7cf24121447b0cfd
 \item 
 uint32\+\_\+t \mbox{\hyperlink{structfs__inode_ac10de2ad4b7c87da65fc17b5674b5759}{size}}
 \item 
+\mbox{\Hypertarget{structfs__inode_a0057adf5604e607679e68a94ab3e5cd9}\label{structfs__inode_a0057adf5604e607679e68a94ab3e5cd9}} 
+uint32\+\_\+t {\bfseries hcount}
+\item 
 uint32\+\_\+t \mbox{\hyperlink{structfs__inode_a2d0c4627d2c8925e6a51502fa47685aa}{direct}} \mbox{[}F\+S\+\_\+\+D\+I\+R\+E\+C\+T\+\_\+\+P\+O\+I\+N\+T\+E\+R\+S\+\_\+\+P\+E\+R\+\_\+\+I\+N\+O\+DE\mbox{]}
 \item 
 uint32\+\_\+t \mbox{\hyperlink{structfs__inode_a5cde1770f044b6566f36f6acdf958beb}{indirect}}
 \end{DoxyCompactItemize}
 
 
-\doxysubsection{Detailed Description}
+\subsection{Detailed Description}
 inode structure 
 
 the structure of inodes contains information about one file with a total size of 54 bytes. 
 
-\doxysubsection{Field Documentation}
+\subsection{Field Documentation}
 \mbox{\Hypertarget{structfs__inode_a3c7fa94aa9d0d94355efb5fd53613a64}\label{structfs__inode_a3c7fa94aa9d0d94355efb5fd53613a64}} 
 \index{fs\_inode@{fs\_inode}!atime@{atime}}
 \index{atime@{atime}!fs\_inode@{fs\_inode}}
-\doxysubsubsection{\texorpdfstring{atime}{atime}}
+\subsubsection{\texorpdfstring{atime}{atime}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+inode\+::atime}
 
 last access time in seconds since the epoch \mbox{\Hypertarget{structfs__inode_a2d0c4627d2c8925e6a51502fa47685aa}\label{structfs__inode_a2d0c4627d2c8925e6a51502fa47685aa}} 
 \index{fs\_inode@{fs\_inode}!direct@{direct}}
 \index{direct@{direct}!fs\_inode@{fs\_inode}}
-\doxysubsubsection{\texorpdfstring{direct}{direct}}
+\subsubsection{\texorpdfstring{direct}{direct}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+inode\+::direct\mbox{[}F\+S\+\_\+\+D\+I\+R\+E\+C\+T\+\_\+\+P\+O\+I\+N\+T\+E\+R\+S\+\_\+\+P\+E\+R\+\_\+\+I\+N\+O\+DE\mbox{]}}
 
 direct data blocks \mbox{\Hypertarget{structfs__inode_a93b1c3bdde3437a4dbfe538ffe47dc01}\label{structfs__inode_a93b1c3bdde3437a4dbfe538ffe47dc01}} 
 \index{fs\_inode@{fs\_inode}!gid@{gid}}
 \index{gid@{gid}!fs\_inode@{fs\_inode}}
-\doxysubsubsection{\texorpdfstring{gid}{gid}}
+\subsubsection{\texorpdfstring{gid}{gid}}
 {\footnotesize\ttfamily uint16\+\_\+t fs\+\_\+inode\+::gid}
 
 group id of owners \mbox{\Hypertarget{structfs__inode_a5cde1770f044b6566f36f6acdf958beb}\label{structfs__inode_a5cde1770f044b6566f36f6acdf958beb}} 
 \index{fs\_inode@{fs\_inode}!indirect@{indirect}}
 \index{indirect@{indirect}!fs\_inode@{fs\_inode}}
-\doxysubsubsection{\texorpdfstring{indirect}{indirect}}
+\subsubsection{\texorpdfstring{indirect}{indirect}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+inode\+::indirect}
 
 indirect data blocks \mbox{\Hypertarget{structfs__inode_a04b2f2016a6abba84872c15d6554c6b1}\label{structfs__inode_a04b2f2016a6abba84872c15d6554c6b1}} 
 \index{fs\_inode@{fs\_inode}!mode@{mode}}
 \index{mode@{mode}!fs\_inode@{fs\_inode}}
-\doxysubsubsection{\texorpdfstring{mode}{mode}}
+\subsubsection{\texorpdfstring{mode}{mode}}
 {\footnotesize\ttfamily uint16\+\_\+t fs\+\_\+inode\+::mode}
 
 file type and permissions \mbox{\Hypertarget{structfs__inode_ab11566bfc13bcd9f7cf24121447b0cfd}\label{structfs__inode_ab11566bfc13bcd9f7cf24121447b0cfd}} 
 \index{fs\_inode@{fs\_inode}!mtime@{mtime}}
 \index{mtime@{mtime}!fs\_inode@{fs\_inode}}
-\doxysubsubsection{\texorpdfstring{mtime}{mtime}}
+\subsubsection{\texorpdfstring{mtime}{mtime}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+inode\+::mtime}
 
 last modification time in seconds since the epoch \mbox{\Hypertarget{structfs__inode_ac10de2ad4b7c87da65fc17b5674b5759}\label{structfs__inode_ac10de2ad4b7c87da65fc17b5674b5759}} 
 \index{fs\_inode@{fs\_inode}!size@{size}}
 \index{size@{size}!fs\_inode@{fs\_inode}}
-\doxysubsubsection{\texorpdfstring{size}{size}}
+\subsubsection{\texorpdfstring{size}{size}}
 {\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+inode\+::size}
 
 size of the file in bytes \mbox{\Hypertarget{structfs__inode_ada0d9d68adb122d7e83558a1b8f683ec}\label{structfs__inode_ada0d9d68adb122d7e83558a1b8f683ec}} 
 \index{fs\_inode@{fs\_inode}!uid@{uid}}
 \index{uid@{uid}!fs\_inode@{fs\_inode}}
-\doxysubsubsection{\texorpdfstring{uid}{uid}}
+\subsubsection{\texorpdfstring{uid}{uid}}
 {\footnotesize\ttfamily uint16\+\_\+t fs\+\_\+inode\+::uid}
 
 id of owner 
