@@ -27,11 +27,11 @@ int exitflag = 0;
 int filepid;
 int argcount = 0;
 char cwd[BUFSIZE];
-char* argval[ARGMAX]; // our local argc, argv
+char** argval; // our local argc, argv
 
 int __exit();
 char* getPath(char* cur, char* path) ;
-void __pwd(char*, int);
+void __pwd(char*);
 void __cd(char*);
 void __touch(char*);
 void __rm(char*);
@@ -50,7 +50,8 @@ void screenfetch();
 
 int main(int argc, char* argv[])
 {
-	int format = 0;
+   int format = 0;
+   argval =( char ** ) malloc ( ARGMAX * sizeof ( char *) ) ;
    if(argc < 2) {
 		printf("use: %s [-f --format] <disk>\n",argv[0]);
 		return 1;
@@ -78,7 +79,7 @@ int main(int argc, char* argv[])
         }
         else if(strcmp(argval[0],"pwd")==0)
         {
-            __pwd(cwd,1);
+            __pwd(cwd);
         }
         else if(strcmp(argval[0],"cd")==0)
         {
@@ -209,7 +210,10 @@ int main(int argc, char* argv[])
 }
 
 
-/*get input containing spaces and tabs and store it in argval*/
+/**
+* @breif get input 
+* @details get input containing spaces and tabs and store it in argval
+*/
 void getInput()
 {
     fflush(stdout); // clear all previous buffers if any
@@ -231,6 +235,12 @@ void getInput()
     }
     free(input);
 }
+/**
+* @breif resolve symlink
+* @details resolve symlink for .. and . case
+* @param sym 	the symlink
+* @return string without .. and .
+*/
 char* resolve_symlink(char* sym) {
 	if(sym == NULL) {
 		return NULL;
@@ -298,7 +308,10 @@ char* getPath(char* cur, char* path) {
 	}
 	return res;
 }
-/* read th e file */
+/**
+* @brief read file
+* @param path 	the file path to read 
+*/
 void __cat(char* path)
 {
 	char tmp_cwd[BUFSIZE];
@@ -331,7 +344,11 @@ void __cat(char* path)
 	close_(fd);
 }
 
-/* write in a file */
+/**
+* @breif write in a file 
+* @param path 	the file path to write in
+* @param data	string of characters to write
+*/
 void __write(char* path, char* data) {
 	char tmp_cwd[BUFSIZE];
 	char* new_path = getPath(cwd, path);
@@ -354,7 +371,11 @@ void __write(char* path, char* data) {
 	close_(fd);
 }
 
-/* copy one file to another */
+/**
+* @breif copy one file to another 
+* @param file1	name of the first file
+* @param file2 name of the second file
+*/
 void __cp(char* file1, char* file2)
 {
 	if(file1 == NULL || file2 == NULL){
@@ -367,7 +388,11 @@ void __cp(char* file1, char* file2)
 	}
 }
 
-/* create a hard link */
+/** 
+* @breif create a hard link 
+* @param file1	name of the first file
+* @param file2 name of the second file
+*/
 void __ln(char* file1, char* file2)
 {
 	if(file1 == NULL || file2 == NULL){
@@ -380,7 +405,11 @@ void __ln(char* file1, char* file2)
 	}
 }
 
-/* move one file to another */
+/**
+* @breif move one file to another 
+* @param file1	name of the first file
+* @param file2 name of the second file
+*/
 void __mv(char* file1, char* file2)
 {
 	if(file1 == NULL || file2 == NULL){
@@ -393,7 +422,10 @@ void __mv(char* file1, char* file2)
 	}
 }
 
-/*ls -l  lists date permissions etc*/
+/**
+* @breif ls -l  lists date permissions etc
+* @param path 	path of the folder
+*/
 void __lsl(char* path)
 {
 	char tmp_cwd[BUFSIZE] = {0};
@@ -408,7 +440,10 @@ void __lsl(char* path)
 	lsl_(tmp_cwd);
 }
 
-/* list cwd contents*/
+/**
+* @breif list cwd contents
+* @param path 	path of the folder
+*/
 void __ls(char* path)
 {
 	char tmp_cwd[BUFSIZE] = {0};
@@ -423,14 +458,19 @@ void __ls(char* path)
 	ls_(tmp_cwd);
 }
 
-/* clear the screen*/
+/** 
+* @breif clear the screen
+*/
 void __clear()
 {
     const char* blank = "\e[1;1H\e[2J";
     write(STDOUT_FILENO,blank,12);
 }
 
-/* remove folder */
+/**
+* @breif remove folder 
+* @param name	dire name
+*/
 void __rmdir(char* name)
 {
 	char tmp_cwd[BUFSIZE];
@@ -446,7 +486,10 @@ void __rmdir(char* name)
 	rmdir_(tmp_cwd, 1);
 }
 
-/* remove file */
+/**
+* @breif remove file 
+* @param name	file name
+*/
 void __rm(char* name){
 	char tmp_cwd[BUFSIZE];
 	strcpy(tmp_cwd, cwd);
@@ -461,7 +504,10 @@ void __rm(char* name){
 	rm_(tmp_cwd);
 }
 
-/* Make folder */
+/** 
+* @breif Make folder 
+* @param name	dir name
+*/
 void __mkdir(char* name)
 {
 	char tmp_cwd[BUFSIZE];
@@ -479,7 +525,10 @@ void __mkdir(char* name)
 }
 
 
-/*Make file*/
+/**
+* @breif Make file
+* @param name	file name
+*/
 void __touch(char* name){
 	char tmp_cwd[BUFSIZE];
 	strcpy(tmp_cwd, cwd);
@@ -499,38 +548,53 @@ void __touch(char* name){
 	close_(fd);
 }
 
-/*change directory functionality*/
+/**
+* @breif change directory functionality
+* @param path 	new path
+*/
 void __cd(char* path)
 {
-	char temp_str[BUFSIZE] = {0};
-	strcat(temp_str, cwd);
+	if(path == NULL || strlen(path) == 0){
+		strcpy(cwd, "/");
+	}
+	else{
+		char temp_str[BUFSIZE] = {0};
+		strcat(temp_str, cwd);
 
-	char* new_path = getPath(cwd, path);
-	if(new_path == NULL) {
-		fprintf(stderr, "cannot resolve path\n");
-		return;
+		char* new_path = getPath(cwd, path);
+		if(new_path == NULL) {
+			fprintf(stderr, "cannot resolve path\n");
+			return;
+		}
+		strcpy(cwd, new_path);
+		free(new_path);
+		DIR_* dir = opendir_(cwd, 0, 0);
+		if(dir == NULL) {
+			fprintf(stderr, "directory %s does not exist\n", cwd);
+			strcpy(cwd, temp_str);
+			return;
+		}
+		closedir_(dir);
 	}
-	strcpy(cwd, new_path);
-	free(new_path);
-	DIR_* dir = opendir_(cwd, 0, 0);
-	if(dir == NULL) {
-		fprintf(stderr, "directory %s does not exist\n", cwd);
-		strcpy(cwd, temp_str);
-		return;
-	}
-	closedir_(dir);
 }
 
-/*Implement basic exit*/
+/**
+* @breif Implement basic exit
+* @return 0
+*/
 int __exit()
 {
     exitflag = 1;
+    free(argval);
     closefs();
     return 0;
 }
 
-/* Implement pwd function in shell - 1 prints, 0 stores*/
-void __pwd(char* cwdstr,int command)
+/**
+* @breif Implement pwd function in shell - 1 prints, 0 stores
+* @param cwdstr 	Curret Working Directory
+*/
+void __pwd(char* cwdstr)
 {
 	if(cwdstr != NULL)
     	printf("%s\n",cwdstr);
