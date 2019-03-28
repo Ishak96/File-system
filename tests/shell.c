@@ -25,6 +25,7 @@
 #define DEF "\x1B[0m"
 #define ARGMAX 10
 #define BUFSIZE 1000
+#define DEFAULT_SIZE 100000
 
 
 char *input,*input1;
@@ -33,6 +34,7 @@ int filepid;
 int argcount = 0;
 char cwd[BUFSIZE];
 char* argval[ARGMAX]; // our local argc, argv
+DIR_* dir;
 
 int __exit();
 void __pwd(char*, int);
@@ -54,12 +56,16 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	if(initfs(argv[1],atoi(argv[2])) < 0) {
-		fprintf(stderr,"shell : creatfile %s\n",argv[1]);
-		return 1;
+	int size = atoi(argv[2]);
+	if(size < DEFAULT_SIZE)
+		size = DEFAULT_SIZE;
+
+	if(initfs(argv[1],size) < 0) {
+			fprintf(stderr,"shell : creatfile %s\n",argv[1]);
+			return 1;
 	}
 	printf("opened emulated disk image %s\n",argv[1]);
-	DIR_* rootdir = opendir_("/", 0, 0);
+	dir = opendir_("/", 0, 0);
 	strcpy(cwd, "/");
 
     while(exitflag==0)
@@ -117,7 +123,7 @@ int main(int argc, char* argv[])
             }
         }
     }
-   closedir_(rootdir);
+   closedir_(dir);
 }
 
 /*get input containing spaces and tabs and store it in argval*/
@@ -164,7 +170,7 @@ void __lsl()
 /* list cwd contents*/
 void __ls()
 {
-
+	ls_(cwd);
 }
 
 /* clear the screen*/
@@ -183,20 +189,32 @@ void __rmdir(char* name)
 /* Make folder */
 void __mkdir(char* name)
 {
+	char tmp_cwd[BUFSIZE];
+	strcpy(tmp_cwd, cwd);
+	strcat(tmp_cwd, name);
 
+	opendir_(tmp_cwd, 1, 0);
 }
 
 /*change directory functionality*/
 void __cd(char* path)
 {
-	strcat(cwd, path);
+	char tmp_cwd[BUFSIZE];
+	strcpy(tmp_cwd, cwd);
+	strcat(tmp_cwd, path);
+
+	DIR_* dirtmp = opendir_(tmp_cwd, 0, 1);
+	if(dirtmp != NULL){
+		dir = dirtmp;
+		strcat(cwd, path);
+	}
 }
 
 /*Implement basic exit*/
 int __exit()
 {
     exitflag = 1;
-    return 0; // return 0 to parent process in run.c
+    return 0;
 }
 
 /* Implement pwd function in shell - 1 prints, 0 stores*/
