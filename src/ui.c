@@ -1,3 +1,11 @@
+/**
+ * @file ui.c
+ * @author ABDELMOUMENE Djahid 
+ * @author AYAD Ishak 
+ * @brief The main functions to be used by the fs users
+ * @details contains utility functions such as formatting the fs and
+ * opening and writing to files and so on.
+ */
 #include <io.h>
 #include <fs.h>
 #include <devutils.h>
@@ -13,6 +21,14 @@
 struct fs_filesyst fs;
 struct fs_super_block super;
 
+/**
+ * @brief initializes the system
+ * @details fills the global variables fs and super
+ * @param filename    the filename of the fs
+ * @param size        the size of the fs
+ * @param format      a boolean of wether to format the virtual partition
+ * @return 0 in case of success or -1 in case of an error
+ */
 int initfs(char* filename, size_t size, int format) {
 	srand(time(NULL));
 	printf("Opening filesyst..\n");
@@ -43,7 +59,11 @@ int initfs(char* filename, size_t size, int format) {
 	return 0;
 }
 
-
+/**
+ * @brief a utility function to get the inode of the parent
+ * @param parentino the pointer to put the inode in
+ * @return 0 in case of success or -1 in case of an error
+ */
 int getParentInode(const char* filepath, uint32_t* parentino) {
 	char* filename_copy = strdup(filepath);
 	
@@ -57,6 +77,13 @@ int getParentInode(const char* filepath, uint32_t* parentino) {
 	return 0;
 }
 
+/**
+ * @brief opens a directory
+ * @details opens the directory with pathname *dirname*, or creates it 
+ * if the *creat* parameter is set to not null, the *perms* are set to 
+ * the created directory in that case.
+ * @return the opened directory pointer, or NULL in case of an error
+ */
 DIR_* opendir_(const char* dirname, int creat, uint16_t perms) {
 	DIR_* dir = malloc(sizeof(DIR_));
 	dir->size = 2;
@@ -108,6 +135,13 @@ DIR_* opendir_(const char* dirname, int creat, uint16_t perms) {
 	return dir;
 }
 
+/**
+ * @brief read an entry from a DIR_* pointer
+ * @details reads an entry from a directory (after opening it with opendir_
+ * which returns the DIR_* pointer)
+ * @return a pointer to the current directory entry, or NULL in case the 
+ * end is reached 
+ */
 struct dirent* readdir_(DIR_* dir) {
 	free(dir->files);
 	uint32_t ino = io_getino(dir->fd);
@@ -121,6 +155,9 @@ struct dirent* readdir_(DIR_* dir) {
 	return dir->files + (dir->idx++);
 }
 
+/**
+ * @brief get the inode structure from the path
+ */
 struct fs_inode getInode(const char* path){
 	struct fs_inode ind = {0};
 	uint32_t fileino;
@@ -137,6 +174,12 @@ struct fs_inode getInode(const char* path){
 	return ind;
 }
 
+/**
+ * @brief close a directory pointer
+ * @details called after opendir_ to free the DIR_* pointer and 
+ * its components
+ * @return 0 in case of success or -1 in case of an error
+ */
 int closedir_(DIR_* dir) {
 	if(dir == NULL) {
 		fprintf(stderr, "closedir_: null dir\n");
@@ -150,6 +193,13 @@ int closedir_(DIR_* dir) {
 	free(dir);
 	return 0;
 }
+
+/**
+ * @brief list the files in a directory
+ * @details lists all the files in a directory
+ * @param direct the *absolute* path from the root to the directory
+ * @return 0 in case of success or -1 in case of an error
+ */
 int ls_(const char* direct) {
 	DIR_* dir = opendir_(direct, 0, 0);
 	if(dir == NULL) {
@@ -166,6 +216,13 @@ int ls_(const char* direct) {
 	return 0;
 }
 
+/**
+ * @brief opens a file
+ * @details opens the file with pathname *filename*, or creates it 
+ * if the *creat* parameter is set to not null, the *perms* are set to 
+ * the created file in that case.
+ * @return the opened file's descriptor fd, or -1 in case of an error
+ */
 int open_(const char* filename, int creat, uint16_t perms) {
 	uint32_t fileino;
 	char* tempstr = strdup(filename);
@@ -200,7 +257,10 @@ int open_(const char* filename, int creat, uint16_t perms) {
 	// check perms here
 	return io_open_fd(fileino);
 }
-
+/**
+ * @brief closes an open file descritor
+ * @return 0 in case of success or -1 in case of an error
+ */
 int close_(int fd) {
 	if(io_close_fd(fd) < 0) {
 		fprintf(stderr, "close_: can't close %d\n", fd);
@@ -209,6 +269,11 @@ int close_(int fd) {
 	return 0;
 }
 
+/**
+ * @brief changes the current pointer for a file
+ * @details changes the offset of the file descriptor to newoff
+ * @return 0 in case of success or -1 in case of an error
+ */
 int lseek_(int fd, uint32_t newoff) {
 	if(io_lseek(fs, super, fd, newoff) < 0) {
 		fprintf(stderr, "lseek_: io_lseek\n");
@@ -216,7 +281,12 @@ int lseek_(int fd, uint32_t newoff) {
 	}
 	return 0;
 }
-
+/**
+ * @brief write data to a file
+ * @details writes *size* bytes from the *data* pointer into the corresponding file
+ * for the *fd*.
+ * @return 0 in case of success or -1 in case of an error
+ */
 int write_(int fd, void* data, int size) {
 	if(io_write(fs, super, fd, data, size) < 0) {
 		fprintf(stderr, "write_: io_write\n");
@@ -224,7 +294,12 @@ int write_(int fd, void* data, int size) {
 	}
 	return 0;
 }
-
+/**
+ * @brief reads data from file
+ * @details reads *size* bytes from the corresponding file for the 
+ * *fd* and puts the result in the *data* pointer
+ * @return 0 in case of success or -1 in case of an error
+ */
 int read_(int fd, void* data, int size) {
 	if(io_read(fs, super, fd, data, size) < 0) {
 		fprintf(stderr, "read_: io_read\n");
@@ -233,6 +308,12 @@ int read_(int fd, void* data, int size) {
 	return 0;
 }
 
+/**
+ * @brief removes a file
+ * @details removes files from their path, note that the inode may not
+ * get deleted until all hard links to the inode number have been deleted
+ * @return 0 in case of success or -1 in case of an error
+ */
 int rm_(const char* filename) {
 	uint32_t fileino;
 	char* tempstr = strdup(filename);
@@ -265,6 +346,15 @@ int rm_(const char* filename) {
 	return 0;
 }
 
+/**
+ * @brief attempts to remove a directory
+ * @details attempts to remove the directory from its path, if it doesn't contain
+ * it gets deleted, if it does, it gets deleted if the recursive boolean is set
+ * to no null else it doesn't.
+ * Note that the inode may not
+ * get deleted until all hard links to the inode number have been deleted
+ * @return 0 in case of success or -1 in case of an error
+ */
 int rmdir_(const char* filename, int recursive) {
 	uint32_t fileino;
 	char* tempstr = strdup(filename);
@@ -339,7 +429,14 @@ int rmdir_(const char* filename, int recursive) {
 	return 0;
 }
 
-
+/**
+ * @brief copies a file from src to dest
+ * @details copies any file or directory from src to dest
+ * Note that you have to specify the file name of the destination
+ * e.g. cp_("/dir/file", "/") won't work because the destination doesn't 
+ * have a specified name like cp_("/dir/file", "/file")
+ * @return 0 in case of success or -1 in case of an error
+ */
 int cp_(const char* src, const char* dest) {
 	int srcfd = open_(src, 0, 0);
 	int destfd = open_(dest, 1, 0);
@@ -374,6 +471,15 @@ int cp_(const char* src, const char* dest) {
 	return 0;
 }
 
+/**
+ * @brief creates a hard link of src in dest
+ * @details creates a hard link of the correspoding inode of
+ * any file or directory from src in dest.
+ * Note that you have to specify the file name of the destination
+ * e.g. ln_("/dir/file", "/") won't work because the destination doesn't 
+ * have a specified name like ln_("/dir/file", "/file")
+ * @return 0 in case of success or -1 in case of an error
+ */
 int ln_(const char* src, const char* dest) {
 	uint32_t ino;
 	char* tmpstr = strdup(src);
@@ -411,6 +517,14 @@ int ln_(const char* src, const char* dest) {
 	return 0;
 }
 
+/**
+ * @brief move a file from src to dest
+ * @details moves any file or directory from src to dest
+ * Note that you have to specify the file name of the destination
+ * e.g. mv_("/dir/file", "/") won't work because the destination doesn't 
+ * have a specified name like mv_("/dir/file", "/file")
+ * @return 0 in case of success or -1 in case of an error
+ */
 int mv_(const char* src, const char* dest) {
 	if(ln_(src, dest) < 0) {
 		fprintf(stderr, "mv_: cannot place the destination link\n");
@@ -457,6 +571,9 @@ int mv_(const char* src, const char* dest) {
 	return 0;
 }
 
+/**
+ * @brief closes the virtual filesystem
+ */
 void closefs() {
 	printf("Closing the filesystem..\n");
 	disk_close(&fs);
