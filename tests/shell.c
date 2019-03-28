@@ -36,6 +36,7 @@ char cwd[BUFSIZE];
 char* argval[ARGMAX]; // our local argc, argv
 
 int __exit();
+char* getPath(char* cur, char* path) ;
 void __pwd(char*, int);
 void __cd(char*);
 void __touch(char*);
@@ -55,12 +56,17 @@ void screenfetch();
 
 int main(int argc, char* argv[])
 {
-   if(argc!=2) {
-		printf("use: %s <disk>\n",argv[0]);
+	int format = 0;
+   if(argc > 3) {
+		printf("use: %s [-f --format] <disk>\n",argv[0]);
 		return 1;
 	}
-
-	if(initfs(argv[1],DEFAULT_SIZE) < 0) {
+	for(int opt=1; opt<argc; opt++) {
+		if(!strcmp("-f", argv[opt]) || !strcmp("--format", argv[opt])) {
+			format = 1;
+		}
+	}
+	if(initfs(argv[1], DEFAULT_SIZE, format) < 0) {
 			fprintf(stderr,"shell : creatfile %s\n",argv[1]);
 			return 1;
 	}
@@ -204,6 +210,7 @@ int main(int argc, char* argv[])
     }
 }
 
+
 /*get input containing spaces and tabs and store it in argval*/
 void getInput()
 {
@@ -226,19 +233,85 @@ void getInput()
     }
     free(input);
 }
+char* resolve_symlink(char* sym) {
+	if(sym == NULL) {
+		return NULL;
+	}
+	int len = strlen(sym);
+	if(sym[len-1] == '/') {
+		sym[len-1] = '\0';
+		len--;
+	}
 
+	char* res = malloc(sizeof(char) * len);
+	if(res == NULL) {
+		fprintf(stderr, "malloc error at resolve_symlink\n");
+	}
+	int idx = 1;
+	strcpy(res, "/");
+
+	char delim[2] = "/";
+	char* tok = strtok(sym, delim);
+	int last_len = 0;
+	while(tok != NULL) {
+		if(!strcmp(".", tok)) {
+			tok = strtok(NULL, delim);
+			continue;
+		} else if(!strcmp("..", tok)) {
+			idx = (idx-last_len-1 < 1)? 1: idx-last_len-1;
+		} else {
+			for(int i=idx; i<idx+strlen(tok); i++) {
+				res[i] = tok[i-idx];
+			}
+			idx += strlen(tok);
+			res[idx++] = '/';
+		}
+		last_len = strlen(tok);
+		tok = strtok(NULL, delim);
+	}
+	res[idx] = '\0';
+	return res;
+}
+
+char* getPath(char* cur, char* path) {
+	char *res = malloc(sizeof(char*) * (strlen(cur) + strlen(path)));
+	strcpy(res, cur);
+	if((path == NULL) || (strlen(path) == 0)) {
+		strcpy(res, "/");
+		return NULL;
+	}
+
+	if(path[strlen(path) - 1] == '/') {
+		path[strlen(path) - 1] = '\0';
+	}
+
+	if(path[0] == '/') {
+		char* temp = resolve_symlink(path);
+		strcpy(res, temp);
+		free(temp);
+	} else {
+		if(res[strlen(res) - 1] != '/') {
+			strcat(cur, "/");
+		}
+		strcat(res, path);
+		char* temp = resolve_symlink(res);
+		strcpy(res, temp);
+		free(temp);
+	}
+	return res;
+}
 /* read th e file */
 void __cat(char* path)
 {
 	char tmp_cwd[BUFSIZE];
-	strcpy(tmp_cwd, cwd);
-	
-	if(tmp_cwd[strlen(tmp_cwd) - 1] == '/')
-		strcat(tmp_cwd, path);
-	else{
-		strcat(tmp_cwd, "/");
-		strcat(tmp_cwd, path);
+	char* new_path = getPath(cwd, path);
+	if(new_path == NULL) {
+		fprintf(stderr, "cannot resolve path\n");
+		return;
 	}
+	strcpy(tmp_cwd, new_path);
+	free(new_path);
+
 	int fd = open_(tmp_cwd, 0, 0);
 	if(fd < 0) {
 		fprintf(stderr, "cannot write to the file\n");
@@ -249,7 +322,7 @@ void __cat(char* path)
 		fprintf(stderr, "cannot read inode\n");
 		return;
 	}
-	char* data = malloc(sizeof(char) * ind.size);
+	char* data = malloc(sizeof(char) * (ind.size+1));
 	if(read_(fd, data, ind.size) < 0){
 		fprintf(stderr, "cannot write to the file\n");
 		return ;		
@@ -262,14 +335,13 @@ void __cat(char* path)
 /* write in a file */
 void __write(char* path, char* data){
 	char tmp_cwd[BUFSIZE];
-	strcpy(tmp_cwd, cwd);
-	
-	if(tmp_cwd[strlen(tmp_cwd) - 1] == '/')
-		strcat(tmp_cwd, path);
-	else{
-		strcat(tmp_cwd, "/");
-		strcat(tmp_cwd, path);
+	char* new_path = getPath(cwd, path);
+	if(new_path == NULL) {
+		fprintf(stderr, "cannot resolve path\n");
+		return;
 	}
+	strcpy(tmp_cwd, new_path);
+	free(new_path);
 	
 	int fd = open_(tmp_cwd, 0, 0);
 	if(fd < 0) {
@@ -299,7 +371,7 @@ void __ln(char* file1, char* file2)
 	if(ln_(file1, file2) < 0){
 		fprintf(stderr, "cannot create hard link\n");
 		return ;
-	}	
+	}
 }
 
 /* move one file to another */
@@ -324,14 +396,17 @@ void __lsl(char* path)
 /* list cwd contents*/
 void __ls(char* path)
 {
-	if(path == NULL){
+	if(path == NULL || strlen(path) == 0) {
 		ls_(cwd);
 	}
 	else{
-		char tmp_cwd[BUFSIZE] = {0};
-		strcpy(tmp_cwd, cwd);
-		strcat(tmp_cwd, path);
-		ls_(tmp_cwd);
+		char* new_path = getPath(cwd, path);
+		if(new_path == NULL) {
+			fprintf(stderr, "cannot resolve path\n");
+			return;
+		}
+		ls_(new_path);
+		free(new_path);
 	}
 }
 
@@ -390,45 +465,6 @@ void __mkdir(char* name)
 	closedir_(tmp_dir);
 }
 
-char* resolve_symlink(char* sym) {
-	if(sym == NULL) {
-		return NULL;
-	}
-	int len = strlen(sym);
-	if(sym[len-1] == '/') {
-		sym[len-1] = '\0';
-		len--;
-	}
-
-	char* res = malloc(sizeof(char) * len);
-	if(res == NULL) {
-		fprintf(stderr, "malloc error at resolve_symlink\n");
-	}
-	int idx = 1;
-	strcpy(res, "/");
-
-	char delim[2] = "/";
-	char* tok = strtok(sym, delim);
-	int last_len = 0;
-	while(tok != NULL) {
-		if(!strcmp(".", tok)) {
-			tok = strtok(NULL, delim);
-			continue;
-		} else if(!strcmp("..", tok)) {
-			idx = (idx-last_len-1 < 1)? 1: idx-last_len-1;
-		} else {
-			for(int i=idx; i<idx+strlen(tok); i++) {
-				res[i] = tok[i-idx];
-			}
-			idx += strlen(tok);
-			res[idx++] = '/';
-		}
-		last_len = strlen(tok);
-		tok = strtok(NULL, delim);
-	}
-	res[idx] = '\0';
-	return res;
-}
 
 /*Make file*/
 void __touch(char* name){
@@ -451,28 +487,14 @@ void __cd(char* path)
 {
 	char temp_str[BUFSIZE] = {0};
 	strcat(temp_str, cwd);
-	if((path == NULL) || (strlen(path) == 0)) {
-		strcpy(cwd, "/");
+
+	char* new_path = getPath(cwd, path);
+	if(new_path == NULL) {
+		fprintf(stderr, "cannot resolve path\n");
 		return;
 	}
-
-	if(path[strlen(path) - 1] == '/') {
-		path[strlen(path) - 1] = '\0';
-	}
-
-	if(path[0] == '/') {
-		char* temp = resolve_symlink(path);
-		strcpy(cwd, temp);
-		free(temp);
-	} else {
-		if(cwd[strlen(cwd) - 1] != '/') {
-			strcat(cwd, "/");
-		}
-		strcat(cwd, path);
-		char* temp = resolve_symlink(cwd);
-		strcpy(cwd, temp);
-		free(temp);
-	}
+	strcpy(cwd, new_path);
+	free(new_path);
 	DIR_* dir = opendir_(cwd, 0, 0);
 	if(dir == NULL) {
 		fprintf(stderr, "directory %s does not exist\n", cwd);

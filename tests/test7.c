@@ -22,7 +22,7 @@
  * @brief program to test the disk functions
  */
 int main(int argc, char** argv) {
-	initfs("./bin/partition", 100000);
+	initfs("./bin/partition", 100000, 1);
 	
 	DIR_* dir = opendir_("/DIR", 1, 0);
 	closedir_(dir);

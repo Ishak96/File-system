@@ -13,18 +13,12 @@
 struct fs_filesyst fs;
 struct fs_super_block super;
 
-int cur_user = 0;
-
-int initfs(char* filename, size_t size) {
+int initfs(char* filename, size_t size, int format) {
 	srand(time(NULL));
-	printf("Creating filesyst..\n");
+	printf("Opening filesyst..\n");
 	/* test creatfile */
 	if(creatfile(filename, size, &fs) < 0) {
 		fprintf(stderr, "initfs: can't create file %s\n", filename);
-	}
-	printf("formatting..\n");
-	if(fs_format(fs) < 0) {
-		fprintf(stderr, "initfs: can't fomat partition to file %s\n", filename);
 	}
 	
 	union fs_block blk;
@@ -33,14 +27,19 @@ int initfs(char* filename, size_t size) {
 		return FUNC_ERROR;
 	}
 	super = blk.super;
-
-	uint32_t dirino;
-	if(opendir_creat(fs, super, &dirino, S_DIR, "/") < 0) {
-		fprintf(stderr, "initfs: opendir_creat\n");
-		return FUNC_ERROR;
+	if(format) {
+		printf("formatting..\n");
+		if(fs_format(fs) < 0) {
+			fprintf(stderr, "initfs: can't fomat partition to file %s\n", filename);
+		}
+		
+		uint32_t dirino;
+		if(opendir_creat(fs, super, &dirino, S_DIR, "/") < 0) {
+			fprintf(stderr, "initfs: opendir_creat\n");
+			return FUNC_ERROR;
+		}
+		printf("Creating the root directory.. %u\n", dirino);
 	}
-	printf("Creating the root directory.. %u\n", dirino);
-	
 	return 0;
 }
 
