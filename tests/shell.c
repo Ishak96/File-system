@@ -34,7 +34,6 @@ int argcount = 0;
 char cwd[BUFSIZE];
 char* argval[ARGMAX]; // our local argc, argv
 
-void about();
 int __exit();
 void __pwd(char*, int);
 void __cd(char*);
@@ -140,6 +139,8 @@ void getInput()
         }
         else argcount++;
     }
+    for(int i = 0; i < argcount; i++)
+    	printf("%s\n", argval[i]);
     free(input);
 }
 
@@ -202,6 +203,8 @@ int __exit()
 /* Implement pwd function in shell - 1 prints, 0 stores*/
 void __pwd(char* cwdstr,int command)
 {
-
-
+	if(cwdstr != NULL)
+    	printf("%s\n",cwdstr);
+    else 
+    	fprintf(stderr, "__pwd: invalid argument!\n");
 }
