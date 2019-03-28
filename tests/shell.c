@@ -75,6 +75,9 @@ int main(int argc, char* argv[])
 
         if(strcmp(argval[0],"exit")==0 || strcmp(argval[0],"z")==0)
         {
+			for(int i=0; i<argcount; i++) {
+				free(argval[i]);
+			}
             __exit();
         }
         else if(strcmp(argval[0],"pwd")==0)
@@ -335,6 +338,8 @@ void __cat(char* path)
 	}
 	
 	char* data = malloc(sizeof(char) * (ind.size+1));
+	memset(data, 0, sizeof(char) * (ind.size+1));
+	
 	if(read_(fd, data, ind.size+1) < 0){
 		fprintf(stderr, "cannot write to the file\n");
 		return ;		
