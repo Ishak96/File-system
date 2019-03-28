@@ -4,8 +4,8 @@
  * @author AYAD Ishak
  * @brief main dirent functions
  */
-#include<stdlib.h>
-#include<stdio.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <string.h>
 
@@ -17,7 +17,7 @@
 #include <ui.h>
 
 #define DEF "\x1B[0m"
-#define ARGMAX 10
+#define ARGMAX 100
 #define BUFSIZE 1000
 #define DEFAULT_SIZE 100000
 
@@ -201,6 +201,10 @@ int main(int argc, char* argv[])
             char* filename = argval[1];
             __cat(filename);
         }
+        else if(strlen(argval[0]))
+        {
+			fprintf(stderr, "Invalid command \"%s\"\n", argval[0]);
+		}
     }
 }
 
@@ -311,7 +315,7 @@ void __cat(char* path)
 		fprintf(stderr, "cannot write to the file\n");
 		return ;
 	}
-	struct fs_inode ind = getInode(path);
+	struct fs_inode ind = getInode(tmp_cwd);
 	if(ind.hcount == 0) {
 		fprintf(stderr, "cannot read inode\n");
 		return;
