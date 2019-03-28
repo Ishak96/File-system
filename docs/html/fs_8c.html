@@ -73,7 +73,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>main filesystem functions  
+<p>main filesystem utilities  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;devutils.h&gt;</code><br />
 <code>#include &lt;<a class="el" href="fs_8h_source.html">fs.h</a>&gt;</code><br />
@@ -82,6 +82,7 @@ $(function() {
 <code>#include &lt;unistd.h&gt;</code><br />
 <code>#include &lt;stdio.h&gt;</code><br />
 <code>#include &lt;math.h&gt;</code><br />
+<code>#include &lt;string.h&gt;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -91,14 +92,91 @@ Functions</h2></td></tr>
 <tr class="memitem:a7e220f2d9e463faa6ed48b24a72e79a0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fs_8c.html#a7e220f2d9e463faa6ed48b24a72e79a0">fs_dump_super</a> (struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a> fs)</td></tr>
 <tr class="memdesc:a7e220f2d9e463faa6ed48b24a72e79a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">dump formatted content of the superblock  <a href="#a7e220f2d9e463faa6ed48b24a72e79a0">More...</a><br /></td></tr>
 <tr class="separator:a7e220f2d9e463faa6ed48b24a72e79a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a538713b3121109eb211c8448eabffd22"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fs_8c.html#a538713b3121109eb211c8448eabffd22">fs_format</a> (struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a> fs)</td></tr>
+<tr class="memdesc:a538713b3121109eb211c8448eabffd22"><td class="mdescLeft">&#160;</td><td class="mdescRight">format the filesystem  <a href="#a538713b3121109eb211c8448eabffd22">More...</a><br /></td></tr>
+<tr class="separator:a538713b3121109eb211c8448eabffd22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c2e18bd1cc27666e2a7a6a57d0c638c"><td class="memItemLeft" align="right" valign="top"><a id="a4c2e18bd1cc27666e2a7a6a57d0c638c"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>fs_is_data_allocated</b> (struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a> fs, struct <a class="el" href="structfs__super__block.html">fs_super_block</a> super, uint32_t datanum)</td></tr>
+<tr class="separator:a4c2e18bd1cc27666e2a7a6a57d0c638c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25a027606e27eaab605d9eacd642aace"><td class="memItemLeft" align="right" valign="top"><a id="a25a027606e27eaab605d9eacd642aace"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>fs_is_inode_allocated</b> (struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a> fs, struct <a class="el" href="structfs__super__block.html">fs_super_block</a> super, uint32_t inodenum)</td></tr>
+<tr class="separator:a25a027606e27eaab605d9eacd642aace"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfc7945259a3ace7684c089d73d40338"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fs_8c.html#abfc7945259a3ace7684c089d73d40338">fs_alloc_inode</a> (struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a> fs, struct <a class="el" href="structfs__super__block.html">fs_super_block</a> *super, uint32_t *inodenum)</td></tr>
+<tr class="memdesc:abfc7945259a3ace7684c089d73d40338"><td class="mdescLeft">&#160;</td><td class="mdescRight">allocate an inode  <a href="#abfc7945259a3ace7684c089d73d40338">More...</a><br /></td></tr>
+<tr class="separator:abfc7945259a3ace7684c089d73d40338"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0df6f0d2778e7f25cc1f97abd66d1f96"><td class="memItemLeft" align="right" valign="top"><a id="a0df6f0d2778e7f25cc1f97abd66d1f96"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>fs_write_inode</b> (struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a> fs, struct <a class="el" href="structfs__super__block.html">fs_super_block</a> super, uint32_t indno, struct <a class="el" href="structfs__inode.html">fs_inode</a> *inode)</td></tr>
+<tr class="separator:a0df6f0d2778e7f25cc1f97abd66d1f96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47decd79b4f0cd23d217919b0f546b3d"><td class="memItemLeft" align="right" valign="top"><a id="a47decd79b4f0cd23d217919b0f546b3d"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>fs_read_inode</b> (struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a> fs, struct <a class="el" href="structfs__super__block.html">fs_super_block</a> super, uint32_t indno, struct <a class="el" href="structfs__inode.html">fs_inode</a> *inode)</td></tr>
+<tr class="separator:a47decd79b4f0cd23d217919b0f546b3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cf2db96883c96842b9a8929d3384179"><td class="memItemLeft" align="right" valign="top"><a id="a0cf2db96883c96842b9a8929d3384179"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>fs_dump_inode</b> (struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a> fs, struct <a class="el" href="structfs__super__block.html">fs_super_block</a> super, uint32_t inodenum)</td></tr>
+<tr class="separator:a0cf2db96883c96842b9a8929d3384179"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae55a6476e008c973536249aa38e548c5"><td class="memItemLeft" align="right" valign="top"><a id="ae55a6476e008c973536249aa38e548c5"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>fs_alloc_data</b> (struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a> fs, struct <a class="el" href="structfs__super__block.html">fs_super_block</a> *super, uint32_t data[], size_t size)</td></tr>
+<tr class="separator:ae55a6476e008c973536249aa38e548c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc3bb071d5340d42aa027f8bfc1a6b41"><td class="memItemLeft" align="right" valign="top"><a id="acc3bb071d5340d42aa027f8bfc1a6b41"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>fs_free_inode</b> (struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a> fs, struct <a class="el" href="structfs__super__block.html">fs_super_block</a> *super, uint32_t inodenum)</td></tr>
+<tr class="separator:acc3bb071d5340d42aa027f8bfc1a6b41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abef1af270d59a7cb29901e47fad84946"><td class="memItemLeft" align="right" valign="top"><a id="abef1af270d59a7cb29901e47fad84946"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>fs_free_data</b> (struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a> fs, struct <a class="el" href="structfs__super__block.html">fs_super_block</a> *super, uint32_t datanum)</td></tr>
+<tr class="separator:abef1af270d59a7cb29901e47fad84946"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a781019eeca85b9b95c3f910d5b2caf"><td class="memItemLeft" align="right" valign="top"><a id="a3a781019eeca85b9b95c3f910d5b2caf"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>fs_write_data</b> (struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a> fs, struct <a class="el" href="structfs__super__block.html">fs_super_block</a> super, union <a class="el" href="unionfs__block.html">fs_block</a> *data, uint32_t *blknums, size_t size)</td></tr>
+<tr class="separator:a3a781019eeca85b9b95c3f910d5b2caf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0825ae78294f022bb91dde1b73d024a3"><td class="memItemLeft" align="right" valign="top"><a id="a0825ae78294f022bb91dde1b73d024a3"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>fs_read_data</b> (struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a> fs, struct <a class="el" href="structfs__super__block.html">fs_super_block</a> super, union <a class="el" href="unionfs__block.html">fs_block</a> *data, uint32_t *blknums, size_t size)</td></tr>
+<tr class="separator:a0825ae78294f022bb91dde1b73d024a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>main filesystem functions </p>
+<div class="textblock"><p>main filesystem utilities </p>
 <dl class="section author"><dt>Author</dt><dd>ABDELMOUMENE Djahid </dd>
 <dd>
 AYAD Ishak</dd></dl>
 <p>initializing the partition files and utility functions to interact with the os </p>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a id="abfc7945259a3ace7684c089d73d40338"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfc7945259a3ace7684c089d73d40338">&#9670;&nbsp;</a></span>fs_alloc_inode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int fs_alloc_inode </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a>&#160;</td>
+          <td class="paramname"><em>fs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">struct <a class="el" href="structfs__super__block.html">fs_super_block</a> *&#160;</td>
+          <td class="paramname"><em>super</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t *&#160;</td>
+          <td class="paramname"><em>inodenum</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>allocate an inode </p>
+<p>allocates the first free inode in the inode table </p><ul>
+<li>fs: the virtual filesystem </li>
+<li>super: the superblock </li>
+<li>inodenum: the inode number allocated </li>
+</ul>
+
+</div>
+</div>
 <a id="a7e220f2d9e463faa6ed48b24a72e79a0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7e220f2d9e463faa6ed48b24a72e79a0">&#9670;&nbsp;</a></span>fs_dump_super()</h2>
 
@@ -117,6 +195,27 @@ AYAD Ishak</dd></dl>
 
 <p>dump formatted content of the superblock </p>
 <p>prints a human readable superblock from teh filesystem fs </p>
+
+</div>
+</div>
+<a id="a538713b3121109eb211c8448eabffd22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a538713b3121109eb211c8448eabffd22">&#9670;&nbsp;</a></span>fs_format()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int fs_format </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structfs__filesyst.html">fs_filesyst</a>&#160;</td>
+          <td class="paramname"><em>fs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>format the filesystem </p>
+<p>formats the superblock and sets the bitmaps to 0 </p>
 
 </div>
 </div>

@@ -1,0 +1,170 @@
+\hypertarget{dirent_8h}{}\section{include/dirent.h File Reference}
+\label{dirent_8h}\index{include/dirent.h@{include/dirent.h}}
+
+
+\mbox{\hyperlink{dirent_8h}{dirent.\+h}} -\/ format of directory entries  
+
+
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structdirent}{dirent}}
+\item 
+struct \mbox{\hyperlink{structDIR__}{D\+I\+R\+\_\+}}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{dirent_8h_a42ed4417ea0d3ba67ff834e83b404b7d}\label{dirent_8h_a42ed4417ea0d3ba67ff834e83b404b7d}} 
+\#define {\bfseries S\+\_\+\+D\+IR}~01000
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{dirent_8h_ae34a7c4307e6ffc52f82e585fbaa17fc}{formatdir}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t $\ast$inodenum, uint16\+\_\+t mode)
+\begin{DoxyCompactList}\small\item\em format and empty directory \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{dirent_8h_aabfec4741bfff6464165ad0f069833cd}{insert\+File}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t dirino, struct \mbox{\hyperlink{structdirent}{dirent}} file)
+\begin{DoxyCompactList}\small\item\em insert a file into a directory \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{dirent_8h_a8fd4e3d412c35e583f028d40208a2678}{find\+File}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t dirino, char $\ast$filename, struct \mbox{\hyperlink{structdirent}{dirent}} $\ast$res, int $\ast$idx)
+\begin{DoxyCompactList}\small\item\em find a filename in a directory \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{dirent_8h_a0634ce1644920e3baab8bcc38745703b}{get\+Files}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t dirino, struct \mbox{\hyperlink{structdirent}{dirent}} $\ast$$\ast$files, int $\ast$size)
+\begin{DoxyCompactList}\small\item\em get the files in a directory with inode {\itshape inodenum} \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{dirent_8h_a0ff4eb9b59a4a099e668c74d239a7d04}{del\+File}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t dirino, char $\ast$filename)
+\begin{DoxyCompactList}\small\item\em delete a file from a directory \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{dirent_8h_a3912a88b3b0e5076c49c73ec51adf144}{findpath}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t $\ast$ino, char $\ast$filename)
+\begin{DoxyCompactList}\small\item\em find the inode number of a file from its absolute path \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{dirent_8h_a97f9d6cf6167002e1a089f7621f79dcf}{opendir\+\_\+creat}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t $\ast$dirino, uint16\+\_\+t mode, const char $\ast$filepath)
+\begin{DoxyCompactList}\small\item\em creates and formats a directory \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{dirent_8h_a105d0e823af19eecc0fb34170346522b}{opendir\+\_\+ino}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t dirino, const char $\ast$filepath)
+\begin{DoxyCompactList}\small\item\em structures the a directory using the given filepath \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{dirent_8h_a1b1b7b809e6f0c3ea9f6bc18c6defe90}{open\+\_\+ino}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t fileino, const char $\ast$filepath)
+\begin{DoxyCompactList}\small\item\em inserts a file into a directory \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{dirent_8h_a3445d37f8aa9d1b83cb871ff04f094bf}{open\+\_\+creat}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t $\ast$fileino, uint16\+\_\+t mode, const char $\ast$filepath)
+\begin{DoxyCompactList}\small\item\em creates a new file \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\mbox{\hyperlink{dirent_8h}{dirent.\+h}} -\/ format of directory entries 
+
+\begin{DoxyAuthor}{Author}
+A\+B\+D\+E\+L\+M\+O\+U\+M\+E\+NE Djahid 
+
+A\+Y\+AD Ishak
+\end{DoxyAuthor}
+main filesystem structs and prototypes 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{dirent_8h_a0ff4eb9b59a4a099e668c74d239a7d04}\label{dirent_8h_a0ff4eb9b59a4a099e668c74d239a7d04}} 
+\index{dirent.h@{dirent.h}!delFile@{delFile}}
+\index{delFile@{delFile}!dirent.h@{dirent.h}}
+\subsubsection{\texorpdfstring{delFile()}{delFile()}}
+{\footnotesize\ttfamily int del\+File (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{uint32\+\_\+t}]{dirino,  }\item[{char $\ast$}]{filename }\end{DoxyParamCaption})}
+
+
+
+delete a file from a directory 
+
+deletes the file with filename {\itshape filename} into the directory with inode number {\itshape dirino}. the deletion is also done as in a sorted list. \mbox{\Hypertarget{dirent_8h_a8fd4e3d412c35e583f028d40208a2678}\label{dirent_8h_a8fd4e3d412c35e583f028d40208a2678}} 
+\index{dirent.h@{dirent.h}!findFile@{findFile}}
+\index{findFile@{findFile}!dirent.h@{dirent.h}}
+\subsubsection{\texorpdfstring{findFile()}{findFile()}}
+{\footnotesize\ttfamily int find\+File (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{uint32\+\_\+t}]{dirino,  }\item[{char $\ast$}]{filename,  }\item[{struct \mbox{\hyperlink{structdirent}{dirent}} $\ast$}]{res,  }\item[{int $\ast$}]{idx }\end{DoxyParamCaption})}
+
+
+
+find a filename in a directory 
+
+gets the structure found in a directory of the corresponding file with name {\itshape filename} in directory with inode number {\itshape dirino}. this function uses a binary search because the file entries are sorted in the directory \mbox{\Hypertarget{dirent_8h_a3912a88b3b0e5076c49c73ec51adf144}\label{dirent_8h_a3912a88b3b0e5076c49c73ec51adf144}} 
+\index{dirent.h@{dirent.h}!findpath@{findpath}}
+\index{findpath@{findpath}!dirent.h@{dirent.h}}
+\subsubsection{\texorpdfstring{findpath()}{findpath()}}
+{\footnotesize\ttfamily int findpath (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{uint32\+\_\+t $\ast$}]{ino,  }\item[{char $\ast$}]{filename }\end{DoxyParamCaption})}
+
+
+
+find the inode number of a file from its absolute path 
+
+searches for the inode number of file with the absolute path {\itshape filename} and puts the value found into pointer {\itshape ino}. note that the root directory \char`\"{}/\char`\"{} is a special case and always has inode number 0 \mbox{\Hypertarget{dirent_8h_ae34a7c4307e6ffc52f82e585fbaa17fc}\label{dirent_8h_ae34a7c4307e6ffc52f82e585fbaa17fc}} 
+\index{dirent.h@{dirent.h}!formatdir@{formatdir}}
+\index{formatdir@{formatdir}!dirent.h@{dirent.h}}
+\subsubsection{\texorpdfstring{formatdir()}{formatdir()}}
+{\footnotesize\ttfamily int formatdir (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{uint32\+\_\+t $\ast$}]{inodenum,  }\item[{uint16\+\_\+t}]{mode }\end{DoxyParamCaption})}
+
+
+
+format and empty directory 
+
+allocate the inode for the directory and initialize the size (to 0) in the first byte \mbox{\Hypertarget{dirent_8h_a0634ce1644920e3baab8bcc38745703b}\label{dirent_8h_a0634ce1644920e3baab8bcc38745703b}} 
+\index{dirent.h@{dirent.h}!getFiles@{getFiles}}
+\index{getFiles@{getFiles}!dirent.h@{dirent.h}}
+\subsubsection{\texorpdfstring{getFiles()}{getFiles()}}
+{\footnotesize\ttfamily int get\+Files (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{uint32\+\_\+t}]{dirino,  }\item[{struct \mbox{\hyperlink{structdirent}{dirent}} $\ast$$\ast$}]{files,  }\item[{int $\ast$}]{size }\end{DoxyParamCaption})}
+
+
+
+get the files in a directory with inode {\itshape inodenum} 
+
+allocates an array of struct dirent\textquotesingle{}s and puts the files and the number of files in files and size respectively \mbox{\Hypertarget{dirent_8h_aabfec4741bfff6464165ad0f069833cd}\label{dirent_8h_aabfec4741bfff6464165ad0f069833cd}} 
+\index{dirent.h@{dirent.h}!insertFile@{insertFile}}
+\index{insertFile@{insertFile}!dirent.h@{dirent.h}}
+\subsubsection{\texorpdfstring{insertFile()}{insertFile()}}
+{\footnotesize\ttfamily int insert\+File (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{uint32\+\_\+t}]{dirino,  }\item[{struct \mbox{\hyperlink{structdirent}{dirent}}}]{file }\end{DoxyParamCaption})}
+
+
+
+insert a file into a directory 
+
+inserts the file structure {\itshape file} into the corresponding directory with inode number {\itshape dirino}. the insertion is in a sorted list. \mbox{\Hypertarget{dirent_8h_a3445d37f8aa9d1b83cb871ff04f094bf}\label{dirent_8h_a3445d37f8aa9d1b83cb871ff04f094bf}} 
+\index{dirent.h@{dirent.h}!open\_creat@{open\_creat}}
+\index{open\_creat@{open\_creat}!dirent.h@{dirent.h}}
+\subsubsection{\texorpdfstring{open\_creat()}{open\_creat()}}
+{\footnotesize\ttfamily int open\+\_\+creat (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{uint32\+\_\+t $\ast$}]{fileino,  }\item[{uint16\+\_\+t}]{mode,  }\item[{const char $\ast$}]{filepath }\end{DoxyParamCaption})}
+
+
+
+creates a new file 
+
+creates a new file with a new inode number and inserts its corresponding directory entry into the appropriate directory (meaning inserts to the parent directory) \mbox{\Hypertarget{dirent_8h_a1b1b7b809e6f0c3ea9f6bc18c6defe90}\label{dirent_8h_a1b1b7b809e6f0c3ea9f6bc18c6defe90}} 
+\index{dirent.h@{dirent.h}!open\_ino@{open\_ino}}
+\index{open\_ino@{open\_ino}!dirent.h@{dirent.h}}
+\subsubsection{\texorpdfstring{open\_ino()}{open\_ino()}}
+{\footnotesize\ttfamily int open\+\_\+ino (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{uint32\+\_\+t}]{fileino,  }\item[{const char $\ast$}]{filepath }\end{DoxyParamCaption})}
+
+
+
+inserts a file into a directory 
+
+insert the file with inode number {\itshape fileino} with the path {\itshape filepath}, meaning it creates a new directory entry and puts it in the parent directory (we get this from the full path ex\+: /\+D\+I\+R/file the parent directory is /\+D\+IR) 
+\begin{DoxyParams}{Parameters}
+{\em fileino} & the inode of the file to be inserted \\
+\hline
+{\em filepath} & the full path of the file to be inserted \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{dirent_8h_a97f9d6cf6167002e1a089f7621f79dcf}\label{dirent_8h_a97f9d6cf6167002e1a089f7621f79dcf}} 
+\index{dirent.h@{dirent.h}!opendir\_creat@{opendir\_creat}}
+\index{opendir\_creat@{opendir\_creat}!dirent.h@{dirent.h}}
+\subsubsection{\texorpdfstring{opendir\_creat()}{opendir\_creat()}}
+{\footnotesize\ttfamily int opendir\+\_\+creat (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{uint32\+\_\+t $\ast$}]{dirino,  }\item[{uint16\+\_\+t}]{perms,  }\item[{const char $\ast$}]{filepath }\end{DoxyParamCaption})}
+
+
+
+creates and formats a directory 
+
+creates a new directory with a new inode number and then calls {\itshape opendir\+\_\+ino} \mbox{\Hypertarget{dirent_8h_a105d0e823af19eecc0fb34170346522b}\label{dirent_8h_a105d0e823af19eecc0fb34170346522b}} 
+\index{dirent.h@{dirent.h}!opendir\_ino@{opendir\_ino}}
+\index{opendir\_ino@{opendir\_ino}!dirent.h@{dirent.h}}
+\subsubsection{\texorpdfstring{opendir\_ino()}{opendir\_ino()}}
+{\footnotesize\ttfamily int opendir\+\_\+ino (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{uint32\+\_\+t}]{dirino,  }\item[{const char $\ast$}]{filepath }\end{DoxyParamCaption})}
+
+
+
+structures the a directory using the given filepath 
+
+formats the main components of the directory. Meaning it creates the subdirectories . and .. and also create an instance of its directory entry in the parent directory. ex\+: with /\+D\+IR it puts . and .. in the /\+D\+IR directory and D\+IR in the / (root) directory 
+\begin{DoxyParams}{Parameters}
+{\em dirino} & the inode number of the directory to be inserted \\
+\hline
+{\em filepath} & the full path (absolute) of the directory to be inserted \\
+\hline
+\end{DoxyParams}

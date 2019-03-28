@@ -1,4 +1,4 @@
-\hypertarget{disk_8h}{}\doxysection{include/disk.h File Reference}
+\hypertarget{disk_8h}{}\section{include/disk.h File Reference}
 \label{disk_8h}\index{include/disk.h@{include/disk.h}}
 
 
@@ -7,18 +7,18 @@ main functions for interacting with the os
 
 {\ttfamily \#include $<$stdint.\+h$>$}\newline
 {\ttfamily \#include $<$stdlib.\+h$>$}\newline
-\doxysubsection*{Data Structures}
+\subsection*{Data Structures}
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}
 \begin{DoxyCompactList}\small\item\em virtual filesystem structure \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsection*{Macros}
+\subsection*{Macros}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\Hypertarget{disk_8h_ad6b56bdbbe5838a6260ddc0926fa1891}\label{disk_8h_ad6b56bdbbe5838a6260ddc0926fa1891}} 
 \#define {\bfseries F\+S\+\_\+\+B\+L\+O\+C\+K\+\_\+\+S\+I\+ZE}~4096 			   /$\ast$ block size in bytes $\ast$/
 \end{DoxyCompactItemize}
-\doxysubsection*{Functions}
+\subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
 int \mbox{\hyperlink{disk_8h_a9d3c8e891397d966d2fbb3c27cc41dcc}{creatfile}} (const char $\ast$filename, size\+\_\+t size, struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} $\ast$fs)
@@ -33,7 +33,7 @@ int \mbox{\hyperlink{disk_8h_ae7c04a755273864393eb6bb6b6419be1}{fs\+\_\+read\+\_
 \begin{DoxyCompactList}\small\item\em read a chunk of data from a filesystem \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
-\doxysubsection{Detailed Description}
+\subsection{Detailed Description}
 main functions for interacting with the os 
 
 \begin{DoxyAuthor}{Author}
@@ -43,11 +43,11 @@ A\+Y\+AD Ishak
 \end{DoxyAuthor}
 constains structs and prototypes used to manipulate the virtual filesystem 
 
-\doxysubsection{Function Documentation}
+\subsection{Function Documentation}
 \mbox{\Hypertarget{disk_8h_a9d3c8e891397d966d2fbb3c27cc41dcc}\label{disk_8h_a9d3c8e891397d966d2fbb3c27cc41dcc}} 
 \index{disk.h@{disk.h}!creatfile@{creatfile}}
 \index{creatfile@{creatfile}!disk.h@{disk.h}}
-\doxysubsubsection{\texorpdfstring{creatfile()}{creatfile()}}
+\subsubsection{\texorpdfstring{creatfile()}{creatfile()}}
 {\footnotesize\ttfamily int creatfile (\begin{DoxyParamCaption}\item[{const char $\ast$}]{filename,  }\item[{size\+\_\+t}]{size,  }\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} $\ast$}]{fs }\end{DoxyParamCaption})}
 
 
@@ -69,7 +69,7 @@ if this function is called on a disk image that already exists, the function wil
 \mbox{\Hypertarget{disk_8h_acb759581a1d3715fe5e74fe13c23677f}\label{disk_8h_acb759581a1d3715fe5e74fe13c23677f}} 
 \index{disk.h@{disk.h}!disk\_close@{disk\_close}}
 \index{disk\_close@{disk\_close}!disk.h@{disk.h}}
-\doxysubsubsection{\texorpdfstring{disk\_close()}{disk\_close()}}
+\subsubsection{\texorpdfstring{disk\_close()}{disk\_close()}}
 {\footnotesize\ttfamily void disk\+\_\+close (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} $\ast$}]{fs }\end{DoxyParamCaption})}
 
 
@@ -84,7 +84,7 @@ this function close the file descriptor using the virtual filesystem structure
 \mbox{\Hypertarget{disk_8h_a0cd9235d1059da527f94b43efb2afbbd}\label{disk_8h_a0cd9235d1059da527f94b43efb2afbbd}} 
 \index{disk.h@{disk.h}!disk\_size@{disk\_size}}
 \index{disk\_size@{disk\_size}!disk.h@{disk.h}}
-\doxysubsubsection{\texorpdfstring{disk\_size()}{disk\_size()}}
+\subsubsection{\texorpdfstring{disk\_size()}{disk\_size()}}
 {\footnotesize\ttfamily int disk\+\_\+size (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs }\end{DoxyParamCaption})}
 
 
@@ -102,7 +102,7 @@ the virtual filesystem number of blocks
 \mbox{\Hypertarget{disk_8h_ae7c04a755273864393eb6bb6b6419be1}\label{disk_8h_ae7c04a755273864393eb6bb6b6419be1}} 
 \index{disk.h@{disk.h}!fs\_read\_block@{fs\_read\_block}}
 \index{fs\_read\_block@{fs\_read\_block}!disk.h@{disk.h}}
-\doxysubsubsection{\texorpdfstring{fs\_read\_block()}{fs\_read\_block()}}
+\subsubsection{\texorpdfstring{fs\_read\_block()}{fs\_read\_block()}}
 {\footnotesize\ttfamily int fs\+\_\+read\+\_\+block (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{int}]{blocknum,  }\item[{void $\ast$}]{blk }\end{DoxyParamCaption})}
 
 
@@ -112,7 +112,7 @@ read a chunk of data from a filesystem
 read a block of data blk from the filesystem fs from block number blocknum \mbox{\Hypertarget{disk_8h_ace2675173098deba29cd2bd9b3f74a7a}\label{disk_8h_ace2675173098deba29cd2bd9b3f74a7a}} 
 \index{disk.h@{disk.h}!fs\_write\_block@{fs\_write\_block}}
 \index{fs\_write\_block@{fs\_write\_block}!disk.h@{disk.h}}
-\doxysubsubsection{\texorpdfstring{fs\_write\_block()}{fs\_write\_block()}}
+\subsubsection{\texorpdfstring{fs\_write\_block()}{fs\_write\_block()}}
 {\footnotesize\ttfamily int fs\+\_\+write\+\_\+block (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{int}]{blocknum,  }\item[{const void $\ast$}]{blk,  }\item[{size\+\_\+t}]{blksize }\end{DoxyParamCaption})}
 
 

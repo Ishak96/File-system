@@ -1,0 +1,149 @@
+.TH "src/dirent.c" 3 "Thu Mar 28 2019" "File Manager" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/dirent.c \- main directory managment and naming functions  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <io\&.h>\fP
+.br
+\fC#include <fs\&.h>\fP
+.br
+\fC#include <devutils\&.h>\fP
+.br
+\fC#include <disk\&.h>\fP
+.br
+\fC#include <dirent\&.h>\fP
+.br
+\fC#include <libgen\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBformatdir\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t *inodenum, uint16_t mode)"
+.br
+.RI "format and empty directory "
+.ti -1c
+.RI "int \fBgetFiles\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t dirino, struct \fBdirent\fP **files, int *size)"
+.br
+.RI "get the files in a directory with inode \fIinodenum\fP "
+.ti -1c
+.RI "int \fBfindFile\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t dirino, char *filename, struct \fBdirent\fP *res, int *idx)"
+.br
+.RI "find a filename in a directory "
+.ti -1c
+.RI "int \fBinsertFile\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t dirino, struct \fBdirent\fP file)"
+.br
+.RI "insert a file into a directory "
+.ti -1c
+.RI "int \fBdelFile\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t dirino, char *filename)"
+.br
+.RI "delete a file from a directory "
+.ti -1c
+.RI "int \fBfindpath\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t *ino, char *filename)"
+.br
+.RI "find the inode number of a file from its absolute path "
+.ti -1c
+.RI "int \fBopendir_ino\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t dirino, const char *filepath)"
+.br
+.RI "structures the a directory using the given filepath "
+.ti -1c
+.RI "int \fBopendir_creat\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t *dirino, uint16_t perms, const char *filepath)"
+.br
+.RI "creates and formats a directory "
+.ti -1c
+.RI "int \fBopen_ino\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t fileino, const char *filepath)"
+.br
+.RI "inserts a file into a directory "
+.ti -1c
+.RI "int \fBopen_creat\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t *fileino, uint16_t mode, const char *filepath)"
+.br
+.RI "creates a new file "
+.in -1c
+.SH "Detailed Description"
+.PP 
+main directory managment and naming functions 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+ABDELMOUMENE Djahid 
+.PP
+AYAD Ishak 
+.RE
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "int delFile (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t dirino, char * filename)"
+
+.PP
+delete a file from a directory deletes the file with filename \fIfilename\fP into the directory with inode number \fIdirino\fP\&. the deletion is also done as in a sorted list\&. 
+.SS "int findFile (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t dirino, char * filename, struct \fBdirent\fP * res, int * idx)"
+
+.PP
+find a filename in a directory gets the structure found in a directory of the corresponding file with name \fIfilename\fP in directory with inode number \fIdirino\fP\&. this function uses a binary search because the file entries are sorted in the directory 
+.SS "int findpath (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t * ino, char * filename)"
+
+.PP
+find the inode number of a file from its absolute path searches for the inode number of file with the absolute path \fIfilename\fP and puts the value found into pointer \fIino\fP\&. note that the root directory '/' is a special case and always has inode number 0 
+.SS "int formatdir (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t * inodenum, uint16_t mode)"
+
+.PP
+format and empty directory allocate the inode for the directory and initialize the size (to 0) in the first byte 
+.SS "int getFiles (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t dirino, struct \fBdirent\fP ** files, int * size)"
+
+.PP
+get the files in a directory with inode \fIinodenum\fP allocates an array of struct dirent's and puts the files and the number of files in files and size respectively 
+.SS "int insertFile (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t dirino, struct \fBdirent\fP file)"
+
+.PP
+insert a file into a directory inserts the file structure \fIfile\fP into the corresponding directory with inode number \fIdirino\fP\&. the insertion is in a sorted list\&. 
+.SS "int open_creat (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t * fileino, uint16_t mode, const char * filepath)"
+
+.PP
+creates a new file creates a new file with a new inode number and inserts its corresponding directory entry into the appropriate directory (meaning inserts to the parent directory) 
+.SS "int open_ino (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t fileino, const char * filepath)"
+
+.PP
+inserts a file into a directory insert the file with inode number \fIfileino\fP with the path \fIfilepath\fP, meaning it creates a new directory entry and puts it in the parent directory (we get this from the full path ex: /DIR/file the parent directory is /DIR) 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfileino\fP the inode of the file to be inserted 
+.br
+\fIfilepath\fP the full path of the file to be inserted 
+.RE
+.PP
+
+.SS "int opendir_creat (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t * dirino, uint16_t perms, const char * filepath)"
+
+.PP
+creates and formats a directory creates a new directory with a new inode number and then calls \fIopendir_ino\fP 
+.SS "int opendir_ino (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t dirino, const char * filepath)"
+
+.PP
+structures the a directory using the given filepath formats the main components of the directory\&. Meaning it creates the subdirectories \&. and \&.\&. and also create an instance of its directory entry in the parent directory\&. ex: with /DIR it puts \&. and \&.\&. in the /DIR directory and DIR in the / (root) directory 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdirino\fP the inode number of the directory to be inserted 
+.br
+\fIfilepath\fP the full path (absolute) of the directory to be inserted 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for File Manager from the source code\&.

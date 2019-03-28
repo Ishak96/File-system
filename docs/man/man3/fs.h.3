@@ -1,4 +1,4 @@
-.TH "include/fs.h" 3 "Tue Mar 5 2019" "File Manager" \" -*- nroff -*-
+.TH "include/fs.h" 3 "Thu Mar 28 2019" "File Manager" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -61,6 +61,44 @@ include/fs.h \- filesystem function header
 .RI "int \fBfs_dump_super\fP (struct \fBfs_filesyst\fP fs)"
 .br
 .RI "dump formatted content of the superblock "
+.ti -1c
+.RI "int \fBfs_format\fP (struct \fBfs_filesyst\fP fs)"
+.br
+.RI "format the filesystem "
+.ti -1c
+.RI "int \fBfs_alloc_inode\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP *super, uint32_t *inodenum)"
+.br
+.RI "allocate an inode "
+.ti -1c
+.RI "int \fBfs_read_inode\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t indno, struct \fBfs_inode\fP *inode)"
+.br
+.ti -1c
+.RI "int \fBfs_dump_inode\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t inodenum)"
+.br
+.ti -1c
+.RI "int \fBfs_alloc_data\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP *super, uint32_t data[], size_t size)"
+.br
+.ti -1c
+.RI "int \fBfs_write_inode\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t indno, struct \fBfs_inode\fP *inode)"
+.br
+.ti -1c
+.RI "int \fBfs_free_inode\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP *super, uint32_t inodenum)"
+.br
+.ti -1c
+.RI "int \fBfs_free_data\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP *super, uint32_t datanum)"
+.br
+.ti -1c
+.RI "int \fBfs_is_data_allocated\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t datanum)"
+.br
+.ti -1c
+.RI "int \fBfs_is_inode_allocated\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t inodenum)"
+.br
+.ti -1c
+.RI "int \fBfs_write_data\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, union \fBfs_block\fP *data, uint32_t *blknums, size_t size)"
+.br
+.ti -1c
+.RI "int \fBfs_read_data\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, union \fBfs_block\fP *data, uint32_t *blknums, size_t size)"
+.br
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -78,10 +116,28 @@ AYAD Ishak
 main filesystem structs and prototypes 
 .SH "Function Documentation"
 .PP 
+.SS "int fs_alloc_inode (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP * super, uint32_t * inodenum)"
+
+.PP
+allocate an inode allocates the first free inode in the inode table 
+.PD 0
+
+.IP "\(bu" 2
+fs: the virtual filesystem 
+.IP "\(bu" 2
+super: the superblock 
+.IP "\(bu" 2
+inodenum: the inode number allocated 
+.PP
+
 .SS "int fs_dump_super (struct \fBfs_filesyst\fP fs)"
 
 .PP
 dump formatted content of the superblock prints a human readable superblock from teh filesystem fs 
+.SS "int fs_format (struct \fBfs_filesyst\fP fs)"
+
+.PP
+format the filesystem formats the superblock and sets the bitmaps to 0 
 .SS "int fs_format_super (struct \fBfs_filesyst\fP fs)"
 
 .PP
