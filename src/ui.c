@@ -58,7 +58,7 @@ int getParentInode(const char* filepath, uint32_t* parentino) {
 	return 0;
 }
 
-DIR_* opendir_(const char* dirname, uint16_t perms) {
+DIR_* opendir_(const char* dirname, int creat, uint16_t perms) {
 	DIR_* dir = malloc(sizeof(DIR_));
 	dir->size = 2;
 	dir->idx = 0;
@@ -66,6 +66,10 @@ DIR_* opendir_(const char* dirname, uint16_t perms) {
 	char* tempstr = strdup(dirname);
 	if(findpath(fs, super, &dirino, tempstr) < 0) {
 		// check perms here
+		if(!creat) {
+			fprintf(stderr, "opendir_: directory does not exist.\n");
+			return NULL;
+		}
 		if(opendir_creat(fs, super, &dirino, perms, dirname) < 0) {
 			fprintf(stderr, "opendir_: opendir_creat\n");
 			return NULL;
@@ -80,7 +84,10 @@ DIR_* opendir_(const char* dirname, uint16_t perms) {
 	}
 	/* verify type */
 	struct fs_inode ind;
-	fs_read_inode(fs, super, dirino, &ind);
+	if(fs_read_inode(fs, super, dirino, &ind) < 0) {
+		fprintf(stderr, "opendir_: cannot open the inode\n");
+		return NULL;
+	}
 	uint16_t mode = ind.mode;
 	if((mode & S_DIR) == 0) {
 		fprintf(stderr, "opendir_: %s is a regular file (use open_)\n", dirname);
@@ -88,6 +95,10 @@ DIR_* opendir_(const char* dirname, uint16_t perms) {
 	}
 
 	dir->fd = io_open_fd(dirino);
+	if(dir->fd < 0) {
+		fprintf(stderr, "opendir_: canot create a file descriptor\n");
+		return NULL;
+	}
 	if(getFiles(fs, super, dirino, &(dir->files), &(dir->size)) < 0) {
 		fprintf(stderr, "opendir_: cannot read files\n");
 		return NULL;
@@ -121,10 +132,13 @@ int closedir_(DIR_* dir) {
 	return 0;
 }
 int ls_(const char* direct) {
-	DIR_* dir = opendir_(direct, 0);
-	
+	DIR_* dir = opendir_(direct, 0, 0);
+	if(dir == NULL) {
+		fprintf(stderr, "ls_: directory does not exist\n");
+		return FUNC_ERROR;
+	}
+	printf("[%d]%s\n", dir->size, direct);
 	struct dirent* d;
-	printf("%s [%d]:\n", direct, dir->size);
 	while((d = readdir_(dir)) != NULL){
 		printf("%d %d %s\n", d->d_ino, d->d_type, d->d_name);
 	}
@@ -133,12 +147,15 @@ int ls_(const char* direct) {
 	return 0;
 }
 
-int open_(const char* filename, uint16_t perms) {
-
+int open_(const char* filename, int creat, uint16_t perms) {
 	uint32_t fileino;
 	char* tempstr = strdup(filename);
 	if(findpath(fs, super, &fileino, tempstr) < 0) {
 		// check perms here
+		if(!creat) {
+			fprintf(stderr, "open_: file does not exist.");
+			return FUNC_ERROR;
+		}
 		if(open_creat(fs, super, &fileino, perms, filename) < 0) {
 			fprintf(stderr, "open_: open_creat\n");
 			return FUNC_ERROR;
@@ -150,7 +167,10 @@ int open_(const char* filename, uint16_t perms) {
 	}
 	/* verify type */
 	struct fs_inode ind;
-	fs_read_inode(fs, super, fileino, &ind);
+	if(fs_read_inode(fs, super, fileino, &ind) < 0) {
+		fprintf(stderr, "open_: fs_read_inode\n");
+		return FUNC_ERROR;
+	}
 	uint16_t mode = ind.mode;
 	if((mode & S_DIR) != 0) {
 		fprintf(stderr, "open_: %s is a directory (use opendir_)\n", filename);
@@ -194,7 +214,6 @@ int read_(int fd, void* data, int size) {
 	return 0;
 }
 
-
 int rm_(const char* filename) {
 	uint32_t fileino;
 	char* tempstr = strdup(filename);
@@ -206,7 +225,7 @@ int rm_(const char* filename) {
 	fs_read_inode(fs, super, fileino, &ind);
 	uint16_t mode = ind.mode;
 	if((mode & S_DIR) != 0) {
-		fprintf(stderr, "rm_: %s is a directory (use opendir_)\n", filename);
+		fprintf(stderr, "rm_: %s is a directory (use rmdir_)\n", filename);
 		return FUNC_ERROR;
 	}
 	uint32_t ino;
@@ -227,9 +246,84 @@ int rm_(const char* filename) {
 	return 0;
 }
 
+int rmdir_(const char* filename, int recursive) {
+	uint32_t fileino;
+	char* tempstr = strdup(filename);
+	if(findpath(fs, super, &fileino, tempstr) < 0) {
+		fprintf(stderr, "rmdir_: directory doesn't exist\n");
+		return FUNC_ERROR;
+	}
+	struct fs_inode ind;
+	if(fs_read_inode(fs, super, fileino, &ind) < 0) {
+		fprintf(stderr, "rmdir_: fs_read_inode\n");
+		return FUNC_ERROR;
+	}
+	uint16_t mode = ind.mode;
+	if((mode & S_DIR) == 0) {
+		fprintf(stderr, "rmdir_: %s is a regular file (use rm_)\n", filename);
+		return FUNC_ERROR;
+	}
+	
+	DIR_* dir = opendir_(filename, 0, 0);
+	if(dir == NULL) {
+		fprintf(stderr, "rmdir_: opendir_\n");
+		return FUNC_ERROR;
+	}
+	if(dir->size > 2) {
+		if(!recursive) {
+			fprintf(stderr, "rmdir_: %s is not empty\n", filename);
+			free(tempstr);
+		} else {
+			struct dirent* dire = NULL;
+			while((dire = readdir_(dir)) != NULL) {
+				if(!strcmp(dire->d_name, ".") || !strcmp(dire->d_name, "..")) {
+					continue;
+				}
+				char* sub = malloc(sizeof(char) * (strlen(filename) + strlen(dire->d_name) + 1));
+				strcpy(sub, filename);
+				if(filename[strlen(filename) - 1] != '/') {
+					strcat(sub, "/");
+				}
+				strcat(sub, dire->d_name);
+				if(dire->d_type & S_DIR) {
+					if(rmdir_(sub, 1) < 0) {
+						fprintf(stderr, "rmdir_: can't remove %s\n", sub);
+						free(sub);
+						return FUNC_ERROR;
+					}
+				} else {
+					if(rm_(sub) < 0) {
+						fprintf(stderr, "rmdir_: can't remove %s\n", sub);
+						free(sub);
+						return FUNC_ERROR;
+					}
+				}
+				free(sub);
+			}
+		}
+	}
+	uint32_t ino;
+	if(getParentInode(filename, &ino) < 0) {
+		fprintf(stderr, "rmdir_: invalid directory path %s\n", filename);
+		return FUNC_ERROR;
+	}
+	free(tempstr);
+	tempstr = strdup(filename);
+	char* base = basename(tempstr);
+
+	if(delFile(fs, super, ino, base) < 0) {
+		fprintf(stderr, "rm_: can't remove file or directory\n");
+		return FUNC_ERROR;
+	}
+	free(tempstr);
+	closedir_(dir);
+	return 0;
+}
+
+
 int cp_(const char* src, const char* dest) {
-	int srcfd = open_(src, 0);
-	int destfd = open_(dest, 0);
+	int srcfd = open_(src, 0, 0);
+	int destfd = open_(dest, 1, 0);
 	if(srcfd < 0 || destfd < 0) {
 		fprintf(stderr, "cp_: cannot open src or dest\n");
 		return FUNC_ERROR;
@@ -240,7 +334,7 @@ int cp_(const char* src, const char* dest) {
 		fprintf(stderr, "cp_: cannot read inode\n");
 		return FUNC_ERROR;
 	}
-	
+
 	size_t size = ind.size;
 	
 	lseek_(srcfd, 0);
@@ -303,10 +397,43 @@ int mv_(const char* src, const char* dest) {
 		fprintf(stderr, "mv_: cannot place the destination link\n");
 		return FUNC_ERROR;
 	}
-
-	if(rm_(src) < 0) {
-		fprintf(stderr, "mv_: cannot delete the source link\n");
+	uint32_t srcino;
+	char* tempstr = strdup(src);
+	if(findpath(fs, super, &srcino, tempstr) < 0) {
+		fprintf(stderr, "mv_: cannot find inode number\n");
 		return FUNC_ERROR;
+	}
+	free(tempstr);
+	struct fs_inode ind = {0};
+	if(fs_read_inode(fs, super, srcino, &ind)) {
+		fprintf(stderr, "mv_: cannot read inode\n");
+		return FUNC_ERROR;
+	}
+	if(ind.mode & S_DIR) {
+		DIR_* dir = opendir_(src, 0, 0);
+		if(dir == NULL) {
+			fprintf(stderr, "mv_: can't remove file or directory\n");
+			return FUNC_ERROR;
+		}
+		uint32_t ino;
+		if(getParentInode(src, &ino) < 0) {
+			fprintf(stderr, "mv_: invalid directory path %s\n", src);
+			return FUNC_ERROR;
+		}
+		char* tempstr = strdup(src);
+		char* base = basename(tempstr);
+
+		if(delFile(fs, super, ino, base) < 0) {
+			fprintf(stderr, "mv_: can't remove file or directory\n");
+			return FUNC_ERROR;
+		}
+		free(tempstr);
+		closedir_(dir);
+	} else {
+		if(rm_(src) < 0) {
+			fprintf(stderr, "mv_: cannot delete the source link\n");
+			return FUNC_ERROR;
+		}
 	}
 	return 0;
 }

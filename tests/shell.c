@@ -33,8 +33,8 @@ int main(int argc, char *argv[])
 	}
 	printf("opened emulated disk image %s\n",argv[1]);
 
-	DIR_* rootdir = opendir_("/", 0);
-	int filepswd = open_("/passwd", 0);
+	DIR_* rootdir = opendir_("/", 0, 0);
+	int filepswd = open_("/passwd", 1, 0);
 	write_(filepswd, root, sizeof(root));
 
 	printf("Username :\n");
