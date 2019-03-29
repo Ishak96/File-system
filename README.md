@@ -12,16 +12,16 @@ Then go to the directory
 ```
 	cd PROJET_OS
 ```
-compile the project
+Then create the bin and obj dir's
 ```
-make
+	mkdir obj bin
 ```
-To run the project
+compile docs
 ```
-	./bin/fmanag [-d] [dir]
+make gendocs
 ```
 
-To compile tests
+To compile tests and shell interface
 ```
 	make test
 ```
@@ -29,4 +29,9 @@ To compile tests
 To run these tests
 ```
 	./bin/<testname>
+```
+
+To run the shell interface
+```
+	./bin/shell <disk> [-f] [--format]
 ```
