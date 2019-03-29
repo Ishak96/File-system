@@ -406,19 +406,6 @@ void __lsl(char* path)
 /* list cwd contents*/
 void __ls(char* path)
 {
-//~ <<<<<<< HEAD
-	//~ if(path == NULL || strlen(path) == 0) {
-		//~ ls_(cwd);
-	//~ }
-	//~ else{
-		//~ char* new_path = getPath(cwd, path);
-		//~ if(new_path == NULL) {
-			//~ fprintf(stderr, "cannot resolve path\n");
-			//~ return;
-		//~ }
-		//~ ls_(new_path);
-		//~ free(new_path);
-//~ =======
 	char tmp_cwd[BUFSIZE] = {0};
 	if(path == NULL){
 		strcpy(tmp_cwd, cwd);
@@ -426,7 +413,6 @@ void __ls(char* path)
 	else{
 		strcpy(tmp_cwd, cwd);
 		strcat(tmp_cwd, path);
-//~ >>>>>>> 82f8d714b8e2bd4c0619d0f3b9db6697092b5b74
 	}
 
 	ls_(tmp_cwd);
