@@ -23,7 +23,7 @@ struct fs_filesyst{
 	uint32_t tot_size;/**< total size of our file (partition) */
 	uint32_t nblocks; /**< number of blocks in disk image*/
 };
-
+int fs_check_magicnum(int fd);
 int creatfile(const char* filename, size_t size, struct fs_filesyst* fs);
 int disk_size(struct fs_filesyst fs);
 void disk_close(struct fs_filesyst* fs);

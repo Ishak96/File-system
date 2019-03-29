@@ -51,7 +51,7 @@ void screenfetch();
 int main(int argc, char* argv[])
 {
 	int format = 0;
-   if(argc > 3) {
+   if(argc < 2) {
 		printf("use: %s [-f --format] <disk>\n",argv[0]);
 		return 1;
 	}
@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
 			fprintf(stderr,"shell : creatfile %s\n",argv[1]);
 			return 1;
 	}
-	printf("opened emulated disk image %s\n",argv[1]);
+	printf("opened emulated disk image \"%s\"\n",argv[1]);
 	strcpy(cwd, "/");
 
     while(exitflag==0)
@@ -237,7 +237,7 @@ char* resolve_symlink(char* sym) {
 		len--;
 	}
 
-	char* res = malloc(sizeof(char) * len);
+	char* res = malloc(sizeof(char) * (len+5));
 	if(res == NULL) {
 		fprintf(stderr, "malloc error at resolve_symlink\n");
 	}
@@ -316,8 +316,9 @@ void __cat(char* path)
 		fprintf(stderr, "cannot read inode\n");
 		return;
 	}
+	
 	char* data = malloc(sizeof(char) * (ind.size+1));
-	if(read_(fd, data, ind.size) < 0){
+	if(read_(fd, data, ind.size+1) < 0){
 		fprintf(stderr, "cannot write to the file\n");
 		return ;		
 	}
@@ -327,7 +328,7 @@ void __cat(char* path)
 }
 
 /* write in a file */
-void __write(char* path, char* data){
+void __write(char* path, char* data) {
 	char tmp_cwd[BUFSIZE];
 	char* new_path = getPath(cwd, path);
 	if(new_path == NULL) {
@@ -487,6 +488,10 @@ void __touch(char* name){
 	}
 
 	int fd = open_(tmp_cwd, 1, 0);
+	if(fd < 0) {
+		fprintf(stderr, "could not create file %s\n", name);
+		return;
+	}
 	close_(fd);
 }
 

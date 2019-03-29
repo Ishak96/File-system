@@ -55,6 +55,7 @@ int getFiles(struct fs_filesyst fs, struct fs_super_block super,
 	}
 
 	*files = malloc(sizeof(struct dirent) * (*size));
+	bzero(*files, sizeof(struct dirent) * (*size));
 	if(files == NULL) {
 		fprintf(stderr, "getFiles: malloc err!\n");
 		return FUNC_ERROR;

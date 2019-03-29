@@ -173,6 +173,9 @@ int fs_format(struct fs_filesyst fs) {
 	return 0;
 }
 
+/**
+ * @brief utility function to check if a data block is allocated
+ */
 int fs_is_data_allocated(struct fs_filesyst fs, struct fs_super_block super, uint32_t datanum) {
 	datanum --;
 	uint32_t blkno = datanum / (BITS_PER_BYTE * FS_BLOCK_SIZE) + super.data_bitmap_loc;
@@ -191,6 +194,9 @@ int fs_is_data_allocated(struct fs_filesyst fs, struct fs_super_block super, uin
 	return (byte & mask) > 0;
 }
 
+/**
+ * @brief utility function to check if an inode number is allocated
+ */
 int fs_is_inode_allocated(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum) {
 	uint32_t blkno = inodenum / (BITS_PER_BYTE * FS_BLOCK_SIZE) + super.inode_bitmap_loc;
 	union fs_block blk;
@@ -298,6 +304,9 @@ int fs_alloc_inode(struct fs_filesyst fs, struct fs_super_block* super, uint32_t
 	return 0;
 }
 
+/**
+ * @brief writes an inode struct into an inode block location
+ */
 int fs_write_inode(struct fs_filesyst fs, struct fs_super_block super,
 				   uint32_t indno, struct fs_inode *inode)
 {
@@ -331,6 +340,10 @@ int fs_write_inode(struct fs_filesyst fs, struct fs_super_block super,
 	return 0;
 }
 
+/**
+ * @brief reads an inode from the inode table and puts its content 
+ * in a the inode struct
+ */
 int fs_read_inode(struct fs_filesyst fs, struct fs_super_block super,
 				   uint32_t indno, struct fs_inode *inode)
 {
@@ -358,6 +371,9 @@ int fs_read_inode(struct fs_filesyst fs, struct fs_super_block super,
 	return 0;
 }
 
+/**
+ * @brief dump (print) the content of the inode 
+ */
 int fs_dump_inode(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum) {
 	uint32_t blkno = inodenum / FS_INODES_PER_BLOCK + super.inode_loc;
 	uint8_t indoff = inodenum % FS_INODES_PER_BLOCK;
@@ -381,6 +397,11 @@ int fs_dump_inode(struct fs_filesyst fs, struct fs_super_block super, uint32_t i
 	return 0;
 }
 
+/**
+ * @brief allocate multiple data blocks from the data section
+ * @param data      the array of data block pointers (numbers)
+ * @param size      the number of blocks to allocate
+ */
 int fs_alloc_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t data[], size_t size) {
 	/* todo: remove super from argument (read from file directly) and write at the end */
 	if(super->free_data_count < size) {
@@ -454,6 +475,9 @@ int fs_alloc_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t 
 	return 0;
 }
 
+/**
+ * @brief free an inode from the inode bitmap
+ */
 int fs_free_inode(struct fs_filesyst fs, struct fs_super_block* super, uint32_t inodenum){
 	uint32_t blkno = inodenum / (FS_INODES_PER_BLOCK * FS_BLOCK_SIZE) + super->inode_bitmap_loc;
 	union fs_block blk;
@@ -485,6 +509,9 @@ int fs_free_inode(struct fs_filesyst fs, struct fs_super_block* super, uint32_t 
 	return 0;
 }
 
+/**
+ * @brief free a data block from the data bitmap
+ */
 int fs_free_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t datanum) {
 	datanum --;
 	uint32_t blkno = datanum / (BITS_PER_BYTE * FS_BLOCK_SIZE) + super->data_bitmap_loc;
@@ -517,6 +544,12 @@ int fs_free_data(struct fs_filesyst fs, struct fs_super_block* super, uint32_t d
 	return 0;
 }
 
+/**
+ * @brief write multiple data blocks into the data section
+ * @param blknums   the array of data block pointers (numbers)
+ * @param size      the number of blocks to write
+ * @param data      the array of data to write
+ */
 int fs_write_data(struct fs_filesyst fs, struct fs_super_block super,
 				  union fs_block *data, uint32_t *blknums, size_t size)
 {
@@ -537,6 +570,12 @@ int fs_write_data(struct fs_filesyst fs, struct fs_super_block super,
 	return 0;
 }
 
+/**
+ * @brief read multiple data blocks into the data section
+ * @param blknums   the array of data block pointers (numbers)
+ * @param size      the number of blocks to read
+ * @param data      the array of data to read
+ */
 int fs_read_data(struct fs_filesyst fs, struct fs_super_block super,
 				 union fs_block *data, uint32_t *blknums, size_t size)
 {

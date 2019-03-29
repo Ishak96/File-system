@@ -246,6 +246,7 @@ int io_lseek(struct fs_filesyst fs, struct fs_super_block super, int fd,
  * @brief writes data to an inode number
  * @details writes the data *data* with size *size* starting from the offset
  * *off* into the inode number *inodenum*
+ * Note: the lazy allocation is done here.
  */
 int io_write_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum,
 			 void* data, uint32_t off, size_t size)
@@ -263,8 +264,10 @@ int io_write_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t in
 	}
 	/* actual writing */
 	uint32_t direct_off = FS_DIRECT_POINTERS_PER_INODE * FS_BLOCK_SIZE;
-	
-	uint32_t level0range_s, level0range_e;
+
+	// note that level0 and level1 signify direct and indirect respectively
+	uint32_t level0range_s, level0range_e; // the offsets (start and end) for the writing in the direct section 
+	// (the indirect block pointer itself is not included)
 	level0range_s = (off < direct_off)? off: direct_off-1;
 	level0range_e = (off + size < direct_off)? off+size-1: direct_off-1;
 	
@@ -276,7 +279,8 @@ int io_write_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t in
 	
 	/* direct writing */
 	if(level0range_s == level0range_e) { /* no direct writing needed*/
-		goto indirect_writing;
+		goto indirect_writing; 
+		// the goto is only used to seperate the major sections of writing (direct and indirect)
 	}
 	uint32_t start = level0range_s/FS_BLOCK_SIZE, end = level0range_e/FS_BLOCK_SIZE;
 	
@@ -337,6 +341,7 @@ int io_write_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t in
 	/* indirect writing */
 	if(level1range_s == level1range_e) { /* no indirect writing needed */
 		goto end_write;
+		// the goto is only used to seperate the major sections of writing (direct and indirect)
 	}
 	union fs_block indirect_data;
 	if(fs_read_data(fs, super, &indirect_data, &ind.indirect, 1) < 0) {
@@ -435,6 +440,7 @@ int io_write(struct fs_filesyst fs, struct fs_super_block super, int fd,
  * @brief read data from an inode number
  * @details reads data from the inode number *inodenum* and puts it in
  * the pointer *data* with size *size* starting from the offset *off*
+ * Note: no allocation or deallocation is done here
  */
 int io_read_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t inodenum,
 			 void* data, uint32_t off, size_t size)
@@ -445,13 +451,14 @@ int io_read_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t ino
 		return FUNC_ERROR;
 	}
 
-	uint32_t direct_off = FS_DIRECT_POINTERS_PER_INODE * FS_BLOCK_SIZE;
-	
-	uint32_t level0range_s, level0range_e;
-	level0range_s = (off < direct_off)? off: direct_off-1;
+	uint32_t direct_off = FS_DIRECT_POINTERS_PER_INODE * FS_BLOCK_SIZE; 
+	// note that level0 and level1 signify direct and indirect respectively
+	uint32_t level0range_s, level0range_e; // the offsets for the reading in the direct section 
+	// (the indirect block pointer itself is not included)
+	level0range_s = (off < direct_off)? off: direct_off-1; 
 	level0range_e = (off + size < direct_off)? off+size-1: direct_off-1;
 	
-	uint32_t level1range_s, level1range_e;
+	uint32_t level1range_s, level1range_e;// the offsets for the reading in the indirect section
 	level1range_s = (off < direct_off)? 0: off-direct_off;
 	level1range_e = (off + size < direct_off)? 0: off+size-1-direct_off;
 
@@ -460,6 +467,7 @@ int io_read_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t ino
 	/* direct reading */
 	if(level0range_s == level0range_e) { /* no direct writing needed*/
 		goto indirect_reading;
+		// the goto is only used to seperate the major sections of reading (direct and indirect)
 	}
 	uint32_t start = level0range_s/FS_BLOCK_SIZE, end = level0range_e/FS_BLOCK_SIZE;
 	if(start == end) {
@@ -530,6 +538,7 @@ int io_read_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t ino
 	/* indirect reading */
 	if(level1range_s == level1range_e || ind.indirect == 0) { /* no indirect reading needed */
 		goto end_read;
+		// the goto is only used to seperate the major sections of reading (direct and indirect)
 	}
 	union fs_block indirect_data;
 	if(fs_read_data(fs, super, &indirect_data, &ind.indirect, 1) < 0) {
