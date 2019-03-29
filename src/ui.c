@@ -151,7 +151,7 @@ int closedir_(DIR_* dir) {
 	free(dir);
 	return 0;
 }
-int ls_(const char* direct) {
+int lsl_(const char* direct) {
 	DIR_* dir = opendir_(direct, 0, 0);
 	if(dir == NULL) {
 		fprintf(stderr, "ls_: directory does not exist\n");
@@ -160,9 +160,40 @@ int ls_(const char* direct) {
 	printf("[%d]%s\n", dir->size, direct);
 	struct dirent* d;
 	while((d = readdir_(dir)) != NULL){
-		printf("%d %d %s\n", d->d_ino, d->d_type, d->d_name);
+		if(d->d_type){
+			printf("%d %d ", d->d_ino, d->d_type);
+			printf("\033[32m");
+			printf("%s\n", d->d_name);
+			printf("\033[37m");
+
+		}
+		else{
+			printf("%d %d %s\n", d->d_ino, d->d_type, d->d_name);
+		}
 	}
 	
+	closedir_(dir);
+	return 0;
+}
+
+int ls_(const char* direct) {
+	DIR_* dir = opendir_(direct, 0, 0);
+	if(dir == NULL) {
+		fprintf(stderr, "ls_: directory does not exist\n");
+		return FUNC_ERROR;
+	}
+	struct dirent* d;
+	while((d = readdir_(dir)) != NULL){
+		if(d->d_type){
+			printf("\033[32m");
+			printf("%s\t",d->d_name);
+			printf("\033[37m");
+		}
+		else{
+			printf("%s\t",d->d_name);
+		}
+	}
+	printf("\n");
 	closedir_(dir);
 	return 0;
 }
