@@ -18,5 +18,6 @@ int closedir_(DIR_* dir);
 int cp_(const char* src, const char* dest);
 int mv_(const char* src, const char* dest);
 void closefs();
+struct fs_inode getInode(const char* path);
 
 #endif

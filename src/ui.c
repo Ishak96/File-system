@@ -122,7 +122,27 @@ struct dirent* readdir_(DIR_* dir) {
 	return dir->files + (dir->idx++);
 }
 
+struct fs_inode getInode(const char* path){
+	struct fs_inode ind = {0};
+	uint32_t fileino;
+	char* tmp = strdup(path);
+	if(findpath(fs, super, &fileino, tmp) < 0) {
+		fprintf(stderr, "cannot get inode of %s\n", path);
+		return ind;
+	}
+	free(tmp);
+	if(fs_read_inode(fs, super, fileino, &ind) < 0) {
+		fprintf(stderr, "rmdir_: fs_read_inode\n");
+		return ind;
+	}
+	return ind;
+}
+
 int closedir_(DIR_* dir) {
+	if(dir == NULL) {
+		fprintf(stderr, "closedir_: null dir\n");
+		return FUNC_ERROR;
+	}
 	if(io_close_fd(dir->fd) < 0) {
 		fprintf(stderr, "close_: can't close %d\n", dir->fd);
 		return FUNC_ERROR;
@@ -153,7 +173,7 @@ int open_(const char* filename, int creat, uint16_t perms) {
 	if(findpath(fs, super, &fileino, tempstr) < 0) {
 		// check perms here
 		if(!creat) {
-			fprintf(stderr, "open_: file does not exist.");
+			fprintf(stderr, "open_: file does not exist.\n");
 			return FUNC_ERROR;
 		}
 		if(open_creat(fs, super, &fileino, perms, filename) < 0) {
