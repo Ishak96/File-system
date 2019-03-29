@@ -1,0 +1,296 @@
+\begin{theindex}
+
+  \item {atime}
+    \subitem {fs\_inode}, \hyperpage{8}
+
+  \indexspace
+
+  \item {creatfile}
+    \subitem {disk.c}, \hyperpage{26}
+    \subitem {disk.h}, \hyperpage{17}
+
+  \indexspace
+
+  \item {data}
+    \subitem {fs\_block}, \hyperpage{6}
+  \item {data\_bitmap\_loc}
+    \subitem {fs\_super\_block}, \hyperpage{10}
+  \item {data\_bitmap\_size}
+    \subitem {fs\_super\_block}, \hyperpage{10}
+  \item {data\_count}
+    \subitem {fs\_super\_block}, \hyperpage{10}
+  \item {data\_loc}
+    \subitem {fs\_super\_block}, \hyperpage{10}
+  \item {delFile}
+    \subitem {dirent.c}, \hyperpage{23}
+    \subitem {dirent.h}, \hyperpage{14}
+  \item {DIR\_}, \hyperpage{5}
+  \item {direct}
+    \subitem {fs\_inode}, \hyperpage{8}
+  \item {dirent}, \hyperpage{5}
+  \item {dirent.c}
+    \subitem {delFile}, \hyperpage{23}
+    \subitem {findFile}, \hyperpage{23}
+    \subitem {findpath}, \hyperpage{23}
+    \subitem {formatdir}, \hyperpage{23}
+    \subitem {getFiles}, \hyperpage{23}
+    \subitem {insertFile}, \hyperpage{24}
+    \subitem {open\_creat}, \hyperpage{24}
+    \subitem {open\_ino}, \hyperpage{24}
+    \subitem {opendir\_creat}, \hyperpage{25}
+    \subitem {opendir\_ino}, \hyperpage{25}
+  \item {dirent.h}
+    \subitem {delFile}, \hyperpage{14}
+    \subitem {findFile}, \hyperpage{14}
+    \subitem {findpath}, \hyperpage{14}
+    \subitem {formatdir}, \hyperpage{14}
+    \subitem {getFiles}, \hyperpage{15}
+    \subitem {insertFile}, \hyperpage{15}
+    \subitem {open\_creat}, \hyperpage{15}
+    \subitem {open\_ino}, \hyperpage{15}
+    \subitem {opendir\_creat}, \hyperpage{16}
+    \subitem {opendir\_ino}, \hyperpage{16}
+  \item {disk.c}
+    \subitem {creatfile}, \hyperpage{26}
+    \subitem {disk\_close}, \hyperpage{27}
+    \subitem {disk\_size}, \hyperpage{27}
+    \subitem {fs\_read\_block}, \hyperpage{27}
+    \subitem {fs\_write\_block}, \hyperpage{27}
+  \item {disk.h}
+    \subitem {creatfile}, \hyperpage{17}
+    \subitem {disk\_close}, \hyperpage{18}
+    \subitem {disk\_size}, \hyperpage{18}
+    \subitem {fs\_read\_block}, \hyperpage{19}
+    \subitem {fs\_write\_block}, \hyperpage{19}
+  \item {disk\_close}
+    \subitem {disk.c}, \hyperpage{27}
+    \subitem {disk.h}, \hyperpage{18}
+  \item {disk\_size}
+    \subitem {disk.c}, \hyperpage{27}
+    \subitem {disk.h}, \hyperpage{18}
+
+  \indexspace
+
+  \item {fd}
+    \subitem {fs\_filesyst}, \hyperpage{7}
+  \item {filedesc\_table}
+    \subitem {io.c}, \hyperpage{34}
+  \item {findFile}
+    \subitem {dirent.c}, \hyperpage{23}
+    \subitem {dirent.h}, \hyperpage{14}
+  \item {findpath}
+    \subitem {dirent.c}, \hyperpage{23}
+    \subitem {dirent.h}, \hyperpage{14}
+  \item {formatdir}
+    \subitem {dirent.c}, \hyperpage{23}
+    \subitem {dirent.h}, \hyperpage{14}
+  \item {free\_data\_count}
+    \subitem {fs\_super\_block}, \hyperpage{11}
+  \item {free\_inode\_count}
+    \subitem {fs\_super\_block}, \hyperpage{11}
+  \item {fs.c}
+    \subitem {fs\_alloc\_inode}, \hyperpage{29}
+    \subitem {fs\_dump\_super}, \hyperpage{29}
+    \subitem {fs\_format}, \hyperpage{29}
+    \subitem {fs\_format\_super}, \hyperpage{29}
+  \item {fs.h}
+    \subitem {fs\_alloc\_inode}, \hyperpage{20}
+    \subitem {fs\_dump\_super}, \hyperpage{21}
+    \subitem {fs\_format}, \hyperpage{21}
+    \subitem {fs\_format\_super}, \hyperpage{21}
+  \item {fs\_alloc\_inode}
+    \subitem {fs.c}, \hyperpage{29}
+    \subitem {fs.h}, \hyperpage{20}
+  \item {fs\_block}, \hyperpage{5}
+    \subitem {data}, \hyperpage{6}
+    \subitem {inodes}, \hyperpage{6}
+    \subitem {pointers}, \hyperpage{6}
+    \subitem {super}, \hyperpage{6}
+  \item {fs\_dump\_super}
+    \subitem {fs.c}, \hyperpage{29}
+    \subitem {fs.h}, \hyperpage{21}
+  \item {fs\_filesyst}, \hyperpage{7}
+    \subitem {fd}, \hyperpage{7}
+    \subitem {nblocks}, \hyperpage{7}
+    \subitem {tot\_size}, \hyperpage{7}
+  \item {fs\_format}
+    \subitem {fs.c}, \hyperpage{29}
+    \subitem {fs.h}, \hyperpage{21}
+  \item {fs\_format\_super}
+    \subitem {fs.c}, \hyperpage{29}
+    \subitem {fs.h}, \hyperpage{21}
+  \item {fs\_inode}, \hyperpage{8}
+    \subitem {atime}, \hyperpage{8}
+    \subitem {direct}, \hyperpage{8}
+    \subitem {gid}, \hyperpage{8}
+    \subitem {indirect}, \hyperpage{8}
+    \subitem {mode}, \hyperpage{9}
+    \subitem {mtime}, \hyperpage{9}
+    \subitem {size}, \hyperpage{9}
+    \subitem {uid}, \hyperpage{9}
+  \item {fs\_read\_block}
+    \subitem {disk.c}, \hyperpage{27}
+    \subitem {disk.h}, \hyperpage{19}
+  \item {fs\_super\_block}, \hyperpage{9}
+    \subitem {data\_bitmap\_loc}, \hyperpage{10}
+    \subitem {data\_bitmap\_size}, \hyperpage{10}
+    \subitem {data\_count}, \hyperpage{10}
+    \subitem {data\_loc}, \hyperpage{10}
+    \subitem {free\_data\_count}, \hyperpage{11}
+    \subitem {free\_inode\_count}, \hyperpage{11}
+    \subitem {inode\_bitmap\_loc}, \hyperpage{11}
+    \subitem {inode\_bitmap\_size}, \hyperpage{11}
+    \subitem {inode\_count}, \hyperpage{11}
+    \subitem {inode\_loc}, \hyperpage{11}
+    \subitem {magic}, \hyperpage{11}
+    \subitem {mounts}, \hyperpage{11}
+    \subitem {mtime}, \hyperpage{12}
+    \subitem {nreads}, \hyperpage{12}
+    \subitem {nwrites}, \hyperpage{12}
+    \subitem {wtime}, \hyperpage{12}
+  \item {fs\_write\_block}
+    \subitem {disk.c}, \hyperpage{27}
+    \subitem {disk.h}, \hyperpage{19}
+
+  \indexspace
+
+  \item {getFiles}
+    \subitem {dirent.c}, \hyperpage{23}
+    \subitem {dirent.h}, \hyperpage{15}
+  \item {gid}
+    \subitem {fs\_inode}, \hyperpage{8}
+
+  \indexspace
+
+  \item {include/dirent.h}, \hyperpage{13}
+  \item {include/disk.h}, \hyperpage{17}
+  \item {include/fs.h}, \hyperpage{19}
+  \item {indirect}
+    \subitem {fs\_inode}, \hyperpage{8}
+  \item {inode\_bitmap\_loc}
+    \subitem {fs\_super\_block}, \hyperpage{11}
+  \item {inode\_bitmap\_size}
+    \subitem {fs\_super\_block}, \hyperpage{11}
+  \item {inode\_count}
+    \subitem {fs\_super\_block}, \hyperpage{11}
+  \item {inode\_loc}
+    \subitem {fs\_super\_block}, \hyperpage{11}
+  \item {inodes}
+    \subitem {fs\_block}, \hyperpage{6}
+  \item {insertFile}
+    \subitem {dirent.c}, \hyperpage{24}
+    \subitem {dirent.h}, \hyperpage{15}
+  \item {io.c}
+    \subitem {filedesc\_table}, \hyperpage{34}
+    \subitem {io\_close\_fd}, \hyperpage{31}
+    \subitem {io\_iopen}, \hyperpage{31}
+    \subitem {io\_lazy\_alloc}, \hyperpage{32}
+    \subitem {io\_lseek}, \hyperpage{32}
+    \subitem {io\_open\_creat\_fd}, \hyperpage{32}
+    \subitem {io\_open\_fd}, \hyperpage{32}
+    \subitem {io\_read}, \hyperpage{33}
+    \subitem {io\_read\_ino}, \hyperpage{33}
+    \subitem {io\_rm}, \hyperpage{33}
+    \subitem {io\_rm\_ino}, \hyperpage{33}
+    \subitem {io\_write}, \hyperpage{34}
+    \subitem {io\_write\_ino}, \hyperpage{34}
+  \item {io\_close\_fd}
+    \subitem {io.c}, \hyperpage{31}
+  \item {io\_filedesc}, \hyperpage{12}
+  \item {io\_filedesc\_table}, \hyperpage{12}
+  \item {io\_iopen}
+    \subitem {io.c}, \hyperpage{31}
+  \item {io\_lazy\_alloc}
+    \subitem {io.c}, \hyperpage{32}
+  \item {io\_lseek}
+    \subitem {io.c}, \hyperpage{32}
+  \item {io\_open\_creat\_fd}
+    \subitem {io.c}, \hyperpage{32}
+  \item {io\_open\_fd}
+    \subitem {io.c}, \hyperpage{32}
+  \item {io\_read}
+    \subitem {io.c}, \hyperpage{33}
+  \item {io\_read\_ino}
+    \subitem {io.c}, \hyperpage{33}
+  \item {io\_rm}
+    \subitem {io.c}, \hyperpage{33}
+  \item {io\_rm\_ino}
+    \subitem {io.c}, \hyperpage{33}
+  \item {io\_write}
+    \subitem {io.c}, \hyperpage{34}
+  \item {io\_write\_ino}
+    \subitem {io.c}, \hyperpage{34}
+
+  \indexspace
+
+  \item {magic}
+    \subitem {fs\_super\_block}, \hyperpage{11}
+  \item {main}
+    \subitem {main.c}, \hyperpage{35}
+  \item {main.c}
+    \subitem {main}, \hyperpage{35}
+  \item {mode}
+    \subitem {fs\_inode}, \hyperpage{9}
+  \item {mounts}
+    \subitem {fs\_super\_block}, \hyperpage{11}
+  \item {mtime}
+    \subitem {fs\_inode}, \hyperpage{9}
+    \subitem {fs\_super\_block}, \hyperpage{12}
+
+  \indexspace
+
+  \item {nblocks}
+    \subitem {fs\_filesyst}, \hyperpage{7}
+  \item {nreads}
+    \subitem {fs\_super\_block}, \hyperpage{12}
+  \item {nwrites}
+    \subitem {fs\_super\_block}, \hyperpage{12}
+
+  \indexspace
+
+  \item {open\_creat}
+    \subitem {dirent.c}, \hyperpage{24}
+    \subitem {dirent.h}, \hyperpage{15}
+  \item {open\_ino}
+    \subitem {dirent.c}, \hyperpage{24}
+    \subitem {dirent.h}, \hyperpage{15}
+  \item {opendir\_creat}
+    \subitem {dirent.c}, \hyperpage{25}
+    \subitem {dirent.h}, \hyperpage{16}
+  \item {opendir\_ino}
+    \subitem {dirent.c}, \hyperpage{25}
+    \subitem {dirent.h}, \hyperpage{16}
+
+  \indexspace
+
+  \item {pointers}
+    \subitem {fs\_block}, \hyperpage{6}
+
+  \indexspace
+
+  \item {size}
+    \subitem {fs\_inode}, \hyperpage{9}
+  \item {src/dirent.c}, \hyperpage{22}
+  \item {src/disk.c}, \hyperpage{25}
+  \item {src/fs.c}, \hyperpage{28}
+  \item {src/io.c}, \hyperpage{30}
+  \item {src/main.c}, \hyperpage{35}
+  \item {super}
+    \subitem {fs\_block}, \hyperpage{6}
+
+  \indexspace
+
+  \item {tot\_size}
+    \subitem {fs\_filesyst}, \hyperpage{7}
+
+  \indexspace
+
+  \item {uid}
+    \subitem {fs\_inode}, \hyperpage{9}
+
+  \indexspace
+
+  \item {wtime}
+    \subitem {fs\_super\_block}, \hyperpage{12}
+
+\end{theindex}

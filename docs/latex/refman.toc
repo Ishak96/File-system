@@ -1,0 +1,132 @@
+\@ifundefined {etoctocstyle}{\let \etoc@startlocaltoc \@gobble \let \etoc@settocdepth \@gobble \let \etoc@depthtag \@gobble \let \etoc@setlocaltop \@gobble }{}
+\contentsline {chapter}{\numberline {1}Data Structure Index}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}Data Structures}{1}{section.1.1}
+\contentsline {chapter}{\numberline {2}File Index}{3}{chapter.2}
+\contentsline {section}{\numberline {2.1}File List}{3}{section.2.1}
+\contentsline {chapter}{\numberline {3}Data Structure Documentation}{5}{chapter.3}
+\contentsline {section}{\numberline {3.1}D\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}I\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}R\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}\_\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{} Struct Reference}{5}{section.3.1}
+\contentsline {section}{\numberline {3.2}dirent Struct Reference}{5}{section.3.2}
+\contentsline {section}{\numberline {3.3}fs\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}\_\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}block Union Reference}{5}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}Detailed Description}{6}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.3.2}Field Documentation}{6}{subsection.3.3.2}
+\contentsline {subsubsection}{\numberline {3.3.2.1}data}{6}{subsubsection.3.3.2.1}
+\contentsline {subsubsection}{\numberline {3.3.2.2}inodes}{6}{subsubsection.3.3.2.2}
+\contentsline {subsubsection}{\numberline {3.3.2.3}pointers}{6}{subsubsection.3.3.2.3}
+\contentsline {subsubsection}{\numberline {3.3.2.4}super}{6}{subsubsection.3.3.2.4}
+\contentsline {section}{\numberline {3.4}fs\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}\_\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}filesyst Struct Reference}{7}{section.3.4}
+\contentsline {subsection}{\numberline {3.4.1}Detailed Description}{7}{subsection.3.4.1}
+\contentsline {subsection}{\numberline {3.4.2}Field Documentation}{7}{subsection.3.4.2}
+\contentsline {subsubsection}{\numberline {3.4.2.1}fd}{7}{subsubsection.3.4.2.1}
+\contentsline {subsubsection}{\numberline {3.4.2.2}nblocks}{7}{subsubsection.3.4.2.2}
+\contentsline {subsubsection}{\numberline {3.4.2.3}tot\_size}{7}{subsubsection.3.4.2.3}
+\contentsline {section}{\numberline {3.5}fs\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}\_\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}inode Struct Reference}{8}{section.3.5}
+\contentsline {subsection}{\numberline {3.5.1}Detailed Description}{8}{subsection.3.5.1}
+\contentsline {subsection}{\numberline {3.5.2}Field Documentation}{8}{subsection.3.5.2}
+\contentsline {subsubsection}{\numberline {3.5.2.1}atime}{8}{subsubsection.3.5.2.1}
+\contentsline {subsubsection}{\numberline {3.5.2.2}direct}{8}{subsubsection.3.5.2.2}
+\contentsline {subsubsection}{\numberline {3.5.2.3}gid}{8}{subsubsection.3.5.2.3}
+\contentsline {subsubsection}{\numberline {3.5.2.4}indirect}{9}{subsubsection.3.5.2.4}
+\contentsline {subsubsection}{\numberline {3.5.2.5}mode}{9}{subsubsection.3.5.2.5}
+\contentsline {subsubsection}{\numberline {3.5.2.6}mtime}{9}{subsubsection.3.5.2.6}
+\contentsline {subsubsection}{\numberline {3.5.2.7}size}{9}{subsubsection.3.5.2.7}
+\contentsline {subsubsection}{\numberline {3.5.2.8}uid}{9}{subsubsection.3.5.2.8}
+\contentsline {section}{\numberline {3.6}fs\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}\_\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}super\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}\_\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}block Struct Reference}{9}{section.3.6}
+\contentsline {subsection}{\numberline {3.6.1}Detailed Description}{10}{subsection.3.6.1}
+\contentsline {subsection}{\numberline {3.6.2}Field Documentation}{10}{subsection.3.6.2}
+\contentsline {subsubsection}{\numberline {3.6.2.1}data\_bitmap\_loc}{10}{subsubsection.3.6.2.1}
+\contentsline {subsubsection}{\numberline {3.6.2.2}data\_bitmap\_size}{10}{subsubsection.3.6.2.2}
+\contentsline {subsubsection}{\numberline {3.6.2.3}data\_count}{10}{subsubsection.3.6.2.3}
+\contentsline {subsubsection}{\numberline {3.6.2.4}data\_loc}{11}{subsubsection.3.6.2.4}
+\contentsline {subsubsection}{\numberline {3.6.2.5}free\_data\_count}{11}{subsubsection.3.6.2.5}
+\contentsline {subsubsection}{\numberline {3.6.2.6}free\_inode\_count}{11}{subsubsection.3.6.2.6}
+\contentsline {subsubsection}{\numberline {3.6.2.7}inode\_bitmap\_loc}{11}{subsubsection.3.6.2.7}
+\contentsline {subsubsection}{\numberline {3.6.2.8}inode\_bitmap\_size}{11}{subsubsection.3.6.2.8}
+\contentsline {subsubsection}{\numberline {3.6.2.9}inode\_count}{11}{subsubsection.3.6.2.9}
+\contentsline {subsubsection}{\numberline {3.6.2.10}inode\_loc}{11}{subsubsection.3.6.2.10}
+\contentsline {subsubsection}{\numberline {3.6.2.11}magic}{11}{subsubsection.3.6.2.11}
+\contentsline {subsubsection}{\numberline {3.6.2.12}mounts}{12}{subsubsection.3.6.2.12}
+\contentsline {subsubsection}{\numberline {3.6.2.13}mtime}{12}{subsubsection.3.6.2.13}
+\contentsline {subsubsection}{\numberline {3.6.2.14}nreads}{12}{subsubsection.3.6.2.14}
+\contentsline {subsubsection}{\numberline {3.6.2.15}nwrites}{12}{subsubsection.3.6.2.15}
+\contentsline {subsubsection}{\numberline {3.6.2.16}wtime}{12}{subsubsection.3.6.2.16}
+\contentsline {section}{\numberline {3.7}io\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}\_\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}filedesc Struct Reference}{12}{section.3.7}
+\contentsline {section}{\numberline {3.8}io\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}\_\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}filedesc\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}\_\discretionary {\unhbox \voidb@x \hbox {\relax \fontsize {7}{8}\selectfont $\leftarrow \joinrel \rhook $}}{}{}table Struct Reference}{12}{section.3.8}
+\contentsline {chapter}{\numberline {4}File Documentation}{13}{chapter.4}
+\contentsline {section}{\numberline {4.1}include/dirent.h File Reference}{13}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Detailed Description}{14}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Function Documentation}{14}{subsection.4.1.2}
+\contentsline {subsubsection}{\numberline {4.1.2.1}delFile()}{14}{subsubsection.4.1.2.1}
+\contentsline {subsubsection}{\numberline {4.1.2.2}findFile()}{14}{subsubsection.4.1.2.2}
+\contentsline {subsubsection}{\numberline {4.1.2.3}findpath()}{14}{subsubsection.4.1.2.3}
+\contentsline {subsubsection}{\numberline {4.1.2.4}formatdir()}{15}{subsubsection.4.1.2.4}
+\contentsline {subsubsection}{\numberline {4.1.2.5}getFiles()}{15}{subsubsection.4.1.2.5}
+\contentsline {subsubsection}{\numberline {4.1.2.6}insertFile()}{15}{subsubsection.4.1.2.6}
+\contentsline {subsubsection}{\numberline {4.1.2.7}open\_creat()}{15}{subsubsection.4.1.2.7}
+\contentsline {subsubsection}{\numberline {4.1.2.8}open\_ino()}{16}{subsubsection.4.1.2.8}
+\contentsline {subsubsection}{\numberline {4.1.2.9}opendir\_creat()}{16}{subsubsection.4.1.2.9}
+\contentsline {subsubsection}{\numberline {4.1.2.10}opendir\_ino()}{16}{subsubsection.4.1.2.10}
+\contentsline {section}{\numberline {4.2}include/disk.h File Reference}{17}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Detailed Description}{17}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Function Documentation}{17}{subsection.4.2.2}
+\contentsline {subsubsection}{\numberline {4.2.2.1}creatfile()}{18}{subsubsection.4.2.2.1}
+\contentsline {subsubsection}{\numberline {4.2.2.2}disk\_close()}{18}{subsubsection.4.2.2.2}
+\contentsline {subsubsection}{\numberline {4.2.2.3}disk\_size()}{18}{subsubsection.4.2.2.3}
+\contentsline {subsubsection}{\numberline {4.2.2.4}fs\_read\_block()}{19}{subsubsection.4.2.2.4}
+\contentsline {subsubsection}{\numberline {4.2.2.5}fs\_write\_block()}{19}{subsubsection.4.2.2.5}
+\contentsline {section}{\numberline {4.3}include/fs.h File Reference}{19}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Detailed Description}{20}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Function Documentation}{20}{subsection.4.3.2}
+\contentsline {subsubsection}{\numberline {4.3.2.1}fs\_alloc\_inode()}{21}{subsubsection.4.3.2.1}
+\contentsline {subsubsection}{\numberline {4.3.2.2}fs\_dump\_super()}{21}{subsubsection.4.3.2.2}
+\contentsline {subsubsection}{\numberline {4.3.2.3}fs\_format()}{21}{subsubsection.4.3.2.3}
+\contentsline {subsubsection}{\numberline {4.3.2.4}fs\_format\_super()}{21}{subsubsection.4.3.2.4}
+\contentsline {section}{\numberline {4.4}src/dirent.c File Reference}{22}{section.4.4}
+\contentsline {subsection}{\numberline {4.4.1}Detailed Description}{22}{subsection.4.4.1}
+\contentsline {subsection}{\numberline {4.4.2}Function Documentation}{23}{subsection.4.4.2}
+\contentsline {subsubsection}{\numberline {4.4.2.1}delFile()}{23}{subsubsection.4.4.2.1}
+\contentsline {subsubsection}{\numberline {4.4.2.2}findFile()}{23}{subsubsection.4.4.2.2}
+\contentsline {subsubsection}{\numberline {4.4.2.3}findpath()}{23}{subsubsection.4.4.2.3}
+\contentsline {subsubsection}{\numberline {4.4.2.4}formatdir()}{23}{subsubsection.4.4.2.4}
+\contentsline {subsubsection}{\numberline {4.4.2.5}getFiles()}{24}{subsubsection.4.4.2.5}
+\contentsline {subsubsection}{\numberline {4.4.2.6}insertFile()}{24}{subsubsection.4.4.2.6}
+\contentsline {subsubsection}{\numberline {4.4.2.7}open\_creat()}{24}{subsubsection.4.4.2.7}
+\contentsline {subsubsection}{\numberline {4.4.2.8}open\_ino()}{24}{subsubsection.4.4.2.8}
+\contentsline {subsubsection}{\numberline {4.4.2.9}opendir\_creat()}{25}{subsubsection.4.4.2.9}
+\contentsline {subsubsection}{\numberline {4.4.2.10}opendir\_ino()}{25}{subsubsection.4.4.2.10}
+\contentsline {section}{\numberline {4.5}src/disk.c File Reference}{25}{section.4.5}
+\contentsline {subsection}{\numberline {4.5.1}Detailed Description}{26}{subsection.4.5.1}
+\contentsline {subsection}{\numberline {4.5.2}Function Documentation}{26}{subsection.4.5.2}
+\contentsline {subsubsection}{\numberline {4.5.2.1}creatfile()}{26}{subsubsection.4.5.2.1}
+\contentsline {subsubsection}{\numberline {4.5.2.2}disk\_close()}{27}{subsubsection.4.5.2.2}
+\contentsline {subsubsection}{\numberline {4.5.2.3}disk\_size()}{27}{subsubsection.4.5.2.3}
+\contentsline {subsubsection}{\numberline {4.5.2.4}fs\_read\_block()}{27}{subsubsection.4.5.2.4}
+\contentsline {subsubsection}{\numberline {4.5.2.5}fs\_write\_block()}{28}{subsubsection.4.5.2.5}
+\contentsline {section}{\numberline {4.6}src/fs.c File Reference}{28}{section.4.6}
+\contentsline {subsection}{\numberline {4.6.1}Detailed Description}{29}{subsection.4.6.1}
+\contentsline {subsection}{\numberline {4.6.2}Function Documentation}{29}{subsection.4.6.2}
+\contentsline {subsubsection}{\numberline {4.6.2.1}fs\_alloc\_inode()}{29}{subsubsection.4.6.2.1}
+\contentsline {subsubsection}{\numberline {4.6.2.2}fs\_dump\_super()}{29}{subsubsection.4.6.2.2}
+\contentsline {subsubsection}{\numberline {4.6.2.3}fs\_format()}{29}{subsubsection.4.6.2.3}
+\contentsline {subsubsection}{\numberline {4.6.2.4}fs\_format\_super()}{30}{subsubsection.4.6.2.4}
+\contentsline {section}{\numberline {4.7}src/io.c File Reference}{30}{section.4.7}
+\contentsline {subsection}{\numberline {4.7.1}Detailed Description}{31}{subsection.4.7.1}
+\contentsline {subsection}{\numberline {4.7.2}Function Documentation}{31}{subsection.4.7.2}
+\contentsline {subsubsection}{\numberline {4.7.2.1}io\_close\_fd()}{31}{subsubsection.4.7.2.1}
+\contentsline {subsubsection}{\numberline {4.7.2.2}io\_iopen()}{32}{subsubsection.4.7.2.2}
+\contentsline {subsubsection}{\numberline {4.7.2.3}io\_lazy\_alloc()}{32}{subsubsection.4.7.2.3}
+\contentsline {subsubsection}{\numberline {4.7.2.4}io\_lseek()}{32}{subsubsection.4.7.2.4}
+\contentsline {subsubsection}{\numberline {4.7.2.5}io\_open\_creat\_fd()}{32}{subsubsection.4.7.2.5}
+\contentsline {subsubsection}{\numberline {4.7.2.6}io\_open\_fd()}{33}{subsubsection.4.7.2.6}
+\contentsline {subsubsection}{\numberline {4.7.2.7}io\_read()}{33}{subsubsection.4.7.2.7}
+\contentsline {subsubsection}{\numberline {4.7.2.8}io\_read\_ino()}{33}{subsubsection.4.7.2.8}
+\contentsline {subsubsection}{\numberline {4.7.2.9}io\_rm()}{33}{subsubsection.4.7.2.9}
+\contentsline {subsubsection}{\numberline {4.7.2.10}io\_rm\_ino()}{34}{subsubsection.4.7.2.10}
+\contentsline {subsubsection}{\numberline {4.7.2.11}io\_write()}{34}{subsubsection.4.7.2.11}
+\contentsline {subsubsection}{\numberline {4.7.2.12}io\_write\_ino()}{34}{subsubsection.4.7.2.12}
+\contentsline {subsection}{\numberline {4.7.3}Variable Documentation}{34}{subsection.4.7.3}
+\contentsline {subsubsection}{\numberline {4.7.3.1}filedesc\_table}{34}{subsubsection.4.7.3.1}
+\contentsline {section}{\numberline {4.8}src/main.c File Reference}{35}{section.4.8}
+\contentsline {subsection}{\numberline {4.8.1}Detailed Description}{35}{subsection.4.8.1}
+\contentsline {subsection}{\numberline {4.8.2}Function Documentation}{35}{subsection.4.8.2}
+\contentsline {subsubsection}{\numberline {4.8.2.1}main()}{35}{subsubsection.4.8.2.1}
+\contentsline {chapter}{Index}{37}{section*.24}

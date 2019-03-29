@@ -45,6 +45,7 @@ void __mv(char*, char*);
 void __ln(char*, char*);
 void __write(char*, char*);
 void __cat(char*);
+void __help();
 void getInput();
 void screenfetch();
 
@@ -201,6 +202,10 @@ int main(int argc, char* argv[])
         {
             char* filename = argval[1];
             __cat(filename);
+        }
+        else if(strcmp(argval[0],"help")==0)
+        {
+        	__help();
         }
     }
 }
@@ -596,4 +601,24 @@ void __pwd(char* cwdstr)
     	printf("%s\n",cwdstr);
     else 
     	fprintf(stderr, "__pwd: invalid argument!\n");
+}
+
+/**
+* @breif help user's
+*/
+void __help(){
+	printf("|\t cat <path> : read file \n");
+	printf("|\t write <path> <data> : write the data in the file \n");
+	printf("|\t cp <file1> <file2> : copy one file to another \n");
+	printf("|\t ln <file1> <file2> : create a hard link \n");
+	printf("|\t mv <file1> <file2> : move one file to another \n");
+	printf("|\t ls [-l] <path> : list path contents and date permissions… \n");
+	printf("|\t clear : clear the screen \n");
+	printf("|\t rmdir <dirname> : remove folder \n");
+	printf("|\t rm <filename> : remove file \n");
+	printf("|\t mkdir <dirname> : make a dir \n");
+	printf("|\t touch <filename> : make a file \n");
+	printf("|\t cd <path> : change the current directory \n");
+	printf("|\t exit : basic exit \n");
+	printf("|\t pwd : print the current working directory \n");
 }
