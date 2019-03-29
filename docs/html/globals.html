@@ -65,6 +65,18 @@ $(function() {
 <div class="textblock">Here is a list of all documented functions, variables, defines, enums, and typedefs with links to the documentation:</div>
 
 <h3><a id="index_c"></a>- c -</h3><ul>
+<li>close_()
+: <a class="el" href="ui_8c.html#a8b781b4c41e62c5962c6ec63fe9c7509">ui.c</a>
+</li>
+<li>closedir_()
+: <a class="el" href="ui_8c.html#ad1fa284659138258baa3f26efe94ea83">ui.c</a>
+</li>
+<li>closefs()
+: <a class="el" href="ui_8c.html#a74db267490c84cd193ea1e1befe51e50">ui.c</a>
+</li>
+<li>cp_()
+: <a class="el" href="ui_8c.html#aba83fc62d859315269921ae2dd7c1d1b">ui.c</a>
+</li>
 <li>creatfile()
 : <a class="el" href="disk_8c.html#a9d3c8e891397d966d2fbb3c27cc41dcc">disk.c</a>
 , <a class="el" href="disk_8h.html#a9d3c8e891397d966d2fbb3c27cc41dcc">disk.h</a>
@@ -78,12 +90,12 @@ $(function() {
 , <a class="el" href="dirent_8h.html#a0ff4eb9b59a4a099e668c74d239a7d04">dirent.h</a>
 </li>
 <li>disk_close()
-: <a class="el" href="disk_8h.html#acb759581a1d3715fe5e74fe13c23677f">disk.h</a>
-, <a class="el" href="disk_8c.html#acb759581a1d3715fe5e74fe13c23677f">disk.c</a>
+: <a class="el" href="disk_8c.html#acb759581a1d3715fe5e74fe13c23677f">disk.c</a>
+, <a class="el" href="disk_8h.html#acb759581a1d3715fe5e74fe13c23677f">disk.h</a>
 </li>
 <li>disk_size()
-: <a class="el" href="disk_8h.html#a0cd9235d1059da527f94b43efb2afbbd">disk.h</a>
-, <a class="el" href="disk_8c.html#a0cd9235d1059da527f94b43efb2afbbd">disk.c</a>
+: <a class="el" href="disk_8c.html#a0cd9235d1059da527f94b43efb2afbbd">disk.c</a>
+, <a class="el" href="disk_8h.html#a0cd9235d1059da527f94b43efb2afbbd">disk.h</a>
 </li>
 </ul>
 
@@ -104,9 +116,21 @@ $(function() {
 : <a class="el" href="dirent_8c.html#ae34a7c4307e6ffc52f82e585fbaa17fc">dirent.c</a>
 , <a class="el" href="dirent_8h.html#ae34a7c4307e6ffc52f82e585fbaa17fc">dirent.h</a>
 </li>
+<li>fs_alloc_data()
+: <a class="el" href="fs_8c.html#ae55a6476e008c973536249aa38e548c5">fs.c</a>
+, <a class="el" href="fs_8h.html#ae55a6476e008c973536249aa38e548c5">fs.h</a>
+</li>
 <li>fs_alloc_inode()
 : <a class="el" href="fs_8c.html#abfc7945259a3ace7684c089d73d40338">fs.c</a>
 , <a class="el" href="fs_8h.html#abfc7945259a3ace7684c089d73d40338">fs.h</a>
+</li>
+<li>fs_check_magicnum()
+: <a class="el" href="disk_8c.html#a68f60476e1b6f97936ac50f31b7c4c1d">disk.c</a>
+, <a class="el" href="disk_8h.html#a68f60476e1b6f97936ac50f31b7c4c1d">disk.h</a>
+</li>
+<li>fs_dump_inode()
+: <a class="el" href="fs_8c.html#a0cf2db96883c96842b9a8929d3384179">fs.c</a>
+, <a class="el" href="fs_8h.html#a0cf2db96883c96842b9a8929d3384179">fs.h</a>
 </li>
 <li>fs_dump_super()
 : <a class="el" href="fs_8c.html#a7e220f2d9e463faa6ed48b24a72e79a0">fs.c</a>
@@ -120,13 +144,45 @@ $(function() {
 : <a class="el" href="fs_8c.html#a8e0f528f56de2675994ff4d38ac28942">fs.c</a>
 , <a class="el" href="fs_8h.html#a8e0f528f56de2675994ff4d38ac28942">fs.h</a>
 </li>
+<li>fs_free_data()
+: <a class="el" href="fs_8c.html#abef1af270d59a7cb29901e47fad84946">fs.c</a>
+, <a class="el" href="fs_8h.html#abef1af270d59a7cb29901e47fad84946">fs.h</a>
+</li>
+<li>fs_free_inode()
+: <a class="el" href="fs_8c.html#acc3bb071d5340d42aa027f8bfc1a6b41">fs.c</a>
+, <a class="el" href="fs_8h.html#acc3bb071d5340d42aa027f8bfc1a6b41">fs.h</a>
+</li>
+<li>fs_is_data_allocated()
+: <a class="el" href="fs_8c.html#a4c2e18bd1cc27666e2a7a6a57d0c638c">fs.c</a>
+, <a class="el" href="fs_8h.html#a4c2e18bd1cc27666e2a7a6a57d0c638c">fs.h</a>
+</li>
+<li>fs_is_inode_allocated()
+: <a class="el" href="fs_8c.html#a25a027606e27eaab605d9eacd642aace">fs.c</a>
+, <a class="el" href="fs_8h.html#a25a027606e27eaab605d9eacd642aace">fs.h</a>
+</li>
 <li>fs_read_block()
-: <a class="el" href="disk_8h.html#ae7c04a755273864393eb6bb6b6419be1">disk.h</a>
-, <a class="el" href="disk_8c.html#ae7c04a755273864393eb6bb6b6419be1">disk.c</a>
+: <a class="el" href="disk_8c.html#ae7c04a755273864393eb6bb6b6419be1">disk.c</a>
+, <a class="el" href="disk_8h.html#ae7c04a755273864393eb6bb6b6419be1">disk.h</a>
+</li>
+<li>fs_read_data()
+: <a class="el" href="fs_8c.html#a0825ae78294f022bb91dde1b73d024a3">fs.c</a>
+, <a class="el" href="fs_8h.html#a0825ae78294f022bb91dde1b73d024a3">fs.h</a>
+</li>
+<li>fs_read_inode()
+: <a class="el" href="fs_8c.html#a47decd79b4f0cd23d217919b0f546b3d">fs.c</a>
+, <a class="el" href="fs_8h.html#a47decd79b4f0cd23d217919b0f546b3d">fs.h</a>
 </li>
 <li>fs_write_block()
-: <a class="el" href="disk_8h.html#ace2675173098deba29cd2bd9b3f74a7a">disk.h</a>
-, <a class="el" href="disk_8c.html#ace2675173098deba29cd2bd9b3f74a7a">disk.c</a>
+: <a class="el" href="disk_8c.html#ace2675173098deba29cd2bd9b3f74a7a">disk.c</a>
+, <a class="el" href="disk_8h.html#ace2675173098deba29cd2bd9b3f74a7a">disk.h</a>
+</li>
+<li>fs_write_data()
+: <a class="el" href="fs_8c.html#a3a781019eeca85b9b95c3f910d5b2caf">fs.c</a>
+, <a class="el" href="fs_8h.html#a3a781019eeca85b9b95c3f910d5b2caf">fs.h</a>
+</li>
+<li>fs_write_inode()
+: <a class="el" href="fs_8c.html#a0df6f0d2778e7f25cc1f97abd66d1f96">fs.c</a>
+, <a class="el" href="fs_8h.html#a0df6f0d2778e7f25cc1f97abd66d1f96">fs.h</a>
 </li>
 </ul>
 
@@ -136,10 +192,19 @@ $(function() {
 : <a class="el" href="dirent_8c.html#a0634ce1644920e3baab8bcc38745703b">dirent.c</a>
 , <a class="el" href="dirent_8h.html#a0634ce1644920e3baab8bcc38745703b">dirent.h</a>
 </li>
+<li>getInode()
+: <a class="el" href="ui_8c.html#a9b7d3c93662c7604bd19766074399452">ui.c</a>
+</li>
+<li>getParentInode()
+: <a class="el" href="ui_8c.html#a4938b45089b8927e185c718f644d2a57">ui.c</a>
+</li>
 </ul>
 
 
 <h3><a id="index_i"></a>- i -</h3><ul>
+<li>initfs()
+: <a class="el" href="ui_8c.html#ae8f503215ed97784096bcc0970ac57f0">ui.c</a>
+</li>
 <li>insertFile()
 : <a class="el" href="dirent_8c.html#aabfec4741bfff6464165ad0f069833cd">dirent.c</a>
 , <a class="el" href="dirent_8h.html#aabfec4741bfff6464165ad0f069833cd">dirent.h</a>
@@ -189,29 +254,77 @@ $(function() {
 </ul>
 
 
+<h3><a id="index_l"></a>- l -</h3><ul>
+<li>ln_()
+: <a class="el" href="ui_8c.html#adf1f17a9fa2e5b0facff85c46c3b370a">ui.c</a>
+</li>
+<li>ls_()
+: <a class="el" href="ui_8c.html#a03c32d3a064f997ed0759fd8f7deb07f">ui.c</a>
+</li>
+<li>lseek_()
+: <a class="el" href="ui_8c.html#ac97c8e18c501f17c437838c21e03bf65">ui.c</a>
+</li>
+<li>lsl_()
+: <a class="el" href="ui_8c.html#ae316065a42161b98b60cf3723a59d643">ui.c</a>
+</li>
+</ul>
+
+
 <h3><a id="index_m"></a>- m -</h3><ul>
 <li>main()
 : <a class="el" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main.c</a>
+</li>
+<li>mv_()
+: <a class="el" href="ui_8c.html#ac51a5cff11be1a0db5dee73fa97cba0e">ui.c</a>
 </li>
 </ul>
 
 
 <h3><a id="index_o"></a>- o -</h3><ul>
+<li>open_()
+: <a class="el" href="ui_8c.html#aa06dad8a71ddc0ec9b7350b04b604ed1">ui.c</a>
+</li>
 <li>open_creat()
 : <a class="el" href="dirent_8c.html#a3445d37f8aa9d1b83cb871ff04f094bf">dirent.c</a>
 , <a class="el" href="dirent_8h.html#a3445d37f8aa9d1b83cb871ff04f094bf">dirent.h</a>
 </li>
 <li>open_ino()
-: <a class="el" href="dirent_8h.html#a1b1b7b809e6f0c3ea9f6bc18c6defe90">dirent.h</a>
-, <a class="el" href="dirent_8c.html#a1b1b7b809e6f0c3ea9f6bc18c6defe90">dirent.c</a>
+: <a class="el" href="dirent_8c.html#a1b1b7b809e6f0c3ea9f6bc18c6defe90">dirent.c</a>
+, <a class="el" href="dirent_8h.html#a1b1b7b809e6f0c3ea9f6bc18c6defe90">dirent.h</a>
+</li>
+<li>opendir_()
+: <a class="el" href="ui_8c.html#a0952e46234173b4a3ec294bb94bbc8f6">ui.c</a>
 </li>
 <li>opendir_creat()
 : <a class="el" href="dirent_8c.html#a3d6fb7f2d136bcb6d3772b645db94214">dirent.c</a>
 , <a class="el" href="dirent_8h.html#a97f9d6cf6167002e1a089f7621f79dcf">dirent.h</a>
 </li>
 <li>opendir_ino()
-: <a class="el" href="dirent_8h.html#a105d0e823af19eecc0fb34170346522b">dirent.h</a>
-, <a class="el" href="dirent_8c.html#a105d0e823af19eecc0fb34170346522b">dirent.c</a>
+: <a class="el" href="dirent_8c.html#a105d0e823af19eecc0fb34170346522b">dirent.c</a>
+, <a class="el" href="dirent_8h.html#a105d0e823af19eecc0fb34170346522b">dirent.h</a>
+</li>
+</ul>
+
+
+<h3><a id="index_r"></a>- r -</h3><ul>
+<li>read_()
+: <a class="el" href="ui_8c.html#a32933993704ed801d63cc92d9d6085ac">ui.c</a>
+</li>
+<li>readdir_()
+: <a class="el" href="ui_8c.html#af789a22b4c2141046ef21d51d54d135c">ui.c</a>
+</li>
+<li>rm_()
+: <a class="el" href="ui_8c.html#a712ddc5bf52e97dbc808ec7c2540a57b">ui.c</a>
+</li>
+<li>rmdir_()
+: <a class="el" href="ui_8c.html#afc87ccf1c3a7840dbbcd0a5876fa2641">ui.c</a>
+</li>
+</ul>
+
+
+<h3><a id="index_w"></a>- w -</h3><ul>
+<li>write_()
+: <a class="el" href="ui_8c.html#a797f6df3a03b5664bab9cbf72c01773e">ui.c</a>
 </li>
 </ul>
 </div><!-- contents -->

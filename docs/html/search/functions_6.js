@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['open_5fcreat',['open_creat',['../dirent_8c.html#a3445d37f8aa9d1b83cb871ff04f094bf',1,'open_creat(struct fs_filesyst fs, struct fs_super_block super, uint32_t *fileino, uint16_t mode, const char *filepath):&#160;dirent.c'],['../dirent_8h.html#a3445d37f8aa9d1b83cb871ff04f094bf',1,'open_creat(struct fs_filesyst fs, struct fs_super_block super, uint32_t *fileino, uint16_t mode, const char *filepath):&#160;dirent.c']]],
-  ['open_5fino',['open_ino',['../dirent_8c.html#a1b1b7b809e6f0c3ea9f6bc18c6defe90',1,'open_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t fileino, const char *filepath):&#160;dirent.c'],['../dirent_8h.html#a1b1b7b809e6f0c3ea9f6bc18c6defe90',1,'open_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t fileino, const char *filepath):&#160;dirent.c']]],
-  ['opendir_5fcreat',['opendir_creat',['../dirent_8c.html#a3d6fb7f2d136bcb6d3772b645db94214',1,'opendir_creat(struct fs_filesyst fs, struct fs_super_block super, uint32_t *dirino, uint16_t perms, const char *filepath):&#160;dirent.c'],['../dirent_8h.html#a97f9d6cf6167002e1a089f7621f79dcf',1,'opendir_creat(struct fs_filesyst fs, struct fs_super_block super, uint32_t *dirino, uint16_t mode, const char *filepath):&#160;dirent.c']]],
-  ['opendir_5fino',['opendir_ino',['../dirent_8c.html#a105d0e823af19eecc0fb34170346522b',1,'opendir_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t dirino, const char *filepath):&#160;dirent.c'],['../dirent_8h.html#a105d0e823af19eecc0fb34170346522b',1,'opendir_ino(struct fs_filesyst fs, struct fs_super_block super, uint32_t dirino, const char *filepath):&#160;dirent.c']]]
+  ['main',['main',['../main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main.c']]],
+  ['mv_5f',['mv_',['../ui_8c.html#ac51a5cff11be1a0db5dee73fa97cba0e',1,'ui.c']]]
 ];

@@ -158,7 +158,7 @@ does the same thing as {\itshape io\+\_\+read\+\_\+ino} but for file descriptors
 
 read data from an inode number 
 
-reads data from the inode number {\itshape inodenum} and puts it in the pointer {\itshape data} with size {\itshape size} starting from the offset {\itshape off} \mbox{\Hypertarget{io_8c_aabbbd49ac82118302db6b964037d6a15}\label{io_8c_aabbbd49ac82118302db6b964037d6a15}} 
+reads data from the inode number {\itshape inodenum} and puts it in the pointer {\itshape data} with size {\itshape size} starting from the offset {\itshape off} Note\+: no allocation or deallocation is done here \mbox{\Hypertarget{io_8c_aabbbd49ac82118302db6b964037d6a15}\label{io_8c_aabbbd49ac82118302db6b964037d6a15}} 
 \index{io.c@{io.c}!io\_rm@{io\_rm}}
 \index{io\_rm@{io\_rm}!io.c@{io.c}}
 \subsubsection{\texorpdfstring{io\_rm()}{io\_rm()}}
@@ -198,7 +198,7 @@ does the same thing as {\itshape io\+\_\+write\+\_\+ino} but for file descriptor
 
 writes data to an inode number 
 
-writes the data {\itshape data} with size {\itshape size} starting from the offset {\itshape off} into the inode number {\itshape inodenum} 
+writes the data {\itshape data} with size {\itshape size} starting from the offset {\itshape off} into the inode number {\itshape inodenum} Note\+: the lazy allocation is done here. 
 
 \subsection{Variable Documentation}
 \mbox{\Hypertarget{io_8c_a588d09692facda28c4a702c0a7d9b493}\label{io_8c_a588d09692facda28c4a702c0a7d9b493}} 

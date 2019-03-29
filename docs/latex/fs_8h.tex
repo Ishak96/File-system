@@ -49,35 +49,32 @@ int \mbox{\hyperlink{fs_8h_a538713b3121109eb211c8448eabffd22}{fs\+\_\+format}} (
 int \mbox{\hyperlink{fs_8h_abfc7945259a3ace7684c089d73d40338}{fs\+\_\+alloc\+\_\+inode}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} $\ast$super, uint32\+\_\+t $\ast$inodenum)
 \begin{DoxyCompactList}\small\item\em allocate an inode \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{fs_8h_a47decd79b4f0cd23d217919b0f546b3d}\label{fs_8h_a47decd79b4f0cd23d217919b0f546b3d}} 
-int {\bfseries fs\+\_\+read\+\_\+inode} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t indno, struct \mbox{\hyperlink{structfs__inode}{fs\+\_\+inode}} $\ast$inode)
-\item 
+int \mbox{\hyperlink{fs_8h_a47decd79b4f0cd23d217919b0f546b3d}{fs\+\_\+read\+\_\+inode}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t indno, struct \mbox{\hyperlink{structfs__inode}{fs\+\_\+inode}} $\ast$inode)
+\begin{DoxyCompactList}\small\item\em reads an inode from the inode table and puts its content in a the inode struct \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{fs_8h_a0cf2db96883c96842b9a8929d3384179}\label{fs_8h_a0cf2db96883c96842b9a8929d3384179}} 
-int {\bfseries fs\+\_\+dump\+\_\+inode} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t inodenum)
-\item 
-\mbox{\Hypertarget{fs_8h_ae55a6476e008c973536249aa38e548c5}\label{fs_8h_ae55a6476e008c973536249aa38e548c5}} 
-int {\bfseries fs\+\_\+alloc\+\_\+data} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} $\ast$super, uint32\+\_\+t data\mbox{[}$\,$\mbox{]}, size\+\_\+t size)
-\item 
+int \mbox{\hyperlink{fs_8h_a0cf2db96883c96842b9a8929d3384179}{fs\+\_\+dump\+\_\+inode}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t inodenum)
+\begin{DoxyCompactList}\small\item\em dump (print) the content of the inode \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{fs_8h_ae55a6476e008c973536249aa38e548c5}{fs\+\_\+alloc\+\_\+data}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} $\ast$super, uint32\+\_\+t data\mbox{[}$\,$\mbox{]}, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em allocate multiple data blocks from the data section \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{fs_8h_a0df6f0d2778e7f25cc1f97abd66d1f96}\label{fs_8h_a0df6f0d2778e7f25cc1f97abd66d1f96}} 
-int {\bfseries fs\+\_\+write\+\_\+inode} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t indno, struct \mbox{\hyperlink{structfs__inode}{fs\+\_\+inode}} $\ast$inode)
-\item 
+int \mbox{\hyperlink{fs_8h_a0df6f0d2778e7f25cc1f97abd66d1f96}{fs\+\_\+write\+\_\+inode}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t indno, struct \mbox{\hyperlink{structfs__inode}{fs\+\_\+inode}} $\ast$inode)
+\begin{DoxyCompactList}\small\item\em writes an inode struct into an inode block location \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{fs_8h_acc3bb071d5340d42aa027f8bfc1a6b41}\label{fs_8h_acc3bb071d5340d42aa027f8bfc1a6b41}} 
-int {\bfseries fs\+\_\+free\+\_\+inode} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} $\ast$super, uint32\+\_\+t inodenum)
-\item 
+int \mbox{\hyperlink{fs_8h_acc3bb071d5340d42aa027f8bfc1a6b41}{fs\+\_\+free\+\_\+inode}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} $\ast$super, uint32\+\_\+t inodenum)
+\begin{DoxyCompactList}\small\item\em free an inode from the inode bitmap \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{fs_8h_abef1af270d59a7cb29901e47fad84946}\label{fs_8h_abef1af270d59a7cb29901e47fad84946}} 
-int {\bfseries fs\+\_\+free\+\_\+data} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} $\ast$super, uint32\+\_\+t datanum)
-\item 
+int \mbox{\hyperlink{fs_8h_abef1af270d59a7cb29901e47fad84946}{fs\+\_\+free\+\_\+data}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} $\ast$super, uint32\+\_\+t datanum)
+\begin{DoxyCompactList}\small\item\em free a data block from the data bitmap \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{fs_8h_a4c2e18bd1cc27666e2a7a6a57d0c638c}\label{fs_8h_a4c2e18bd1cc27666e2a7a6a57d0c638c}} 
-int {\bfseries fs\+\_\+is\+\_\+data\+\_\+allocated} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t datanum)
-\item 
+int \mbox{\hyperlink{fs_8h_a4c2e18bd1cc27666e2a7a6a57d0c638c}{fs\+\_\+is\+\_\+data\+\_\+allocated}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t datanum)
+\begin{DoxyCompactList}\small\item\em utility function to check if a data block is allocated \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{fs_8h_a25a027606e27eaab605d9eacd642aace}\label{fs_8h_a25a027606e27eaab605d9eacd642aace}} 
-int {\bfseries fs\+\_\+is\+\_\+inode\+\_\+allocated} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t inodenum)
-\item 
-\mbox{\Hypertarget{fs_8h_a3a781019eeca85b9b95c3f910d5b2caf}\label{fs_8h_a3a781019eeca85b9b95c3f910d5b2caf}} 
-int {\bfseries fs\+\_\+write\+\_\+data} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, union \mbox{\hyperlink{unionfs__block}{fs\+\_\+block}} $\ast$data, uint32\+\_\+t $\ast$blknums, size\+\_\+t size)
-\item 
-\mbox{\Hypertarget{fs_8h_a0825ae78294f022bb91dde1b73d024a3}\label{fs_8h_a0825ae78294f022bb91dde1b73d024a3}} 
-int {\bfseries fs\+\_\+read\+\_\+data} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, union \mbox{\hyperlink{unionfs__block}{fs\+\_\+block}} $\ast$data, uint32\+\_\+t $\ast$blknums, size\+\_\+t size)
-\end{DoxyCompactItemize}
+int \mbox{\hyperlink{fs_8h_a25a027606e27eaab605d9eacd642aace}{fs\+\_\+is\+\_\+inode\+\_\+allocated}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, uint32\+\_\+t inodenum)
+\begin{DoxyCompactList}\small\item\em utility function to check if an inode number is allocated \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{fs_8h_a3a781019eeca85b9b95c3f910d5b2caf}{fs\+\_\+write\+\_\+data}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, union \mbox{\hyperlink{unionfs__block}{fs\+\_\+block}} $\ast$data, uint32\+\_\+t $\ast$blknums, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em write multiple data blocks into the data section \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{fs_8h_a0825ae78294f022bb91dde1b73d024a3}{fs\+\_\+read\+\_\+data}} (struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} fs, struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} super, union \mbox{\hyperlink{unionfs__block}{fs\+\_\+block}} $\ast$data, uint32\+\_\+t $\ast$blknums, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em read multiple data blocks into the data section \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -91,6 +88,23 @@ A\+Y\+AD Ishak
 main filesystem structs and prototypes 
 
 \subsection{Function Documentation}
+\mbox{\Hypertarget{fs_8h_ae55a6476e008c973536249aa38e548c5}\label{fs_8h_ae55a6476e008c973536249aa38e548c5}} 
+\index{fs.h@{fs.h}!fs\_alloc\_data@{fs\_alloc\_data}}
+\index{fs\_alloc\_data@{fs\_alloc\_data}!fs.h@{fs.h}}
+\subsubsection{\texorpdfstring{fs\_alloc\_data()}{fs\_alloc\_data()}}
+{\footnotesize\ttfamily int fs\+\_\+alloc\+\_\+data (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} $\ast$}]{super,  }\item[{uint32\+\_\+t}]{data\mbox{[}$\,$\mbox{]},  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+allocate multiple data blocks from the data section 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & the array of data block pointers (numbers) \\
+\hline
+{\em size} & the number of blocks to allocate \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{fs_8h_abfc7945259a3ace7684c089d73d40338}\label{fs_8h_abfc7945259a3ace7684c089d73d40338}} 
 \index{fs.h@{fs.h}!fs\_alloc\_inode@{fs\_alloc\_inode}}
 \index{fs\_alloc\_inode@{fs\_alloc\_inode}!fs.h@{fs.h}}
@@ -136,3 +150,41 @@ format the superblock into the virtual filesystem
 format and calculate the positions and sizes of each section of the filesystem (eg. bitmaps and inode and data blocks) \begin{DoxyReturn}{Returns}
 this functions returns -\/1 in case of error and 0 on success 
 \end{DoxyReturn}
+\mbox{\Hypertarget{fs_8h_a0825ae78294f022bb91dde1b73d024a3}\label{fs_8h_a0825ae78294f022bb91dde1b73d024a3}} 
+\index{fs.h@{fs.h}!fs\_read\_data@{fs\_read\_data}}
+\index{fs\_read\_data@{fs\_read\_data}!fs.h@{fs.h}}
+\subsubsection{\texorpdfstring{fs\_read\_data()}{fs\_read\_data()}}
+{\footnotesize\ttfamily int fs\+\_\+read\+\_\+data (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{union \mbox{\hyperlink{unionfs__block}{fs\+\_\+block}} $\ast$}]{data,  }\item[{uint32\+\_\+t $\ast$}]{blknums,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+read multiple data blocks into the data section 
+
+
+\begin{DoxyParams}{Parameters}
+{\em blknums} & the array of data block pointers (numbers) \\
+\hline
+{\em size} & the number of blocks to read \\
+\hline
+{\em data} & the array of data to read \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{fs_8h_a3a781019eeca85b9b95c3f910d5b2caf}\label{fs_8h_a3a781019eeca85b9b95c3f910d5b2caf}} 
+\index{fs.h@{fs.h}!fs\_write\_data@{fs\_write\_data}}
+\index{fs\_write\_data@{fs\_write\_data}!fs.h@{fs.h}}
+\subsubsection{\texorpdfstring{fs\_write\_data()}{fs\_write\_data()}}
+{\footnotesize\ttfamily int fs\+\_\+write\+\_\+data (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}}}]{fs,  }\item[{struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}}}]{super,  }\item[{union \mbox{\hyperlink{unionfs__block}{fs\+\_\+block}} $\ast$}]{data,  }\item[{uint32\+\_\+t $\ast$}]{blknums,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+write multiple data blocks into the data section 
+
+
+\begin{DoxyParams}{Parameters}
+{\em blknums} & the array of data block pointers (numbers) \\
+\hline
+{\em size} & the number of blocks to write \\
+\hline
+{\em data} & the array of data to write \\
+\hline
+\end{DoxyParams}

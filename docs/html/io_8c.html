@@ -460,7 +460,7 @@ AYAD Ishak</dd></dl>
 </div><div class="memdoc">
 
 <p>read data from an inode number </p>
-<p>reads data from the inode number <em>inodenum</em> and puts it in the pointer <em>data</em> with size <em>size</em> starting from the offset <em>off</em> </p>
+<p>reads data from the inode number <em>inodenum</em> and puts it in the pointer <em>data</em> with size <em>size</em> starting from the offset <em>off</em> Note: no allocation or deallocation is done here </p>
 
 </div>
 </div>
@@ -638,7 +638,7 @@ AYAD Ishak</dd></dl>
 </div><div class="memdoc">
 
 <p>writes data to an inode number </p>
-<p>writes the data <em>data</em> with size <em>size</em> starting from the offset <em>off</em> into the inode number <em>inodenum</em> </p>
+<p>writes the data <em>data</em> with size <em>size</em> starting from the offset <em>off</em> into the inode number <em>inodenum</em> Note: the lazy allocation is done here. </p>
 
 </div>
 </div>

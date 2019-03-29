@@ -1,4 +1,4 @@
-.TH "fs_inode" 3 "Thu Mar 28 2019" "File Manager" \" -*- nroff -*-
+.TH "fs_inode" 3 "Fri Mar 29 2019" "File Manager" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -53,6 +53,8 @@ last access time in seconds since the epoch
 direct data blocks 
 .SS "uint16_t fs_inode::gid"
 group id of owners 
+.SS "uint32_t fs_inode::hcount"
+hard link count for the inode 
 .SS "uint32_t fs_inode::indirect"
 indirect data blocks 
 .SS "uint16_t fs_inode::mode"

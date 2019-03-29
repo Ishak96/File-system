@@ -24,8 +24,7 @@ uint32\+\_\+t \mbox{\hyperlink{structfs__inode_ab11566bfc13bcd9f7cf24121447b0cfd
 \item 
 uint32\+\_\+t \mbox{\hyperlink{structfs__inode_ac10de2ad4b7c87da65fc17b5674b5759}{size}}
 \item 
-\mbox{\Hypertarget{structfs__inode_a0057adf5604e607679e68a94ab3e5cd9}\label{structfs__inode_a0057adf5604e607679e68a94ab3e5cd9}} 
-uint32\+\_\+t {\bfseries hcount}
+uint32\+\_\+t \mbox{\hyperlink{structfs__inode_a0057adf5604e607679e68a94ab3e5cd9}{hcount}}
 \item 
 uint32\+\_\+t \mbox{\hyperlink{structfs__inode_a2d0c4627d2c8925e6a51502fa47685aa}{direct}} \mbox{[}F\+S\+\_\+\+D\+I\+R\+E\+C\+T\+\_\+\+P\+O\+I\+N\+T\+E\+R\+S\+\_\+\+P\+E\+R\+\_\+\+I\+N\+O\+DE\mbox{]}
 \item 
@@ -57,7 +56,13 @@ direct data blocks \mbox{\Hypertarget{structfs__inode_a93b1c3bdde3437a4dbfe538ff
 \subsubsection{\texorpdfstring{gid}{gid}}
 {\footnotesize\ttfamily uint16\+\_\+t fs\+\_\+inode\+::gid}
 
-group id of owners \mbox{\Hypertarget{structfs__inode_a5cde1770f044b6566f36f6acdf958beb}\label{structfs__inode_a5cde1770f044b6566f36f6acdf958beb}} 
+group id of owners \mbox{\Hypertarget{structfs__inode_a0057adf5604e607679e68a94ab3e5cd9}\label{structfs__inode_a0057adf5604e607679e68a94ab3e5cd9}} 
+\index{fs\_inode@{fs\_inode}!hcount@{hcount}}
+\index{hcount@{hcount}!fs\_inode@{fs\_inode}}
+\subsubsection{\texorpdfstring{hcount}{hcount}}
+{\footnotesize\ttfamily uint32\+\_\+t fs\+\_\+inode\+::hcount}
+
+hard link count for the inode \mbox{\Hypertarget{structfs__inode_a5cde1770f044b6566f36f6acdf958beb}\label{structfs__inode_a5cde1770f044b6566f36f6acdf958beb}} 
 \index{fs\_inode@{fs\_inode}!indirect@{indirect}}
 \index{indirect@{indirect}!fs\_inode@{fs\_inode}}
 \subsubsection{\texorpdfstring{indirect}{indirect}}

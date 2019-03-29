@@ -1,0 +1,327 @@
+\hypertarget{ui_8c}{}\section{src/ui.c File Reference}
+\label{ui_8c}\index{src/ui.c@{src/ui.c}}
+
+
+The main functions to be used by the fs users.  
+
+
+{\ttfamily \#include $<$io.\+h$>$}\newline
+{\ttfamily \#include $<$fs.\+h$>$}\newline
+{\ttfamily \#include $<$devutils.\+h$>$}\newline
+{\ttfamily \#include $<$disk.\+h$>$}\newline
+{\ttfamily \#include $<$dirent.\+h$>$}\newline
+{\ttfamily \#include $<$libgen.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$time.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{ui_8c_ae8f503215ed97784096bcc0970ac57f0}{initfs}} (char $\ast$filename, size\+\_\+t size, int format)
+\begin{DoxyCompactList}\small\item\em initializes the system \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ui_8c_a4938b45089b8927e185c718f644d2a57}{get\+Parent\+Inode}} (const char $\ast$filepath, uint32\+\_\+t $\ast$parentino)
+\begin{DoxyCompactList}\small\item\em a utility function to get the inode of the parent \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structDIR__}{D\+I\+R\+\_\+}} $\ast$ \mbox{\hyperlink{ui_8c_a0952e46234173b4a3ec294bb94bbc8f6}{opendir\+\_\+}} (const char $\ast$dirname, int creat, uint16\+\_\+t perms)
+\begin{DoxyCompactList}\small\item\em opens a directory \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structdirent}{dirent}} $\ast$ \mbox{\hyperlink{ui_8c_af789a22b4c2141046ef21d51d54d135c}{readdir\+\_\+}} (\mbox{\hyperlink{structDIR__}{D\+I\+R\+\_\+}} $\ast$dir)
+\begin{DoxyCompactList}\small\item\em read an entry from a D\+I\+R\+\_\+$\ast$ pointer \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{ui_8c_a9b7d3c93662c7604bd19766074399452}\label{ui_8c_a9b7d3c93662c7604bd19766074399452}} 
+struct \mbox{\hyperlink{structfs__inode}{fs\+\_\+inode}} \mbox{\hyperlink{ui_8c_a9b7d3c93662c7604bd19766074399452}{get\+Inode}} (const char $\ast$path)
+\begin{DoxyCompactList}\small\item\em get the inode structure from the path \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ui_8c_ad1fa284659138258baa3f26efe94ea83}{closedir\+\_\+}} (\mbox{\hyperlink{structDIR__}{D\+I\+R\+\_\+}} $\ast$dir)
+\begin{DoxyCompactList}\small\item\em close a directory pointer \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ui_8c_ae316065a42161b98b60cf3723a59d643}{lsl\+\_\+}} (const char $\ast$direct)
+\begin{DoxyCompactList}\small\item\em list the files in a directory in a long format \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ui_8c_a03c32d3a064f997ed0759fd8f7deb07f}{ls\+\_\+}} (const char $\ast$direct)
+\begin{DoxyCompactList}\small\item\em list the files in a directory \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ui_8c_aa06dad8a71ddc0ec9b7350b04b604ed1}{open\+\_\+}} (const char $\ast$filename, int creat, uint16\+\_\+t perms)
+\begin{DoxyCompactList}\small\item\em opens a file \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ui_8c_a8b781b4c41e62c5962c6ec63fe9c7509}{close\+\_\+}} (int fd)
+\begin{DoxyCompactList}\small\item\em closes an open file descritor \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ui_8c_ac97c8e18c501f17c437838c21e03bf65}{lseek\+\_\+}} (int fd, uint32\+\_\+t newoff)
+\begin{DoxyCompactList}\small\item\em changes the current pointer for a file \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ui_8c_a797f6df3a03b5664bab9cbf72c01773e}{write\+\_\+}} (int fd, void $\ast$data, int size)
+\begin{DoxyCompactList}\small\item\em write data to a file \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ui_8c_a32933993704ed801d63cc92d9d6085ac}{read\+\_\+}} (int fd, void $\ast$data, int size)
+\begin{DoxyCompactList}\small\item\em reads data from file \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ui_8c_a712ddc5bf52e97dbc808ec7c2540a57b}{rm\+\_\+}} (const char $\ast$filename)
+\begin{DoxyCompactList}\small\item\em removes a file \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ui_8c_afc87ccf1c3a7840dbbcd0a5876fa2641}{rmdir\+\_\+}} (const char $\ast$filename, int recursive)
+\begin{DoxyCompactList}\small\item\em attempts to remove a directory \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ui_8c_aba83fc62d859315269921ae2dd7c1d1b}{cp\+\_\+}} (const char $\ast$src, const char $\ast$dest)
+\begin{DoxyCompactList}\small\item\em copies a file from src to dest \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ui_8c_adf1f17a9fa2e5b0facff85c46c3b370a}{ln\+\_\+}} (const char $\ast$src, const char $\ast$dest)
+\begin{DoxyCompactList}\small\item\em creates a hard link of src in dest \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{ui_8c_ac51a5cff11be1a0db5dee73fa97cba0e}{mv\+\_\+}} (const char $\ast$src, const char $\ast$dest)
+\begin{DoxyCompactList}\small\item\em move a file from src to dest \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{ui_8c_a74db267490c84cd193ea1e1befe51e50}\label{ui_8c_a74db267490c84cd193ea1e1befe51e50}} 
+void \mbox{\hyperlink{ui_8c_a74db267490c84cd193ea1e1befe51e50}{closefs}} ()
+\begin{DoxyCompactList}\small\item\em closes the virtual filesystem \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{ui_8c_a7eb88ecf64607ec00f56850d2dfbbcea}\label{ui_8c_a7eb88ecf64607ec00f56850d2dfbbcea}} 
+struct \mbox{\hyperlink{structfs__filesyst}{fs\+\_\+filesyst}} {\bfseries fs}
+\item 
+\mbox{\Hypertarget{ui_8c_a3d446c6c3c385164a0ad1ace9bb1613b}\label{ui_8c_a3d446c6c3c385164a0ad1ace9bb1613b}} 
+struct \mbox{\hyperlink{structfs__super__block}{fs\+\_\+super\+\_\+block}} {\bfseries super}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The main functions to be used by the fs users. 
+
+\begin{DoxyAuthor}{Author}
+A\+B\+D\+E\+L\+M\+O\+U\+M\+E\+NE Djahid 
+
+A\+Y\+AD Ishak
+\end{DoxyAuthor}
+contains utility functions such as formatting the fs and opening and writing to files and so on. 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{ui_8c_a8b781b4c41e62c5962c6ec63fe9c7509}\label{ui_8c_a8b781b4c41e62c5962c6ec63fe9c7509}} 
+\index{ui.c@{ui.c}!close\_@{close\_}}
+\index{close\_@{close\_}!ui.c@{ui.c}}
+\subsubsection{\texorpdfstring{close\_()}{close\_()}}
+{\footnotesize\ttfamily int close\+\_\+ (\begin{DoxyParamCaption}\item[{int}]{fd }\end{DoxyParamCaption})}
+
+
+
+closes an open file descritor 
+
+\begin{DoxyReturn}{Returns}
+0 in case of success or -\/1 in case of an error 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ui_8c_ad1fa284659138258baa3f26efe94ea83}\label{ui_8c_ad1fa284659138258baa3f26efe94ea83}} 
+\index{ui.c@{ui.c}!closedir\_@{closedir\_}}
+\index{closedir\_@{closedir\_}!ui.c@{ui.c}}
+\subsubsection{\texorpdfstring{closedir\_()}{closedir\_()}}
+{\footnotesize\ttfamily int closedir\+\_\+ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structDIR__}{D\+I\+R\+\_\+}} $\ast$}]{dir }\end{DoxyParamCaption})}
+
+
+
+close a directory pointer 
+
+called after opendir\+\_\+ to free the D\+I\+R\+\_\+$\ast$ pointer and its components \begin{DoxyReturn}{Returns}
+0 in case of success or -\/1 in case of an error 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ui_8c_aba83fc62d859315269921ae2dd7c1d1b}\label{ui_8c_aba83fc62d859315269921ae2dd7c1d1b}} 
+\index{ui.c@{ui.c}!cp\_@{cp\_}}
+\index{cp\_@{cp\_}!ui.c@{ui.c}}
+\subsubsection{\texorpdfstring{cp\_()}{cp\_()}}
+{\footnotesize\ttfamily int cp\+\_\+ (\begin{DoxyParamCaption}\item[{const char $\ast$}]{src,  }\item[{const char $\ast$}]{dest }\end{DoxyParamCaption})}
+
+
+
+copies a file from src to dest 
+
+copies any file or directory from src to dest Note that you have to specify the file name of the destination e.\+g. cp\+\_\+(\char`\"{}/dir/file\char`\"{}, \char`\"{}/\char`\"{}) won\textquotesingle{}t work because the destination doesn\textquotesingle{}t have a specified name like cp\+\_\+(\char`\"{}/dir/file\char`\"{}, \char`\"{}/file\char`\"{}) \begin{DoxyReturn}{Returns}
+0 in case of success or -\/1 in case of an error 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ui_8c_a4938b45089b8927e185c718f644d2a57}\label{ui_8c_a4938b45089b8927e185c718f644d2a57}} 
+\index{ui.c@{ui.c}!getParentInode@{getParentInode}}
+\index{getParentInode@{getParentInode}!ui.c@{ui.c}}
+\subsubsection{\texorpdfstring{getParentInode()}{getParentInode()}}
+{\footnotesize\ttfamily int get\+Parent\+Inode (\begin{DoxyParamCaption}\item[{const char $\ast$}]{filepath,  }\item[{uint32\+\_\+t $\ast$}]{parentino }\end{DoxyParamCaption})}
+
+
+
+a utility function to get the inode of the parent 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parentino} & the pointer to put the inode in \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 in case of success or -\/1 in case of an error 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ui_8c_ae8f503215ed97784096bcc0970ac57f0}\label{ui_8c_ae8f503215ed97784096bcc0970ac57f0}} 
+\index{ui.c@{ui.c}!initfs@{initfs}}
+\index{initfs@{initfs}!ui.c@{ui.c}}
+\subsubsection{\texorpdfstring{initfs()}{initfs()}}
+{\footnotesize\ttfamily int initfs (\begin{DoxyParamCaption}\item[{char $\ast$}]{filename,  }\item[{size\+\_\+t}]{size,  }\item[{int}]{format }\end{DoxyParamCaption})}
+
+
+
+initializes the system 
+
+fills the global variables fs and super 
+\begin{DoxyParams}{Parameters}
+{\em filename} & the filename of the fs \\
+\hline
+{\em size} & the size of the fs \\
+\hline
+{\em format} & a boolean of wether to format the virtual partition \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 in case of success or -\/1 in case of an error 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ui_8c_adf1f17a9fa2e5b0facff85c46c3b370a}\label{ui_8c_adf1f17a9fa2e5b0facff85c46c3b370a}} 
+\index{ui.c@{ui.c}!ln\_@{ln\_}}
+\index{ln\_@{ln\_}!ui.c@{ui.c}}
+\subsubsection{\texorpdfstring{ln\_()}{ln\_()}}
+{\footnotesize\ttfamily int ln\+\_\+ (\begin{DoxyParamCaption}\item[{const char $\ast$}]{src,  }\item[{const char $\ast$}]{dest }\end{DoxyParamCaption})}
+
+
+
+creates a hard link of src in dest 
+
+creates a hard link of the correspoding inode of any file or directory from src in dest. Note that you have to specify the file name of the destination e.\+g. ln\+\_\+(\char`\"{}/dir/file\char`\"{}, \char`\"{}/\char`\"{}) won\textquotesingle{}t work because the destination doesn\textquotesingle{}t have a specified name like ln\+\_\+(\char`\"{}/dir/file\char`\"{}, \char`\"{}/file\char`\"{}) \begin{DoxyReturn}{Returns}
+0 in case of success or -\/1 in case of an error 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ui_8c_a03c32d3a064f997ed0759fd8f7deb07f}\label{ui_8c_a03c32d3a064f997ed0759fd8f7deb07f}} 
+\index{ui.c@{ui.c}!ls\_@{ls\_}}
+\index{ls\_@{ls\_}!ui.c@{ui.c}}
+\subsubsection{\texorpdfstring{ls\_()}{ls\_()}}
+{\footnotesize\ttfamily int ls\+\_\+ (\begin{DoxyParamCaption}\item[{const char $\ast$}]{direct }\end{DoxyParamCaption})}
+
+
+
+list the files in a directory 
+
+lists all the files in a directory 
+\begin{DoxyParams}{Parameters}
+{\em direct} & the {\itshape absolute} path from the root to the directory \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 in case of success or -\/1 in case of an error 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ui_8c_ac97c8e18c501f17c437838c21e03bf65}\label{ui_8c_ac97c8e18c501f17c437838c21e03bf65}} 
+\index{ui.c@{ui.c}!lseek\_@{lseek\_}}
+\index{lseek\_@{lseek\_}!ui.c@{ui.c}}
+\subsubsection{\texorpdfstring{lseek\_()}{lseek\_()}}
+{\footnotesize\ttfamily int lseek\+\_\+ (\begin{DoxyParamCaption}\item[{int}]{fd,  }\item[{uint32\+\_\+t}]{newoff }\end{DoxyParamCaption})}
+
+
+
+changes the current pointer for a file 
+
+changes the offset of the file descriptor to newoff \begin{DoxyReturn}{Returns}
+0 in case of success or -\/1 in case of an error 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ui_8c_ae316065a42161b98b60cf3723a59d643}\label{ui_8c_ae316065a42161b98b60cf3723a59d643}} 
+\index{ui.c@{ui.c}!lsl\_@{lsl\_}}
+\index{lsl\_@{lsl\_}!ui.c@{ui.c}}
+\subsubsection{\texorpdfstring{lsl\_()}{lsl\_()}}
+{\footnotesize\ttfamily int lsl\+\_\+ (\begin{DoxyParamCaption}\item[{const char $\ast$}]{direct }\end{DoxyParamCaption})}
+
+
+
+list the files in a directory in a long format 
+
+lists all the files in a directory in a long format 
+\begin{DoxyParams}{Parameters}
+{\em direct} & the {\itshape absolute} path from the root to the directory \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 in case of success or -\/1 in case of an error 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ui_8c_ac51a5cff11be1a0db5dee73fa97cba0e}\label{ui_8c_ac51a5cff11be1a0db5dee73fa97cba0e}} 
+\index{ui.c@{ui.c}!mv\_@{mv\_}}
+\index{mv\_@{mv\_}!ui.c@{ui.c}}
+\subsubsection{\texorpdfstring{mv\_()}{mv\_()}}
+{\footnotesize\ttfamily int mv\+\_\+ (\begin{DoxyParamCaption}\item[{const char $\ast$}]{src,  }\item[{const char $\ast$}]{dest }\end{DoxyParamCaption})}
+
+
+
+move a file from src to dest 
+
+moves any file or directory from src to dest Note that you have to specify the file name of the destination e.\+g. mv\+\_\+(\char`\"{}/dir/file\char`\"{}, \char`\"{}/\char`\"{}) won\textquotesingle{}t work because the destination doesn\textquotesingle{}t have a specified name like mv\+\_\+(\char`\"{}/dir/file\char`\"{}, \char`\"{}/file\char`\"{}) \begin{DoxyReturn}{Returns}
+0 in case of success or -\/1 in case of an error 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ui_8c_aa06dad8a71ddc0ec9b7350b04b604ed1}\label{ui_8c_aa06dad8a71ddc0ec9b7350b04b604ed1}} 
+\index{ui.c@{ui.c}!open\_@{open\_}}
+\index{open\_@{open\_}!ui.c@{ui.c}}
+\subsubsection{\texorpdfstring{open\_()}{open\_()}}
+{\footnotesize\ttfamily int open\+\_\+ (\begin{DoxyParamCaption}\item[{const char $\ast$}]{filename,  }\item[{int}]{creat,  }\item[{uint16\+\_\+t}]{perms }\end{DoxyParamCaption})}
+
+
+
+opens a file 
+
+opens the file with pathname {\itshape filename}, or creates it if the {\itshape creat} parameter is set to not null, the {\itshape perms} are set to the created file in that case. \begin{DoxyReturn}{Returns}
+the opened file\textquotesingle{}s descriptor fd, or -\/1 in case of an error 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ui_8c_a0952e46234173b4a3ec294bb94bbc8f6}\label{ui_8c_a0952e46234173b4a3ec294bb94bbc8f6}} 
+\index{ui.c@{ui.c}!opendir\_@{opendir\_}}
+\index{opendir\_@{opendir\_}!ui.c@{ui.c}}
+\subsubsection{\texorpdfstring{opendir\_()}{opendir\_()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structDIR__}{D\+I\+R\+\_\+}}$\ast$ opendir\+\_\+ (\begin{DoxyParamCaption}\item[{const char $\ast$}]{dirname,  }\item[{int}]{creat,  }\item[{uint16\+\_\+t}]{perms }\end{DoxyParamCaption})}
+
+
+
+opens a directory 
+
+opens the directory with pathname {\itshape dirname}, or creates it if the {\itshape creat} parameter is set to not null, the {\itshape perms} are set to the created directory in that case. \begin{DoxyReturn}{Returns}
+the opened directory pointer, or N\+U\+LL in case of an error 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ui_8c_a32933993704ed801d63cc92d9d6085ac}\label{ui_8c_a32933993704ed801d63cc92d9d6085ac}} 
+\index{ui.c@{ui.c}!read\_@{read\_}}
+\index{read\_@{read\_}!ui.c@{ui.c}}
+\subsubsection{\texorpdfstring{read\_()}{read\_()}}
+{\footnotesize\ttfamily int read\+\_\+ (\begin{DoxyParamCaption}\item[{int}]{fd,  }\item[{void $\ast$}]{data,  }\item[{int}]{size }\end{DoxyParamCaption})}
+
+
+
+reads data from file 
+
+reads {\itshape size} bytes from the corresponding file for the {\itshape fd} and puts the result in the {\itshape data} pointer \begin{DoxyReturn}{Returns}
+0 in case of success or -\/1 in case of an error 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ui_8c_af789a22b4c2141046ef21d51d54d135c}\label{ui_8c_af789a22b4c2141046ef21d51d54d135c}} 
+\index{ui.c@{ui.c}!readdir\_@{readdir\_}}
+\index{readdir\_@{readdir\_}!ui.c@{ui.c}}
+\subsubsection{\texorpdfstring{readdir\_()}{readdir\_()}}
+{\footnotesize\ttfamily struct \mbox{\hyperlink{structdirent}{dirent}}$\ast$ readdir\+\_\+ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structDIR__}{D\+I\+R\+\_\+}} $\ast$}]{dir }\end{DoxyParamCaption})}
+
+
+
+read an entry from a D\+I\+R\+\_\+$\ast$ pointer 
+
+reads an entry from a directory (after opening it with opendir\+\_\+ which returns the D\+I\+R\+\_\+$\ast$ pointer) \begin{DoxyReturn}{Returns}
+a pointer to the current directory entry, or N\+U\+LL in case the end is reached 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ui_8c_a712ddc5bf52e97dbc808ec7c2540a57b}\label{ui_8c_a712ddc5bf52e97dbc808ec7c2540a57b}} 
+\index{ui.c@{ui.c}!rm\_@{rm\_}}
+\index{rm\_@{rm\_}!ui.c@{ui.c}}
+\subsubsection{\texorpdfstring{rm\_()}{rm\_()}}
+{\footnotesize\ttfamily int rm\+\_\+ (\begin{DoxyParamCaption}\item[{const char $\ast$}]{filename }\end{DoxyParamCaption})}
+
+
+
+removes a file 
+
+removes files from their path, note that the inode may not get deleted until all hard links to the inode number have been deleted \begin{DoxyReturn}{Returns}
+0 in case of success or -\/1 in case of an error 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ui_8c_afc87ccf1c3a7840dbbcd0a5876fa2641}\label{ui_8c_afc87ccf1c3a7840dbbcd0a5876fa2641}} 
+\index{ui.c@{ui.c}!rmdir\_@{rmdir\_}}
+\index{rmdir\_@{rmdir\_}!ui.c@{ui.c}}
+\subsubsection{\texorpdfstring{rmdir\_()}{rmdir\_()}}
+{\footnotesize\ttfamily int rmdir\+\_\+ (\begin{DoxyParamCaption}\item[{const char $\ast$}]{filename,  }\item[{int}]{recursive }\end{DoxyParamCaption})}
+
+
+
+attempts to remove a directory 
+
+attempts to remove the directory from its path, if it doesn\textquotesingle{}t contain it gets deleted, if it does, it gets deleted if the recursive boolean is set to no null else it doesn\textquotesingle{}t. Note that the inode may not get deleted until all hard links to the inode number have been deleted \begin{DoxyReturn}{Returns}
+0 in case of success or -\/1 in case of an error 
+\end{DoxyReturn}
+\mbox{\Hypertarget{ui_8c_a797f6df3a03b5664bab9cbf72c01773e}\label{ui_8c_a797f6df3a03b5664bab9cbf72c01773e}} 
+\index{ui.c@{ui.c}!write\_@{write\_}}
+\index{write\_@{write\_}!ui.c@{ui.c}}
+\subsubsection{\texorpdfstring{write\_()}{write\_()}}
+{\footnotesize\ttfamily int write\+\_\+ (\begin{DoxyParamCaption}\item[{int}]{fd,  }\item[{void $\ast$}]{data,  }\item[{int}]{size }\end{DoxyParamCaption})}
+
+
+
+write data to a file 
+
+writes {\itshape size} bytes from the {\itshape data} pointer into the corresponding file for the {\itshape fd}. \begin{DoxyReturn}{Returns}
+0 in case of success or -\/1 in case of an error 
+\end{DoxyReturn}

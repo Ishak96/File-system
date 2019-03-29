@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['initfs',['initfs',['../ui_8c.html#ae8f503215ed97784096bcc0970ac57f0',1,'ui.c']]],
   ['insertfile',['insertFile',['../dirent_8c.html#aabfec4741bfff6464165ad0f069833cd',1,'insertFile(struct fs_filesyst fs, struct fs_super_block super, uint32_t dirino, struct dirent file):&#160;dirent.c'],['../dirent_8h.html#aabfec4741bfff6464165ad0f069833cd',1,'insertFile(struct fs_filesyst fs, struct fs_super_block super, uint32_t dirino, struct dirent file):&#160;dirent.c']]],
   ['io_5fclose_5ffd',['io_close_fd',['../io_8c.html#ae8b8faa427956aa1451e97cf262dbb99',1,'io.c']]],
   ['io_5fgetino',['io_getino',['../io_8c.html#a05d8b2ab57e89c15e551c2724895b83c',1,'io.c']]],

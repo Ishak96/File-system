@@ -1,4 +1,4 @@
-.TH "src/fs.c" 3 "Thu Mar 28 2019" "File Manager" \" -*- nroff -*-
+.TH "src/fs.c" 3 "Fri Mar 29 2019" "File Manager" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -42,9 +42,11 @@ src/fs.c \- main filesystem utilities
 .ti -1c
 .RI "int \fBfs_is_data_allocated\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t datanum)"
 .br
+.RI "utility function to check if a data block is allocated "
 .ti -1c
 .RI "int \fBfs_is_inode_allocated\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t inodenum)"
 .br
+.RI "utility function to check if an inode number is allocated "
 .ti -1c
 .RI "int \fBfs_alloc_inode\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP *super, uint32_t *inodenum)"
 .br
@@ -52,27 +54,35 @@ src/fs.c \- main filesystem utilities
 .ti -1c
 .RI "int \fBfs_write_inode\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t indno, struct \fBfs_inode\fP *inode)"
 .br
+.RI "writes an inode struct into an inode block location "
 .ti -1c
 .RI "int \fBfs_read_inode\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t indno, struct \fBfs_inode\fP *inode)"
 .br
+.RI "reads an inode from the inode table and puts its content in a the inode struct "
 .ti -1c
 .RI "int \fBfs_dump_inode\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t inodenum)"
 .br
+.RI "dump (print) the content of the inode "
 .ti -1c
 .RI "int \fBfs_alloc_data\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP *super, uint32_t data[], size_t size)"
 .br
+.RI "allocate multiple data blocks from the data section "
 .ti -1c
 .RI "int \fBfs_free_inode\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP *super, uint32_t inodenum)"
 .br
+.RI "free an inode from the inode bitmap "
 .ti -1c
 .RI "int \fBfs_free_data\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP *super, uint32_t datanum)"
 .br
+.RI "free a data block from the data bitmap "
 .ti -1c
 .RI "int \fBfs_write_data\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, union \fBfs_block\fP *data, uint32_t *blknums, size_t size)"
 .br
+.RI "write multiple data blocks into the data section "
 .ti -1c
 .RI "int \fBfs_read_data\fP (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, union \fBfs_block\fP *data, uint32_t *blknums, size_t size)"
 .br
+.RI "read multiple data blocks into the data section "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -90,6 +100,19 @@ AYAD Ishak
 initializing the partition files and utility functions to interact with the os 
 .SH "Function Documentation"
 .PP 
+.SS "int fs_alloc_data (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP * super, uint32_t data[], size_t size)"
+
+.PP
+allocate multiple data blocks from the data section 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdata\fP the array of data block pointers (numbers) 
+.br
+\fIsize\fP the number of blocks to allocate 
+.RE
+.PP
+
 .SS "int fs_alloc_inode (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP * super, uint32_t * inodenum)"
 
 .PP
@@ -120,6 +143,36 @@ format the superblock into the virtual filesystem format and calculate the posit
 \fBReturns:\fP
 .RS 4
 this functions returns -1 in case of error and 0 on success 
+.RE
+.PP
+
+.SS "int fs_read_data (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, union \fBfs_block\fP * data, uint32_t * blknums, size_t size)"
+
+.PP
+read multiple data blocks into the data section 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIblknums\fP the array of data block pointers (numbers) 
+.br
+\fIsize\fP the number of blocks to read 
+.br
+\fIdata\fP the array of data to read 
+.RE
+.PP
+
+.SS "int fs_write_data (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, union \fBfs_block\fP * data, uint32_t * blknums, size_t size)"
+
+.PP
+write multiple data blocks into the data section 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIblknums\fP the array of data block pointers (numbers) 
+.br
+\fIsize\fP the number of blocks to write 
+.br
+\fIdata\fP the array of data to write 
 .RE
 .PP
 

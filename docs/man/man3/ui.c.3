@@ -1,0 +1,350 @@
+.TH "src/ui.c" 3 "Fri Mar 29 2019" "File Manager" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/ui.c \- The main functions to be used by the fs users\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <io\&.h>\fP
+.br
+\fC#include <fs\&.h>\fP
+.br
+\fC#include <devutils\&.h>\fP
+.br
+\fC#include <disk\&.h>\fP
+.br
+\fC#include <dirent\&.h>\fP
+.br
+\fC#include <libgen\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <time\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBinitfs\fP (char *filename, size_t size, int format)"
+.br
+.RI "initializes the system "
+.ti -1c
+.RI "int \fBgetParentInode\fP (const char *filepath, uint32_t *parentino)"
+.br
+.RI "a utility function to get the inode of the parent "
+.ti -1c
+.RI "\fBDIR_\fP * \fBopendir_\fP (const char *dirname, int creat, uint16_t perms)"
+.br
+.RI "opens a directory "
+.ti -1c
+.RI "struct \fBdirent\fP * \fBreaddir_\fP (\fBDIR_\fP *dir)"
+.br
+.RI "read an entry from a DIR_* pointer "
+.ti -1c
+.RI "struct \fBfs_inode\fP \fBgetInode\fP (const char *path)"
+.br
+.RI "get the inode structure from the path "
+.ti -1c
+.RI "int \fBclosedir_\fP (\fBDIR_\fP *dir)"
+.br
+.RI "close a directory pointer "
+.ti -1c
+.RI "int \fBlsl_\fP (const char *direct)"
+.br
+.RI "list the files in a directory in a long format "
+.ti -1c
+.RI "int \fBls_\fP (const char *direct)"
+.br
+.RI "list the files in a directory "
+.ti -1c
+.RI "int \fBopen_\fP (const char *filename, int creat, uint16_t perms)"
+.br
+.RI "opens a file "
+.ti -1c
+.RI "int \fBclose_\fP (int fd)"
+.br
+.RI "closes an open file descritor "
+.ti -1c
+.RI "int \fBlseek_\fP (int fd, uint32_t newoff)"
+.br
+.RI "changes the current pointer for a file "
+.ti -1c
+.RI "int \fBwrite_\fP (int fd, void *data, int size)"
+.br
+.RI "write data to a file "
+.ti -1c
+.RI "int \fBread_\fP (int fd, void *data, int size)"
+.br
+.RI "reads data from file "
+.ti -1c
+.RI "int \fBrm_\fP (const char *filename)"
+.br
+.RI "removes a file "
+.ti -1c
+.RI "int \fBrmdir_\fP (const char *filename, int recursive)"
+.br
+.RI "attempts to remove a directory "
+.ti -1c
+.RI "int \fBcp_\fP (const char *src, const char *dest)"
+.br
+.RI "copies a file from src to dest "
+.ti -1c
+.RI "int \fBln_\fP (const char *src, const char *dest)"
+.br
+.RI "creates a hard link of src in dest "
+.ti -1c
+.RI "int \fBmv_\fP (const char *src, const char *dest)"
+.br
+.RI "move a file from src to dest "
+.ti -1c
+.RI "void \fBclosefs\fP ()"
+.br
+.RI "closes the virtual filesystem "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "struct \fBfs_filesyst\fP \fBfs\fP"
+.br
+.ti -1c
+.RI "struct \fBfs_super_block\fP \fBsuper\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+The main functions to be used by the fs users\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+ABDELMOUMENE Djahid 
+.PP
+AYAD Ishak
+.RE
+.PP
+contains utility functions such as formatting the fs and opening and writing to files and so on\&. 
+.SH "Function Documentation"
+.PP 
+.SS "int close_ (int fd)"
+
+.PP
+closes an open file descritor 
+.PP
+\fBReturns:\fP
+.RS 4
+0 in case of success or -1 in case of an error 
+.RE
+.PP
+
+.SS "int closedir_ (\fBDIR_\fP * dir)"
+
+.PP
+close a directory pointer called after opendir_ to free the DIR_* pointer and its components 
+.PP
+\fBReturns:\fP
+.RS 4
+0 in case of success or -1 in case of an error 
+.RE
+.PP
+
+.SS "int cp_ (const char * src, const char * dest)"
+
+.PP
+copies a file from src to dest copies any file or directory from src to dest Note that you have to specify the file name of the destination e\&.g\&. cp_('/dir/file', '/') won't work because the destination doesn't have a specified name like cp_('/dir/file', '/file') 
+.PP
+\fBReturns:\fP
+.RS 4
+0 in case of success or -1 in case of an error 
+.RE
+.PP
+
+.SS "int getParentInode (const char * filepath, uint32_t * parentino)"
+
+.PP
+a utility function to get the inode of the parent 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIparentino\fP the pointer to put the inode in 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+0 in case of success or -1 in case of an error 
+.RE
+.PP
+
+.SS "int initfs (char * filename, size_t size, int format)"
+
+.PP
+initializes the system fills the global variables fs and super 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfilename\fP the filename of the fs 
+.br
+\fIsize\fP the size of the fs 
+.br
+\fIformat\fP a boolean of wether to format the virtual partition 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+0 in case of success or -1 in case of an error 
+.RE
+.PP
+
+.SS "int ln_ (const char * src, const char * dest)"
+
+.PP
+creates a hard link of src in dest creates a hard link of the correspoding inode of any file or directory from src in dest\&. Note that you have to specify the file name of the destination e\&.g\&. ln_('/dir/file', '/') won't work because the destination doesn't have a specified name like ln_('/dir/file', '/file') 
+.PP
+\fBReturns:\fP
+.RS 4
+0 in case of success or -1 in case of an error 
+.RE
+.PP
+
+.SS "int ls_ (const char * direct)"
+
+.PP
+list the files in a directory lists all the files in a directory 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdirect\fP the \fIabsolute\fP path from the root to the directory 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+0 in case of success or -1 in case of an error 
+.RE
+.PP
+
+.SS "int lseek_ (int fd, uint32_t newoff)"
+
+.PP
+changes the current pointer for a file changes the offset of the file descriptor to newoff 
+.PP
+\fBReturns:\fP
+.RS 4
+0 in case of success or -1 in case of an error 
+.RE
+.PP
+
+.SS "int lsl_ (const char * direct)"
+
+.PP
+list the files in a directory in a long format lists all the files in a directory in a long format 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdirect\fP the \fIabsolute\fP path from the root to the directory 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+0 in case of success or -1 in case of an error 
+.RE
+.PP
+
+.SS "int mv_ (const char * src, const char * dest)"
+
+.PP
+move a file from src to dest moves any file or directory from src to dest Note that you have to specify the file name of the destination e\&.g\&. mv_('/dir/file', '/') won't work because the destination doesn't have a specified name like mv_('/dir/file', '/file') 
+.PP
+\fBReturns:\fP
+.RS 4
+0 in case of success or -1 in case of an error 
+.RE
+.PP
+
+.SS "int open_ (const char * filename, int creat, uint16_t perms)"
+
+.PP
+opens a file opens the file with pathname \fIfilename\fP, or creates it if the \fIcreat\fP parameter is set to not null, the \fIperms\fP are set to the created file in that case\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+the opened file's descriptor fd, or -1 in case of an error 
+.RE
+.PP
+
+.SS "\fBDIR_\fP* opendir_ (const char * dirname, int creat, uint16_t perms)"
+
+.PP
+opens a directory opens the directory with pathname \fIdirname\fP, or creates it if the \fIcreat\fP parameter is set to not null, the \fIperms\fP are set to the created directory in that case\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+the opened directory pointer, or NULL in case of an error 
+.RE
+.PP
+
+.SS "int read_ (int fd, void * data, int size)"
+
+.PP
+reads data from file reads \fIsize\fP bytes from the corresponding file for the \fIfd\fP and puts the result in the \fIdata\fP pointer 
+.PP
+\fBReturns:\fP
+.RS 4
+0 in case of success or -1 in case of an error 
+.RE
+.PP
+
+.SS "struct \fBdirent\fP* readdir_ (\fBDIR_\fP * dir)"
+
+.PP
+read an entry from a DIR_* pointer reads an entry from a directory (after opening it with opendir_ which returns the DIR_* pointer) 
+.PP
+\fBReturns:\fP
+.RS 4
+a pointer to the current directory entry, or NULL in case the end is reached 
+.RE
+.PP
+
+.SS "int rm_ (const char * filename)"
+
+.PP
+removes a file removes files from their path, note that the inode may not get deleted until all hard links to the inode number have been deleted 
+.PP
+\fBReturns:\fP
+.RS 4
+0 in case of success or -1 in case of an error 
+.RE
+.PP
+
+.SS "int rmdir_ (const char * filename, int recursive)"
+
+.PP
+attempts to remove a directory attempts to remove the directory from its path, if it doesn't contain it gets deleted, if it does, it gets deleted if the recursive boolean is set to no null else it doesn't\&. Note that the inode may not get deleted until all hard links to the inode number have been deleted 
+.PP
+\fBReturns:\fP
+.RS 4
+0 in case of success or -1 in case of an error 
+.RE
+.PP
+
+.SS "int write_ (int fd, void * data, int size)"
+
+.PP
+write data to a file writes \fIsize\fP bytes from the \fIdata\fP pointer into the corresponding file for the \fIfd\fP\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+0 in case of success or -1 in case of an error 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for File Manager from the source code\&.

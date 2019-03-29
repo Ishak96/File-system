@@ -1,4 +1,4 @@
-.TH "src/io.c" 3 "Thu Mar 28 2019" "File Manager" \" -*- nroff -*-
+.TH "src/io.c" 3 "Fri Mar 29 2019" "File Manager" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -167,7 +167,7 @@ reads data from a file descriptor does the same thing as \fIio_read_ino\fP but f
 .SS "int io_read_ino (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t inodenum, void * data, uint32_t off, size_t size)"
 
 .PP
-read data from an inode number reads data from the inode number \fIinodenum\fP and puts it in the pointer \fIdata\fP with size \fIsize\fP starting from the offset \fIoff\fP 
+read data from an inode number reads data from the inode number \fIinodenum\fP and puts it in the pointer \fIdata\fP with size \fIsize\fP starting from the offset \fIoff\fP Note: no allocation or deallocation is done here 
 .SS "int io_rm (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, int fd)"
 
 .PP
@@ -183,7 +183,7 @@ writes data to a file descriptor does the same thing as \fIio_write_ino\fP but f
 .SS "int io_write_ino (struct \fBfs_filesyst\fP fs, struct \fBfs_super_block\fP super, uint32_t inodenum, void * data, uint32_t off, size_t size)"
 
 .PP
-writes data to an inode number writes the data \fIdata\fP with size \fIsize\fP starting from the offset \fIoff\fP into the inode number \fIinodenum\fP 
+writes data to an inode number writes the data \fIdata\fP with size \fIsize\fP starting from the offset \fIoff\fP into the inode number \fIinodenum\fP Note: the lazy allocation is done here\&. 
 .SH "Variable Documentation"
 .PP 
 .SS "struct \fBio_filedesc_table\fP filedesc_table = {0}"
