@@ -498,23 +498,28 @@ void __touch(char* name){
 /*change directory functionality*/
 void __cd(char* path)
 {
-	char temp_str[BUFSIZE] = {0};
-	strcat(temp_str, cwd);
+	if(path == NULL || strlen(path) == 0){
+		strcpy(cwd, "/");
+	}
+	else{
+		char temp_str[BUFSIZE] = {0};
+		strcat(temp_str, cwd);
 
-	char* new_path = getPath(cwd, path);
-	if(new_path == NULL) {
-		fprintf(stderr, "cannot resolve path\n");
-		return;
+		char* new_path = getPath(cwd, path);
+		if(new_path == NULL) {
+			fprintf(stderr, "cannot resolve path\n");
+			return;
+		}
+		strcpy(cwd, new_path);
+		free(new_path);
+		DIR_* dir = opendir_(cwd, 0, 0);
+		if(dir == NULL) {
+			fprintf(stderr, "directory %s does not exist\n", cwd);
+			strcpy(cwd, temp_str);
+			return;
+		}
+		closedir_(dir);
 	}
-	strcpy(cwd, new_path);
-	free(new_path);
-	DIR_* dir = opendir_(cwd, 0, 0);
-	if(dir == NULL) {
-		fprintf(stderr, "directory %s does not exist\n", cwd);
-		strcpy(cwd, temp_str);
-		return;
-	}
-	closedir_(dir);
 }
 
 /*Implement basic exit*/
