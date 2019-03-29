@@ -219,18 +219,19 @@ int lsl_(const char* direct) {
 		fprintf(stderr, "ls_: directory does not exist\n");
 		return FUNC_ERROR;
 	}
-	printf("[%d]%s\n", dir->size, direct);
+	printf("%s\n", direct);
+	printf("ino:type:name\n");
 	struct dirent* d;
 	while((d = readdir_(dir)) != NULL){
 		if(d->d_type){
-			printf("%d %d ", d->d_ino, d->d_type);
+			printf("%d   %s  ", d->d_ino, (d->d_type!=0)?"DIR":"REG");
 			printf("\033[32m");
 			printf("%s\n", d->d_name);
 			printf("\033[37m");
 
 		}
 		else{
-			printf("%d %d %s\n", d->d_ino, d->d_type, d->d_name);
+			printf("%d   %s  %s\n", d->d_ino, (d->d_type!=0)?"DIR":"REG", d->d_name);
 		}
 	}
 	
@@ -307,6 +308,7 @@ int open_(const char* filename, int creat, uint16_t perms) {
 	// check perms here
 	return io_open_fd(fileino);
 }
+
 /**
  * @brief closes an open file descritor
  * @return 0 in case of success or -1 in case of an error
